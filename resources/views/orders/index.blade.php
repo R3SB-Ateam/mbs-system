@@ -36,6 +36,18 @@
                 ダッシュボードに戻る
             </a>
         </div>
+        <form method="GET" action="{{ route('orders.index') }}" class="mb-4">
+            <label for="store_id">店舗を選択:</label>
+            <select name="store_id" id="store_id" class="border p-1 rounded">
+                <option value="">全店舗</option>
+                @foreach ($stores as $store)
+                    <option value="{{ $store->store_id }}" {{ $selectedStoreId == $store->store_id ? 'selected' : '' }}>
+                        {{ $store->store_name }}
+                    </option>
+                @endforeach
+            </select>
+            <button type="submit" class="ml-2 px-3 py-1 bg-blue-500 text-white rounded">絞り込み</button>
+        </form>
         <form method="POST" action="{{ route('orders.delivery_prepare') }}">
             @csrf
             <table class="min-w-full bg-white border border-gray-300">

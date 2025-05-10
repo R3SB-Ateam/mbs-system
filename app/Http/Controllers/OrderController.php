@@ -11,14 +11,31 @@ use App\Models\OrderDetails;
 
 class OrderController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        // ordersテーブルからデータを取得
-        $orders = DB::table('orders')->get();
+        // 店舗一覧を取得（セレクトボックス用）
+        $stores = DB::table('stores')->get();
 
-        // ビューにデータを渡す
-        return view('orders.index', ['orders' => $orders]);
+        // GETパラメータからstore_idを取得
+        $storeId = $request->input('store_id');
+
+        // ordersとcustomersを結合し、store_idで絞り込み
+        $orders = DB::table('orders')
+            ->join('customers', 'orders.customer_id', '=', 'customers.customer_id')
+            ->when($storeId, function ($query, $storeId) {
+                return $query->where('customers.store_id', $storeId);
+            })
+            ->select('orders.*')
+            ->orderBy('orders.order_date', 'desc')
+            ->get();
+
+        return view('orders.index', [
+            'orders' => $orders,
+            'stores' => $stores,
+            'selectedStoreId' => $storeId, // ← 選択状態保持のため
+        ]);
     }
+
 
     public function newOrder(){
         // 顧客一覧を取得（customersテーブル）

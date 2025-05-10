@@ -143,13 +143,29 @@ class DeliveryController extends Controller
     }
 
 
-    public function index() // 納品一覧を表示する処理
+    public function index(Request $request)
     {
-        // deliveriesテーブルからデータを取得
-        $deliveries = DB::table('deliveries')->get();
+        // 店舗一覧（セレクトボックス用）
+        $stores = DB::table('stores')->get();
 
-        // ビューにデータを渡す
-        return view('deliveries.index', ['deliveries' => $deliveries]);
+        // クエリパラメータからstore_id取得
+        $storeId = $request->input('store_id');
+
+        // deliveriesとcustomersを結合し、store_idで絞り込み
+        $deliveries = DB::table('deliveries')
+            ->join('customers', 'deliveries.customer_id', '=', 'customers.customer_id')
+            ->when($storeId, function ($query, $storeId) {
+                return $query->where('customers.store_id', $storeId);
+            })
+            ->select('deliveries.*')
+            ->orderBy('deliveries.delivery_date', 'desc')
+            ->get();
+
+        return view('deliveries.index', [
+            'deliveries' => $deliveries,
+            'stores' => $stores,
+            'selectedStoreId' => $storeId,
+        ]);
     }
 
 

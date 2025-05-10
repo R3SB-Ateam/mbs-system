@@ -39,7 +39,7 @@
         <form method="GET" action="{{ route('orders.index') }}" class="mb-4">
             <label for="store_id">店舗を選択:</label>
             <select name="store_id" id="store_id" class="border p-1 rounded">
-                <option value="">全店舗</option>
+                <option value="">-</option>
                 @foreach ($stores as $store)
                     <option value="{{ $store->store_id }}" {{ $selectedStoreId == $store->store_id ? 'selected' : '' }}>
                         {{ $store->store_name }}

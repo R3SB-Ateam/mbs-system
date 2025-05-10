@@ -27,6 +27,7 @@
                     <th class="p-2 border-b">単価</th>
                     <th class="p-2 border-b">数量</th>
                     <th class="p-2 border-b">納品状況</th>
+                    <th class="p-2 border-b">納品日</th>
                     <th class="p-2 border-b">備考</th>
                     <th class="p-2 border-b">キャンセル</th>
                 </tr>
@@ -39,6 +40,9 @@
                         <td class="p-2 border-b">{{ $orderDetail->quantity }}</td>
                         <td class="p-2 border-b">
                             {{ $orderDetail->delivery_status == 1 ? '納品済み' : '未納品' }}
+                        </td>
+                        <td class="p-2 border-b">
+                            {{ $orderDetail->delivery_date ?? '-' }}
                         </td>
                         <td class="p-2 border-b">{{ $orderDetail->remarks }}</td>
                         <td class="p-2 border-b">

@@ -20,6 +20,7 @@ class OrderDetails extends Model
         'unit_price',
         'quantity',
         'delivery_status',
+        'delivery_date',
         'remarks',
         'cancell_flag'
     ];

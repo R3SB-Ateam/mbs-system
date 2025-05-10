@@ -49,6 +49,7 @@ class DeliveryController extends Controller
                         'unit_price' => $original->unit_price,
                         'quantity' => $deliveryQty,
                         'delivery_status' => 1,
+                        'delivery_date' => $request->delivery_date,
                         'cancell_flag' => 0,
                         'remarks' => $original->remarks,
                     ]);

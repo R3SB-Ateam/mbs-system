@@ -36,7 +36,7 @@
         <a href="{{ route('orders.index') }}" class="btn">注文一覧</a>
         <a href="{{ route('deliveries.index') }}" class="btn">納品一覧</a>
         <a href="{{ route('customers.index') }}" class="btn">顧客一覧</a>
-        <a href="{{ route('customers.edit') }}" class="btn">顧客更新</a>
+        <a href="{{ route('customers.edit') }}" class="btn">顧客更新画面</a>
     </div>
 </body>
 </html>

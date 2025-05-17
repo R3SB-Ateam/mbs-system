@@ -46,6 +46,10 @@
                     </option>
                 @endforeach
             </select>
+
+            <input type="text" name="keyword" placeholder="注文ID、顧客名、備考で検索" value="{{ $keyword ?? '' }}"
+           class="border p-1 rounded w-64">
+
             <button type="submit" class="ml-2 px-3 py-1 bg-blue-500 text-white rounded">絞り込み</button>
         </form>
         <form method="POST" action="{{ route('orders.delivery_prepare') }}">
@@ -56,6 +60,7 @@
                         <th></th>
                         <th class="p-2 border-b">注文ID</th>
                         <th class="p-2 border-b">顧客ID</th>
+                        <th class="p-2 border-b">顧客名</th>
                         <th class="p-2 border-b">注文日</th>
                         <th class="p-2 border-b">備考</th>
                     </tr>
@@ -70,6 +75,7 @@
                                 </a>
                             </td>
                             <td class="p-2 border-b">{{ $order->customer_id }}</td>
+                            <td class="p-2 border-b">{{ $order->customer_name }}</td>
                             <td class="p-2 border-b">{{ $order->order_date }}</td>
                             <td class="p-2 border-b">{{ $order->remarks }}</td>
                         </tr>

@@ -18,6 +18,7 @@ class OrderController extends Controller
 
         // GETパラメータからstore_idを取得
         $storeId = $request->input('store_id');
+        $keyword = $request->input('keyword');
 
         // ordersとcustomersを結合し、store_idで絞り込み
         $orders = DB::table('orders')
@@ -25,7 +26,14 @@ class OrderController extends Controller
             ->when($storeId, function ($query, $storeId) {
                 return $query->where('customers.store_id', $storeId);
             })
-            ->select('orders.*')
+            ->when($keyword, function ($query, $keyword) {
+                return $query->where(function ($q) use ($keyword) {
+                    $q->where('orders.order_id', 'like', "%{$keyword}%")
+                    ->orWhere('orders.remarks', 'like', "%{$keyword}%")
+                    ->orWhere('customers.name', 'like', "%{$keyword}%");
+                });
+            })
+            ->select('orders.*', 'customers.name as customer_name')
             ->orderBy('orders.order_date', 'desc')
             ->get();
 
@@ -33,6 +41,7 @@ class OrderController extends Controller
             'orders' => $orders,
             'stores' => $stores,
             'selectedStoreId' => $storeId, // ← 選択状態保持のため
+            'keyword' => $keyword,
         ]);
     }
 

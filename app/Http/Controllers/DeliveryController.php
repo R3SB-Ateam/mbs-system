@@ -166,7 +166,7 @@ class DeliveryController extends Controller
                 });
             })
             ->select('deliveries.*', 'customers.name as customer_name')
-            ->orderBy('deliveries.delivery_date', 'desc')
+            ->orderBy('deliveries.delivery_id', 'desc')
             ->get();
 
         return view('deliveries.index', [

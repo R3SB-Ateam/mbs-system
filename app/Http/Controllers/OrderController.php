@@ -34,7 +34,7 @@ class OrderController extends Controller
                 });
             })
             ->select('orders.*', 'customers.name as customer_name')
-            ->orderBy('orders.order_date', 'desc')
+            ->orderBy('orders.order_id', 'desc')
             ->get();
 
         return view('orders.index', [

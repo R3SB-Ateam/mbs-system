@@ -23,6 +23,7 @@
         <table class="min-w-full bg-white border border-gray-300 mb-4">
             <thead>
                 <tr class="bg-gray-100">
+                    <th class="p-2 border-b">注文詳細ID</th>
                     <th class="p-2 border-b">商品名</th>
                     <th class="p-2 border-b">単価</th>
                     <th class="p-2 border-b">数量</th>
@@ -35,6 +36,7 @@
             <tbody>
                 @foreach ($orderDetails as $orderDetail)
                     <tr>
+                        <td class="p-2 border-b">{{ $orderDetail->order_detail_id }}</td>
                         <td class="p-2 border-b">{{ $orderDetail->product_name }}</td>
                         <td class="p-2 border-b">{{ $orderDetail->unit_price }}</td>
                         <td class="p-2 border-b">{{ $orderDetail->quantity }}</td>

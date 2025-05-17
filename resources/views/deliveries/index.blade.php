@@ -38,6 +38,10 @@
                     </option>
                 @endforeach
             </select>
+
+            <input type="text" name="keyword" placeholder="納品ID、顧客名、備考で検索" value="{{ $keyword ?? '' }}"
+                class="border p-1 rounded w-64">
+
             <button type="submit" class="ml-2 px-3 py-1 bg-green-500 text-white rounded">絞り込み</button>
         </form>
 
@@ -45,6 +49,8 @@
             <thead>
                 <tr class="bg-gray-100">
                     <th class="p-2 border-b">納品ID</th>
+                    <th class="p-2 border-b">顧客ID</th>
+                    <th class="p-2 border-b">顧客名</th>
                     <th class="p-2 border-b">納品日</th>
                     <th class="p-2 border-b">備考</th>
                 </tr>
@@ -58,6 +64,8 @@
                                 {{ $delivery->delivery_id }}
                             </a>
                         </td>
+                        <td class="p-2 border-b">{{ $delivery->customer_id }}</td>
+                        <td class="p-2 border-b">{{ $delivery->customer_name }}</td>
                         <td class="p-2 border-b">{{ $delivery->delivery_date }}</td>
                         <td class="p-2 border-b">{{ $delivery->remarks }}</td>
                     </tr>

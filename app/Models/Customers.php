@@ -6,7 +6,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Customer extends Model
+class Customers extends Model
 {
     protected $table = 'customers'; // 明示的にテーブル名を指定（任意）
 
@@ -15,14 +15,15 @@ class Customer extends Model
     public $timestamps = false; // created_at / updated_at カラムがない場合
 
     protected $fillable = [
-        'customer_id',
+        'store_id',
         'name',
-        'representative_name',
+        'staff',
+        'phone_number',
         'address',
-        'phone',
-        'delivery_conditions',
+        'delivery_location',
+        'registration_date',
         'remarks',
-        'registration_date'
+        'deletion_flag',
     ];
 }
 

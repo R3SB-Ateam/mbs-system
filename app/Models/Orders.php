@@ -17,5 +17,12 @@ class Orders extends Model
 
     // タイムスタンプを無視（必要に応じて）
     public $timestamps = false;
+
+    protected $fillable = [
+        'order_id', 
+        'customer_id',
+        'order_date',
+        'remarks',
+    ];
 }
 

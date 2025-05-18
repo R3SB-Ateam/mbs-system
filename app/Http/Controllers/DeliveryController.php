@@ -150,6 +150,7 @@ class DeliveryController extends Controller
 
         // クエリパラメータからstore_id取得
         $storeId = $request->input('store_id');
+        $keyword = $request->input('keyword');
 
         // deliveriesとcustomersを結合し、store_idで絞り込み
         $deliveries = DB::table('deliveries')
@@ -157,14 +158,22 @@ class DeliveryController extends Controller
             ->when($storeId, function ($query, $storeId) {
                 return $query->where('customers.store_id', $storeId);
             })
-            ->select('deliveries.*')
-            ->orderBy('deliveries.delivery_date', 'desc')
+            ->when($keyword, function ($query, $keyword) {
+                return $query->where(function ($q) use ($keyword) {
+                    $q->where('deliveries.delivery_id', 'like', "%{$keyword}%")
+                    ->orWhere('deliveries.remarks', 'like', "%{$keyword}%")
+                    ->orWhere('customers.name', 'like', "%{$keyword}%");
+                });
+            })
+            ->select('deliveries.*', 'customers.name as customer_name')
+            ->orderBy('deliveries.delivery_id', 'desc')
             ->get();
 
         return view('deliveries.index', [
             'deliveries' => $deliveries,
             'stores' => $stores,
             'selectedStoreId' => $storeId,
+            'keyword' => $keyword,
         ]);
     }
 

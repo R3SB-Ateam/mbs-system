@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\DeliveryController;
+use App\Http\Controllers\CustomerController;
 
 Route::get('/', function () {
     return view('dashboard');
@@ -36,10 +37,8 @@ Route::get('/deliveries/{delivery_id}', [DeliveryController::class, 'show'])->na
 Route::get('/deliveries/{delivery_id}/return', [DeliveryController::class, 'showReturnForm'])->name('deliveries.return_form');
 Route::post('/deliveries/return', [DeliveryController::class, 'processReturn'])->name('deliveries.processReturn');
 
-
-Route::get('/customers', function () {
-    return '顧客一覧ページ';
-})->name('customers.index');
+// 顧客一覧ページ
+Route::get('/customers', [CustomerController::class, 'index'])->name('customers.index');
 
 Route::get('/customers/edit', function () {
     return '顧客更新ページ';

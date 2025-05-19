@@ -8,10 +8,10 @@
 <body>
     <div class="button-container">
         <h2>ダッシュボード</h2>
-        <a href="{{ route('orders.index') }}" class="btn" id="order_btn">注文一覧</a>
-        <a href="{{ route('deliveries.index') }}" class="btn" id="deliveries_btn">納品一覧</a>
-        <a href="{{ route('customers.index') }}" class="btn" id="customer_btn">顧客一覧</a>
-        <a href="{{ route('customers.edit') }}" class="btn" id="customer_update_btn">顧客更新</a>
+        <a href="{{ route('orders.index') }}" class="btn">注文一覧</a>
+        <a href="{{ route('deliveries.index') }}" class="btn">納品一覧</a>
+        <a href="{{ route('customers.index') }}" class="btn">顧客一覧</a>
+        <a href="{{ route('customers.edit') }}" class="btn">顧客更新</a>
     </div>
     <div class="content">
         <h1>ようこそ、MBSシステムへ</h1>

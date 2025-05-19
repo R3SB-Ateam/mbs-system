@@ -35,9 +35,6 @@
                 <a href="{{ route('dashboard') }}" class="inline-block px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700">
                     ← ダッシュボードに戻る
                 </a>
-                <a href="{{ route('orders.new_order') }}" class="inline-block px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">
-                    新規注文登録
-                </a>
             </div>
 
             <form method="GET" action="{{ route('orders.index') }}" class="mb-6 flex flex-col md:flex-row md:items-center gap-4">
@@ -97,14 +94,14 @@
                         @endforeach
                     </tbody>
                 </table>
+                <a href="{{ route('orders.new_order') }}" class="inline-block px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">
+                    新規注文登録
+                </a>
                 <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 mt-4">
                     納品登録
                 </button>
             </form>
         </div>
-
-
-
         
     </divclass>
 

@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>ダッシュボード</title>
     <link rel="stylesheet" href="../resources/css/dashboard.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
     <div class="button-container">

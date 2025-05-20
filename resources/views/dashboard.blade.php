@@ -16,7 +16,7 @@
     </div>
     <div class="content">
         <h1>ようこそ、MBSシステムへ</h1>
-        <p>左側のメニューから各機能へ移動できます。</p>
+        <p id="menu-info">左側のメニューから各機能へ移動できます。</p>
 
         <div class="status-cards">
             <div class="status-card" style="border-left-color: #3498db;">
@@ -33,5 +33,6 @@
             </div>
         </div>
     </div>
+    <script src="/mbs-system/resources/js/dashboard.js"></script>
 </body>
 </html>

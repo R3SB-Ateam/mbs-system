@@ -4,10 +4,15 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\DeliveryController;
 use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\DashboardController;
 
 Route::get('/', function () {
     return view('dashboard');
 })->name('dashboard');
+
+// DashboardControllerのindexメソッドを呼び出して、ダッシュボード画面を表示する
+Route::get('/', [DashboardController::class, 'index']);
+Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
 // 注文一覧ページ
 Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
@@ -43,3 +48,4 @@ Route::get('/customers', [CustomerController::class, 'index'])->name('customers.
 Route::get('/customers/edit', function () {
     return '顧客更新ページ';
 })->name('customers.edit');
+

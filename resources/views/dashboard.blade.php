@@ -21,15 +21,15 @@
         <div class="status-cards">
             <div class="status-card" style="border-left-color: #3498db;">
                 <h3>注文件数</h3>
-                <p>23 件</p>
+                <p>{{$orderCount}} 件</p>
             </div>
             <div class="status-card" style="border-left-color: #e67e22;">
                 <h3>納品件数</h3>
-                <p>5 件</p>
+                <p>{{$deliveryCount}} 件</p>
             </div>
             <div class="status-card" style="border-left-color: #2ecc71;">
                 <h3>顧客数</h3>
-                <p>112 名</p>
+                <p>{{$customerCount}} 名</p>
             </div>
         </div>
     </div>

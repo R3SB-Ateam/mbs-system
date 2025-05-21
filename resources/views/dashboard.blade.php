@@ -3,40 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <title>ダッシュボード</title>
-    <style>
-        body {
-            font-family: sans-serif;
-            margin: 50px;
-            text-align: center;
-        }
-        .button-container {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-            width: 200px;
-            margin: 0 auto;
-        }
-        .btn {
-            padding: 15px;
-            background-color: #3490dc;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            text-decoration: none;
-            font-size: 16px;
-        }
-        .btn:hover {
-            background-color: #2779bd;
-        }
-    </style>
+    <link rel="stylesheet" href="../resources/css/dashboard.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
-    <h1>ダッシュボード</h1>
     <div class="button-container">
+        <h2>ダッシュボード</h2>
         <a href="{{ route('orders.index') }}" class="btn">注文一覧</a>
         <a href="{{ route('deliveries.index') }}" class="btn">納品一覧</a>
         <a href="{{ route('customers.index') }}" class="btn">顧客一覧</a>
-        <a href="{{ route('customers.edit') }}" class="btn">顧客更新画面</a>
+        <a href="{{ route('customers.edit') }}" class="btn">顧客更新</a>
     </div>
+    <div class="content">
+        <h1>ようこそ、MBSシステムへ</h1>
+        <p id="menu-info">左側のメニューから各機能へ移動できます。</p>
+
+        <div class="status-cards">
+            <div class="status-card" style="border-left-color: #3498db;">
+                <h3>注文件数</h3>
+                <p>{{$orderCount}} 件</p>
+            </div>
+            <div class="status-card" style="border-left-color: #e67e22;">
+                <h3>納品件数</h3>
+                <p>{{$deliveryCount}} 件</p>
+            </div>
+            <div class="status-card" style="border-left-color: #2ecc71;">
+                <h3>顧客数</h3>
+                <p>{{$customerCount}} 名</p>
+            </div>
+        </div>
+    </div>
+    <script src="/mbs-system/resources/js/dashboard.js"></script>
 </body>
 </html>

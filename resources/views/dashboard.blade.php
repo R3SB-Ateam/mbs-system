@@ -18,17 +18,39 @@
         <h1>ようこそ、MBSシステムへ</h1>
         <p id="menu-info">左側のメニューから各機能へ移動できます。</p>
 
+        <!-- <form method="GET" action="{{ route('dashboard') }}">
+            <label for="filter">表示範囲</label>
+            <select name="filter" id="filter" onchange="this.form.submit()">
+                <option value="all" {{ $filter === 'all' ? 'selected' : '' }}>全体</option>
+                <option value="recent" {{ $filter === 'recent' ? 'selected' : '' }}>直近2日</option>
+            </select>
+        </form> -->
+
+        <form method="GET" action="{{ route('dashboard') }}" id="filter-toggle" class="filter-toggle">
+        <fieldset>
+        <legend>表示範囲</legend>
+            <input type="radio" name="filter" value="all" id="filter-all" onchange="this.form.submit()" {{ $filter === 'all' ? 'checked' : '' }}>
+            <label for="filter-all">全体</label>
+
+            <input type="radio" name="filter" value="recent" id="filter-recent" onchange="this.form.submit()" {{ $filter === 'recent' ? 'checked' : '' }}>
+            <label for="filter-recent">直近2日</label>
+        </fieldset>
+        </form>
+
+
+
+
         <div class="status-cards">
             <div class="status-card" style="border-left-color: #3498db;">
-                <h3>注文件数</h3>
+                <h3>{{$filter === 'recent' ? '直近2日間の注文件数' : '全体の注文件数'}}</h3>
                 <p>{{$orderCount}} 件</p>
             </div>
             <div class="status-card" style="border-left-color: #e67e22;">
-                <h3>納品件数</h3>
+                <h3>{{$filter === 'recent' ? '直近2日間の納品件数' : '全体の納品件数'}}</h3>
                 <p>{{$deliveryCount}} 件</p>
             </div>
             <div class="status-card" style="border-left-color: #2ecc71;">
-                <h3>顧客数</h3>
+                <h3>{{$filter === 'recent' ? '直近2日間の顧客数' : '全体の顧客数'}}</h3>
                 <p>{{$customerCount}} 名</p>
             </div>
         </div>

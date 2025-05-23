@@ -18,14 +18,6 @@
         <h1>ようこそ、MBSシステムへ</h1>
         <p id="menu-info">左側のメニューから各機能へ移動できます。</p>
 
-        <!-- <form method="GET" action="{{ route('dashboard') }}">
-            <label for="filter">表示範囲</label>
-            <select name="filter" id="filter" onchange="this.form.submit()">
-                <option value="all" {{ $filter === 'all' ? 'selected' : '' }}>全体</option>
-                <option value="recent" {{ $filter === 'recent' ? 'selected' : '' }}>直近2日</option>
-            </select>
-        </form> -->
-
         <form method="GET" action="{{ route('dashboard') }}" id="filter-toggle" class="filter-toggle">
         <fieldset>
         <legend>表示範囲</legend>
@@ -50,8 +42,8 @@
                 <p>{{$deliveryCount}} 件</p>
             </div>
             <div class="status-card" style="border-left-color: #2ecc71;">
-                <h3>{{$filter === 'recent' ? '直近2日間の顧客数' : '全体の顧客数'}}</h3>
-                <p>{{$customerCount}} 名</p>
+                <h3>{{$filter === 'recent' ? '直近2日間の合計金額' : '全体の合計金額'}}</h3>
+                <p>{{$customerCount}} 円</p>
             </div>
         </div>
     </div>

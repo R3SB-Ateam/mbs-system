@@ -25,18 +25,18 @@ class DashboardController extends Controller
             $today = Carbon::today();
             $oneWeekAgo = Carbon::now()->subDays(7);
 
-            // 注文件数,納品件数,顧客数（過去二日）
+            // 注文件数,納品件数,顧客数（過去一週間）
             $orderCount = Order::where('order_date','>=',$oneWeekAgo)->count();
             $deliveryCount = Deliveries::where('delivery_date','>=',$oneWeekAgo)->count();
-            $customerCount = DB::table('order_details')->where('unit_price', '>=', $oneWeekAgo)->sum('unit_price');
-            $customerCount = floor($customerCount);
+            $total_price = DB::table('order_details')->where('unit_price', '>=', $oneWeekAgo)->sum('unit_price');
+            $total_price = number_format($total_price);
         }else{
             // 合計件数（全体）
             $orderCount = Order::count();         // ← 別名 Order を使用
             $deliveryCount = Deliveries::count();
-            $customerCount = DB::table('order_details')->sum('unit_price');
-            $customerCount = floor($customerCount);
+            $total_price = DB::table('order_details')->sum('unit_price');
+            $total_price = number_format($total_price);
         }
-        return view('dashboard', compact('orderCount', 'deliveryCount', 'customerCount','filter'));
+        return view('dashboard', compact('orderCount', 'deliveryCount', 'total_price','filter'));
     }
 }

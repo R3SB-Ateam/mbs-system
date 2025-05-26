@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>ダッシュボード</title>
-    <link rel="stylesheet" href="../resources/css/dashboard.css">
+    <link rel="stylesheet" href="{{ asset('css/dashboard.css') }}">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
@@ -38,8 +38,8 @@
                 <p>{{$deliveryCount}} 件</p>
             </div>
             <div class="status-card" style="border-left-color: #2ecc71;">
-                <h3>{{$filter === 'recent' ? '1週間の合計金額' : '全体の合計金額'}}</h3>
-                <p>{{$customerCount}} 円</p>
+                <h3>{{$filter === 'recent' ? '直近2日間の合計金額' : '全体の合計金額'}}</h3>
+                <p>{{$total_price}} 円</p>
             </div>
         </div>
     </div>

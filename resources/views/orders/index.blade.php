@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>注文一覧</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.1.2/dist/tailwind.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="../../resources/css/orders.css">
+    <link rel="stylesheet" href="{{ asset('css/orders.css') }}">
 </head>
 <body>
     @if (session('success'))

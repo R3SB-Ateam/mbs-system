@@ -9,9 +9,9 @@
 <body>
     <div class="button-container">
         <h2>ダッシュボード</h2>
-        <a href="{{ route('orders.index') }}" class="btn">注文一覧</a>
-        <a href="{{ route('deliveries.index') }}" class="btn">納品一覧</a>
-        <a href="{{ route('customers.index') }}" class="btn">顧客一覧</a>
+        <a href="{{ route('orders.index') }}" class="btn">注文1覧</a>
+        <a href="{{ route('deliveries.index') }}" class="btn">納品1覧</a>
+        <a href="{{ route('customers.index') }}" class="btn">顧客1覧</a>
         <a href="{{ route('customers.edit') }}" class="btn">顧客更新</a>
     </div>
     <div class="content">
@@ -25,24 +25,20 @@
             <label for="filter-all">全体</label>
 
             <input type="radio" name="filter" value="recent" id="filter-recent" onchange="this.form.submit()" {{ $filter === 'recent' ? 'checked' : '' }}>
-            <label for="filter-recent">直近2日</label>
+            <label for="filter-recent">直近1週間</label>
         </fieldset>
-        </form>
-
-
-
 
         <div class="status-cards">
             <div class="status-card" style="border-left-color: #3498db;">
-                <h3>{{$filter === 'recent' ? '直近2日間の注文件数' : '全体の注文件数'}}</h3>
+                <h3>{{$filter === 'recent' ? '1週間の注文件数' : '全体の注文件数'}}</h3>
                 <p>{{$orderCount}} 件</p>
             </div>
             <div class="status-card" style="border-left-color: #e67e22;">
-                <h3>{{$filter === 'recent' ? '直近2日間の納品件数' : '全体の納品件数'}}</h3>
+                <h3>{{$filter === 'recent' ? '1週間の納品件数' : '全体の納品件数'}}</h3>
                 <p>{{$deliveryCount}} 件</p>
             </div>
             <div class="status-card" style="border-left-color: #2ecc71;">
-                <h3>{{$filter === 'recent' ? '直近2日間の合計金額' : '全体の合計金額'}}</h3>
+                <h3>{{$filter === 'recent' ? '1週間の合計金額' : '全体の合計金額'}}</h3>
                 <p>{{$customerCount}} 円</p>
             </div>
         </div>

@@ -23,12 +23,12 @@ class DashboardController extends Controller
         if ($filter === 'recent') {
             
             $today = Carbon::today();
-            $yesterday = Carbon::yesterday();
+            $oneWeekAgo = Carbon::now()->subDays(7);
 
             // 注文件数,納品件数,顧客数（過去二日）
-            $orderCount = Order::where('order_date','>=',$yesterday)->count();
-            $deliveryCount = Deliveries::where('delivery_date','>=',$yesterday)->count();
-            $customerCount = DB::table('order_details')->where('unit_price', '>=', $yesterday)->sum('unit_price');
+            $orderCount = Order::where('order_date','>=',$oneWeekAgo)->count();
+            $deliveryCount = Deliveries::where('delivery_date','>=',$oneWeekAgo)->count();
+            $customerCount = DB::table('order_details')->where('unit_price', '>=', $oneWeekAgo)->sum('unit_price');
             $customerCount = floor($customerCount);
         }else{
             // 合計件数（全体）

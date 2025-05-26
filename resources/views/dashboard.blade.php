@@ -9,9 +9,9 @@
 <body>
     <div class="button-container">
         <h2>ダッシュボード</h2>
-        <a href="{{ route('orders.index') }}" class="btn">注文1覧</a>
-        <a href="{{ route('deliveries.index') }}" class="btn">納品1覧</a>
-        <a href="{{ route('customers.index') }}" class="btn">顧客1覧</a>
+        <a href="{{ route('orders.index') }}" class="btn">注文一覧</a>
+        <a href="{{ route('deliveries.index') }}" class="btn">納品一覧</a>
+        <a href="{{ route('customers.index') }}" class="btn">顧客一覧</a>
         <a href="{{ route('customers.edit') }}" class="btn">顧客更新</a>
     </div>
     <div class="content">
@@ -38,7 +38,7 @@
                 <p>{{$deliveryCount}} 件</p>
             </div>
             <div class="status-card" style="border-left-color: #2ecc71;">
-                <h3>{{$filter === 'recent' ? '直近2日間の合計金額' : '全体の合計金額'}}</h3>
+                <h3>{{$filter === 'recent' ? '直近1週間の合計金額' : '全体の合計金額'}}</h3>
                 <p>{{$total_price}} 円</p>
             </div>
         </div>

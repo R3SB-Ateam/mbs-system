@@ -50,7 +50,7 @@
                         <th class="px-4 py-3 border-b">登録日</th>
                         <th class="px-4 py-3 border-b">電話番号</th>
                         <th class="px-4 py-3 border-b">売上</th>
-                        <th class="px-4 py-3 border-b">平均RT</th>
+                        <th class="px-4 py-3 border-b">平均RT(日)</th>
                     </tr>
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-200">
@@ -61,7 +61,9 @@
                             <td class="px-4 py-3">{{ $customer->registration_date }}</td>
                             <td class="px-4 py-3">{{ $customer->phone_number }}</td>
                             <td class="px-4 py-3">{{ number_format($customer->total_sales) }}円</td>
-                            <td class="px-4 py-3">-</td> {{-- 平均RTは後で対応 --}}
+                            <td class="px-4 py-3">
+                                {{ $customer->average_rt !== null ? $customer->average_rt . '日' : '-' }}
+                            </td>
                         </tr>
                     @endforeach
                 </tbody>

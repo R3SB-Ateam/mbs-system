@@ -72,6 +72,11 @@ h1 {
 /* 検索フォーム */
 .search-form {
     margin-bottom: 20px;
+    text-align: right;
+}
+
+.keyword-text{
+    width: 175px;
 }
 
 .search-form select,

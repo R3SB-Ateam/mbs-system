@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\DeliveryController;
 use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\UpdateController;
 
 Route::get('/', function () {
     return view('dashboard');
@@ -40,6 +41,5 @@ Route::post('/deliveries/return', [DeliveryController::class, 'processReturn'])-
 // 顧客一覧ページ
 Route::get('/customers', [CustomerController::class, 'index'])->name('customers.index');
 
-Route::get('/customers/edit', function () {
-    return '顧客更新ページ';
-})->name('customers.edit');
+// 顧客更新ページ
+Route::get('/update', [UpdateController::class, 'update'])->name('customers.edit');

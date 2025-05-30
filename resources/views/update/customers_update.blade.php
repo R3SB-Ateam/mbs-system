@@ -37,7 +37,7 @@
         </div>
 
         <!-- アップロードフォーム -->
-        <form id="uploadForm" action="{{ route('customers.update') }}" method="post" enctype="multipart/form-data">
+        <form id="uploadForm" action="{{ route('customers.edit') }}" method="post" enctype="multipart/form-data">
             @csrf
             
             <div class="file-input-wrapper">

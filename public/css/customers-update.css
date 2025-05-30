@@ -1,0 +1,299 @@
+/* 基本リセット */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+/* ボディスタイル */
+body {
+    font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    padding: 20px;
+    line-height: 1.6;
+}
+
+/* メインコンテナ */
+.container {
+    max-width: 650px;
+    margin: 0 auto;
+    background: #fff;
+    padding: 50px;
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+/* デコレーション要素 */
+.container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #007bff, #28a745, #ffc107);
+}
+
+/* メインタイトル */
+h1 {
+    margin-bottom: 40px;
+    font-size: 32px;
+    color: #333;
+    font-weight: 600;
+    position: relative;
+}
+
+h1::after {
+    content: '';
+    display: block;
+    width: 60px;
+    height: 3px;
+    background: #007bff;
+    margin: 15px auto 0;
+    border-radius: 2px;
+}
+
+/* フォームラベル */
+label {
+    display: block;
+    font-size: 18px;
+    font-weight: 500;
+    margin-bottom: 20px;
+    color: #555;
+}
+
+/* ファイル入力フィールド */
+.file-input-wrapper {
+    position: relative;
+    display: inline-block;
+    margin-bottom: 30px;
+    width: 100%;
+}
+
+input[type="file"] {
+    width: 100%;
+    padding: 15px;
+    border: 2px dashed #ddd;
+    border-radius: 8px;
+    background-color: #fafafa;
+    font-size: 16px;
+    color: #666;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+input[type="file"]:hover {
+    border-color: #007bff;
+    background-color: #f0f8ff;
+}
+
+input[type="file"]:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+}
+
+/* アップロードボタン */
+button {
+    background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+    color: white;
+    font-size: 18px;
+    font-weight: 600;
+    border: none;
+    border-radius: 8px;
+    padding: 15px 40px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0, 123, 255, 0.3);
+}
+
+button:active {
+    transform: translateY(0);
+}
+
+button:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+/* メッセージベース */
+.message {
+    margin-top: 25px;
+    padding: 15px 20px;
+    border-radius: 8px;
+    font-weight: 500;
+    text-align: left;
+    position: relative;
+    animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* エラーメッセージ */
+.error {
+    background-color: #f8d7da;
+    color: #721c24;
+    border-left: 4px solid #dc3545;
+}
+
+.error::before {
+    content: '⚠️';
+    margin-right: 8px;
+}
+
+/* 成功メッセージ */
+.success {
+    background-color: #d4edda;
+    color: #155724;
+    border-left: 4px solid #28a745;
+}
+
+.success::before {
+    content: '✅';
+    margin-right: 8px;
+}
+
+/* プログレスバー（オプション） */
+.progress-container {
+    width: 100%;
+    background-color: #f0f0f0;
+    border-radius: 10px;
+    margin: 20px 0;
+    overflow: hidden;
+    display: none;
+}
+
+.progress-bar {
+    height: 6px;
+    background: linear-gradient(90deg, #007bff, #28a745);
+    width: 0%;
+    transition: width 0.3s ease;
+}
+
+/* ファイル情報表示 */
+.file-info {
+    margin-top: 15px;
+    padding: 10px;
+    background-color: #f8f9fa;
+    border-radius: 6px;
+    font-size: 14px;
+    color: #666;
+    display: none;
+}
+
+/* 要件リスト */
+.requirements {
+    background-color: #e3f2fd;
+    border-radius: 8px;
+    padding: 20px;
+    margin: 25px 0;
+    text-align: left;
+}
+
+.requirements h3 {
+    color: #1976d2;
+    margin-bottom: 15px;
+    font-size: 18px;
+}
+
+.requirements ul {
+    list-style: none;
+    padding: 0;
+}
+
+.requirements li {
+    margin-bottom: 8px;
+    color: #555;
+    position: relative;
+    padding-left: 20px;
+}
+
+.requirements li::before {
+    content: '•';
+    color: #1976d2;
+    position: absolute;
+    left: 0;
+    font-weight: bold;
+}
+
+/* レスポンシブデザイン */
+@media (max-width: 768px) {
+    body {
+        padding: 15px;
+    }
+    
+    .container {
+        padding: 30px 25px;
+        margin: 10px auto;
+    }
+    
+    h1 {
+        font-size: 26px;
+        margin-bottom: 30px;
+    }
+    
+    button {
+        padding: 12px 30px;
+        font-size: 16px;
+    }
+    
+    input[type="file"] {
+        padding: 12px;
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        padding: 25px 20px;
+    }
+    
+    h1 {
+        font-size: 22px;
+    }
+    
+    button {
+        width: 100%;
+        padding: 12px;
+    }
+}
+
+/* 印刷スタイル */
+@media print {
+    body {
+        background: white;
+        padding: 0;
+    }
+    
+    .container {
+        box-shadow: none;
+        border: 1px solid #ccc;
+    }
+    
+    button {
+        display: none;
+    }
+}

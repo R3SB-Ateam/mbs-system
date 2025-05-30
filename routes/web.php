@@ -42,4 +42,4 @@ Route::post('/deliveries/return', [DeliveryController::class, 'processReturn'])-
 Route::get('/customers', [CustomerController::class, 'index'])->name('customers.index');
 
 // 顧客更新ページ
-Route::get('/update', [UpdateController::class, 'update'])->name('customers.edit');
+Route::put('/customers/{customer}', [CustomerController::class, 'update'])->name('customers.update');

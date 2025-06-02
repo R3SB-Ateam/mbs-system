@@ -6,7 +6,7 @@
     <title>納品登録</title>
     <link href="{{ asset('css/new_delivery.css') }}" rel="stylesheet">
 </head>
-<body class="page-body">
+<body>
     <div class="main-container">
         <h1 class="page-title">納品登録</h1>
         <form method="POST" action="{{ route('orders.delivery_store') }}">

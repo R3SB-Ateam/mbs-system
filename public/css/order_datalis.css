@@ -175,6 +175,25 @@ body {
 /* =========================
    テーブルスタイル
    ========================= */
+
+.table-wrapper {
+    max-height: 450px; /* 表示領域の高さを調整 */
+    overflow-y: auto;  /* 縦スクロールを有効化 */
+    border: 1px solid #ddd; /* お好みで枠線 */
+    background-color: white;
+    margin-bottom: 20px;
+}
+
+.table-wrapper thead th {
+    padding: 10px; /* 既存に合わせて調整 */
+    line-height: 1.4;
+    position: sticky;
+    top: 0;
+    background-color: #f3f4f6;
+    z-index: 10;
+    border-bottom: 2px solid #ddd;
+}
+
 table {
   width: 100%;
   border-collapse: collapse;

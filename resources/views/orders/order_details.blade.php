@@ -28,16 +28,17 @@
             <div class="table-container">
                 <table class="table">
                     <colgroup>
-                        <col style="width: 12%;">
-                        <col style="width: 11%;">
-                        <col style="width: 11%;">
-                        <col style="width: 9%;">
+                        <col style="width: 12%;">  <!-- 注文詳細ID -->
+                        <col style="width: 13%;">  <!-- 商品名 -->
+                        <col style="width: 11%;">  <!-- 単価 -->
+                        <col style="width: 9%;">   <!-- 数量 -->
                         <col style="width: 13%;">  <!-- 納品状況 -->
                         <col style="width: 13%;">  <!-- 納品日 -->
                         <col style="width: 22%;">  <!-- 備考（キャンセル理由が入るので広め） -->
                         <col style="width: 12%;">  <!-- キャンセル（キャンセル済み表示のスペース確保） -->
                     </colgroup>
-
+                    
+                    <div>
                     <thead class="table-head">
                         <tr>
                             <th>注文詳細ID</th>
@@ -74,6 +75,7 @@
                             </tr>
                         @endforeach
                     </tbody>
+                    </div>
                 </table>
             </div>
         </div>

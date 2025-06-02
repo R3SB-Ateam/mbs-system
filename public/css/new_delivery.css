@@ -3,7 +3,7 @@
    =============================== */
 
 /* ページ全体の背景とパディング */
-.page-body {
+body {
     background-color: #f3f4f6;
     padding: 1.5rem;
     margin: 0;

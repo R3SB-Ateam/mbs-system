@@ -6,7 +6,7 @@
     <title>注文詳細</title>
     <link href="{{ asset('css/cancel.css') }}" rel="stylesheet">
 </head>
-<body class="page-body">
+<body>
     <div class="page-container">
         <h1 class="page-title">キャンセル対象一覧（注文ID: {{ $order->order_id }}）</h1>
 

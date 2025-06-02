@@ -16,6 +16,9 @@ h1 {
     font-size: 24px;
     font-weight: bold;
     margin-bottom: 20px;
+    border-bottom: 2px solid #000; /* 黒色の下線 */
+    padding-bottom: 8px;           /* 下線と文字の間に余白 */
+    margin-bottom: 16px;  
 }
 
 /* トースト */
@@ -41,6 +44,7 @@ h1 {
 
 /* ナビボタン */
 .nav-buttons {
+    text-align: center;
     margin-bottom: 20px;
 }
 
@@ -101,13 +105,34 @@ h1 {
 }
 
 /* テーブル */
+.table-wrapper {
+    max-height: 450px; /* 表示領域の高さを調整 */
+    overflow-y: auto;  /* 縦スクロールを有効化 */
+    border: 1px solid #ddd; /* お好みで枠線 */
+    background-color: white;
+    margin-bottom: 20px;
+}
+
+.table-wrapper thead th {
+    padding: 10px; /* 既存に合わせて調整 */
+    line-height: 1.4;
+    position: sticky;
+    top: 0;
+    background-color: #f3f4f6;
+    z-index: 10;
+    border-bottom: 2px solid #ddd;
+}
+
 table {
     width: 100%;
     border-collapse: collapse;
     background: white;
     border: 1px solid #ddd;
     margin-bottom: 20px;
+    border-collapse: separate; /* collapse から変更 */
+    border-spacing: 0; /* collapse っぽく見せるため */
 }
+
 
 th, td {
     padding: 10px;
@@ -141,3 +166,18 @@ thead {
 .submit-button:hover {
     background-color: #059669;
 }
+
+@media (max-width: 430px) {
+    .table-wrapper {
+        overflow-x: auto !important;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+        width: 100%;
+    }
+
+    table {
+        min-width: 600px;
+        width: auto;
+    }
+}
+

@@ -25,10 +25,7 @@
     <div class="container">
         <h1>注文一覧</h1>
 
-        <div class="nav-buttons">
-            <a href="{{ route('orders.new_order') }}" class="button-link blue">新規注文登録</a>
-            <a href="{{ route('dashboard') }}" class="button-link gray">ダッシュボードに戻る</a>
-        </div>
+       
 
         <form method="GET" action="{{ route('orders.index') }}" class="search-form">
             <label for="store_id">店舗を選択:</label>
@@ -45,7 +42,9 @@
             <button type="submit" class="filter-button">絞り込み</button>
         </form>
 
+        
         <form method="POST" action="{{ route('orders.delivery_prepare') }}">
+        <div class="table-wrapper">
             @csrf
             <table>
                 <thead>
@@ -71,8 +70,13 @@
                     @endforeach
                 </tbody>
             </table>
-
+            </div>
+            <div class="nav-buttons">
+                <a href="{{ route('dashboard') }}" class="button-link gray">ダッシュボードに戻る</a>
+                <a href="{{ route('orders.new_order') }}" class="button-link blue">新規注文登録</a>
+            
             <button type="submit" class="submit-button">納品登録</button>
+            </div>
         </form>
     </div>
 </body>

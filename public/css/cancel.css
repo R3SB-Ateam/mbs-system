@@ -3,7 +3,7 @@
    =============================== */
 
 /* ページ全体の背景とテキスト色 */
-.page-body {
+body {
     background-color: #f9fafb;
     color: #1f2937;
     margin: 0;

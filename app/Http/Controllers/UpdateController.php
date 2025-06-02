@@ -21,6 +21,13 @@ class UpdateController extends Controller
     private const BATCH_SIZE = 500; // バッチ処理サイズ
     private const MAX_FILE_SIZE = 10240; // 10MB in KB
 
+
+    public function edit()
+    {
+        // フォーム画面を返す
+        return view('update.customers_update'); // Blade ファイル名に応じて修正
+    }
+
     public function update(Request $request)
     {
         if ($request->isMethod('post') && $request->hasFile('excel_file')) {
@@ -35,7 +42,7 @@ class UpdateController extends Controller
                 $result = $this->processExcelFile($request->file('excel_file'));
                 
                 $message = $this->buildSuccessMessage($result);
-                return redirect()->route('customers.edit')->with('success', $message);
+                return redirect()->route('edit')->with('success', $message);
                 
             } catch (Exception $e) {
                 Log::error('Excel処理エラー', [
@@ -226,8 +233,7 @@ class UpdateController extends Controller
             'delivery_location' => trim($row['F'] ?? ''),
             'remarks' => trim($row['G'] ?? ''),
             'registration_date' => $registrationDate ?? now()->toDateString(),
-            'deletion_flag' => null,
-            'updated_at' => now(),
+            'deletion_flag' => 0,
         ];
     }
 
@@ -312,13 +318,13 @@ class UpdateController extends Controller
         $insertData = [];
 
         foreach ($chunk as $customerId => $excelData) {
+            $excelData = (array) $excelData;
+
             if (!$dbCustomers->has($customerId)) {
-                // 新規追加
-                $excelData['created_at'] = now();
+                // created_at を追加せず保存
                 $insertData[] = $excelData;
                 $addedCount++;
             } else {
-                // 更新チェック
                 $dbData = (array) $dbCustomers[$customerId];
                 if ($this->needsUpdate($dbData, $excelData)) {
                     DB::table('customers')
@@ -330,6 +336,8 @@ class UpdateController extends Controller
                 $dbCustomers->forget($customerId);
             }
         }
+
+
 
         // バッチ挿入
         if (!empty($insertData)) {

@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>注文詳細</title>
-    <link href="{{ asset('css/order_datalis.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/order_datails.css') }}" rel="stylesheet">
 </head>
 <body>
     <div class="container">
@@ -27,6 +27,7 @@
             <h2 class="section-title-detail">注文商品の詳細</h2>
             <div class="table-container">
                 <table class="table">
+                    <div class="table-wrapper">
                     <colgroup>
                         <col style="width: 12%;">  <!-- 注文詳細ID -->
                         <col style="width: 13%;">  <!-- 商品名 -->
@@ -38,7 +39,6 @@
                         <col style="width: 12%;">  <!-- キャンセル（キャンセル済み表示のスペース確保） -->
                     </colgroup>
                     
-                    <div>
                     <thead class="table-head">
                         <tr>
                             <th>注文詳細ID</th>

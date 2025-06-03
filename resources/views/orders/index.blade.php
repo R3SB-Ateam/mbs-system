@@ -25,8 +25,6 @@
     <div class="container">
         <h1>注文一覧</h1>
 
-       
-
         <form method="GET" action="{{ route('orders.index') }}" class="search-form">
             <label for="store_id">店舗を選択:</label>
             <select name="store_id" id="store_id">

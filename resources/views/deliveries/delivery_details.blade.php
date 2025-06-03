@@ -15,7 +15,7 @@
         <!-- アクションボタン -->
         <div class="mb-6 flex flex-wrap gap-4">
             <a href="{{ route('deliveries.index') }}"
-               class="inline-block px-4 py-2 bg-gray-200 text-gray-800 rounded hover:bg-gray-300">
+               class="inline-block px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700">
                 ← 納品一覧に戻る
             </a>
             <a href="{{ route('deliveries.return_form', ['delivery_id' => $delivery->delivery_id]) }}"

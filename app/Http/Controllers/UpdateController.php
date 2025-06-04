@@ -209,33 +209,35 @@ class UpdateController extends Controller
     }
 
     private function buildCustomerData($row, $storeId, $index)
-    {
-        $customerId = trim($row['A'] ?? '');
-        $name = trim($row['B'] ?? '');
+{
+    $customerId = trim($row['A'] ?? '');
+    $name = trim($row['C'] ?? ''); // C列：顧客名
 
-        if (empty($name)) {
-            throw new Exception("顧客名が入力されていません（顧客ID: {$customerId}）");
-        }
-
-        // 電話番号の検証とフォーマット
-        $phoneNumber = $this->validateAndFormatPhoneNumber($row['E'] ?? '', $customerId);
-        
-        // 日付の解析
-        $registrationDate = $this->parseDate($row['H'] ?? '');
-
-        return [
-            'store_id' => $storeId,
-            'customer_id' => $customerId,
-            'name' => $name,
-            'staff' => trim($row['C'] ?? ''),
-            'address' => trim($row['D'] ?? ''),
-            'phone_number' => $phoneNumber,
-            'delivery_location' => trim($row['F'] ?? ''),
-            'remarks' => trim($row['G'] ?? ''),
-            'registration_date' => $registrationDate ?? now()->toDateString(),
-            'deletion_flag' => 0,
-        ];
+    // 顧客ID必須 & 5桁チェック
+    if (!preg_match('/^\d{5}$/', $customerId)) {
+        throw new Exception("顧客IDが無効です（{$customerId}）: {$index} 行目");
     }
+
+    if (empty($name)) {
+        throw new Exception("顧客名が入力されていません（顧客ID: {$customerId}）");
+    }
+
+    $phoneNumber = $this->validateAndFormatPhoneNumber($row['F'] ?? '', $customerId); // F列：電話番号
+
+    return [
+        'store_id' => $storeId,
+        'customer_id' => $customerId,
+        'name' => $name,
+        'staff' => trim($row['D'] ?? ''),              // D列：担当者名
+        'address' => trim($row['E'] ?? ''),            // E列：住所
+        'phone_number' => $phoneNumber,                // F列：電話番号
+        'delivery_location' => trim($row['G'] ?? ''),  // G列：配達条件等
+        'remarks' => trim($row['H'] ?? ''),            // H列：備考
+        'registration_date' => now()->toDateString(),  // 任意に固定値（または他列から取得するなら指定）
+        'deletion_flag' => 0,
+    ];
+}
+
 
     private function validateAndFormatPhoneNumber($phoneNumber, $customerId)
     {

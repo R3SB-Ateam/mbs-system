@@ -9,28 +9,25 @@ html,
 body {
     height: 100%;
     margin: 0;
-    overflow: hidden;
+    padding: 0;
 }
 
 .container {
     display: flex;
     flex-direction: column;
-    height: 100vb;
+    height: 100vh;
     padding: 16px;
     box-sizing: border-box;
-    overflow: hidden;
+    overflow-x: visible !important;
 }
 
 /* 見出し */
 h1 {
-    font-size: 24px;
-    font-weight: bold;
-    margin-bottom: 20px;
-    border-bottom: 2px solid #000;
-    /* 黒色の下線 */
-    padding-bottom: 8px;
-    /* 下線と文字の間に余白 */
-    margin-bottom: 16px;
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid #e5e7eb;
 }
 
 /* トースト */
@@ -47,6 +44,8 @@ h1 {
 
 /* エラーメッセージ */
 .error-message {
+    position: fixed;
+    width: 100%;
     background-color: #fee2e2;
     color: #b91c1c;
     border: 1px solid #fca5a5;
@@ -150,6 +149,7 @@ h1 {
     /* お好みで枠線 */
     background-color: white;
     margin-bottom: 20px;
+    -webkit-overflow-scrolling: touch;
 }
 
 .table-wrapper thead th {
@@ -173,6 +173,7 @@ table {
     /* collapse から変更 */
     border-spacing: 0;
     /* collapse っぽく見せるため */
+    display: table;
 }
 
 
@@ -196,16 +197,59 @@ thead {
     text-decoration: underline;
 }
 
-@media (max-width: 430px) {
-    .table-wrapper {
-        overflow-x: auto !important;
-        overflow-y: auto;
-        -webkit-overflow-scrolling: touch;
+@media screen and (max-width: 768px) {
+    html, body {
+        overflow-x: auto;
+    }
+
+    .container {
+        padding: 8px;
+        height: auto;
+    }
+
+    .search-form {
+        text-align: left;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .keyword-text,
+    .search-form select,
+    .search-form input[type="text"],
+    .filter-button {
         width: 100%;
+        box-sizing: border-box;
+    }
+
+    .table-wrapper {
+        overflow-x: auto;
+        display: block;
+        -webkit-overflow-scrolling: touch;
     }
 
     table {
         min-width: 600px;
-        width: auto;
+        width: 100%;
+        white-space: nowrap;
+    }
+
+    .nav-buttons {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        align-items: stretch;
+    }
+
+    .button-link,
+    .submit-button {
+        margin-right: 0;
+        margin-bottom: 10px;
+        width: 100%;
+        text-align: center;
+    }
+
+    .submit-button {
+        margin-bottom: 0;
     }
 }

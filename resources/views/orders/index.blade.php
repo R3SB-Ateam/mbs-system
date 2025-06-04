@@ -2,8 +2,10 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>注文一覧</title>
     <link rel="stylesheet" href="{{ asset('css/orders.css') }}">
+
 </head>
 <body>
     @if (session('success'))

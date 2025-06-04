@@ -186,7 +186,6 @@ body {
   overflow-y: auto;/* 縦スクロールを有効化 */
   /* お好みで枠線 */
   background-color: white;
-  margin-bottom: 20px;
 }
 
 .table-wrapper thead th {

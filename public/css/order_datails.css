@@ -182,8 +182,10 @@ body {
    ========================= */
 
 .table-wrapper {
-  max-height: 450px;/* 表示領域の高さを調整 */
-  overflow-y: auto;/* 縦スクロールを有効化 */
+  max-height: 450px;
+  /* 表示領域の高さを調整 */
+  overflow-y: auto;
+  /* 縦スクロールを有効化 */
   /* お好みで枠線 */
   background-color: white;
 }
@@ -320,27 +322,44 @@ a:hover {
     padding: 0.75rem 1rem;
   }
 
-  .flex {
-    flex-direction: column;
-    gap: 0.5rem;
+  .btn-back {
+    margin-right: 10px;
   }
 
-  table {
-    font-size: 0.75rem;
-  }
-
-  .status-delivered,
-  .status-pending {
-    font-size: 0.875rem;
-  }
-}
-
-@media (max-width: 767px) {
   .main-container {
     padding: 1rem;
   }
 
   .info-grid {
     grid-template-columns: 1fr;
+  }
+
+  /* テーブルを横スクロール対応にする */
+  .table-wrapper {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    border-radius: 0.5rem;
+  }
+
+  .table {
+    min-width: 700px;
+    width: max-content;
+    table-layout: auto;
+  }
+
+  .table th,
+  .table td {
+    font-size: 0.85rem;
+    padding: 0.5rem;
+    word-break: break-word;
+  }
+
+  .remarks-cell {
+    font-size: clamp(11px, 2.5vw, 14px);
+  }
+
+  .status-delivered,
+  .status-pending {
+    font-size: 0.875rem;
   }
 }

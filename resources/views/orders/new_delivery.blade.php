@@ -53,13 +53,11 @@
                 </table>
             </div>
 
-            <div class="form-actions">
-                <button type="submit" class="btn-submit">
-                    納品登録
-                </button>
-                <a href="{{ route('orders.index') }}" class="inline-block px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700">
-                    ← 注文一覧に戻る
-                </a>
+            <div class="btn">
+                <a href="{{ route('orders.index') }}" class="btn-back">← 注文一覧に戻る</a>
+            
+                <button type="submit" class="btn-submit">納品登録</button>
+                
             </div>
         </form>
     </div>

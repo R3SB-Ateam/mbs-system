@@ -2,9 +2,11 @@
 <html>
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ダッシュボード</title>
     <link rel="stylesheet" href="{{ asset('css/dashboard.css') }}">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="{{ asset('js/dashboard.js') }}"></script>
+    
 </head>
 <body>
     <div class="button-container">
@@ -43,6 +45,5 @@
             </div>
         </div>
     </div>
-    <script src="/mbs-system/resources/js/dashboard.js"></script>
 </body>
 </html>

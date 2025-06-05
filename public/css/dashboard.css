@@ -184,7 +184,15 @@ body {
     }
 
     .content {
-        padding: 20px;
+        padding: 10px 15px;
+        padding-bottom: 80px;
+    }
+
+    .content h1 {
+        font-size: 25px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
 
     .status-cards {
@@ -195,9 +203,11 @@ body {
     .status-card {
         min-width: auto;
         width: 100%;
+        padding: 15px; /* 少しコンパクトに */
+        font-size: 90%;
     }
 
- #filter-toggle label {
+    #filter-toggle label {
         display: block;
         width: 100%;
         margin-right: 0;

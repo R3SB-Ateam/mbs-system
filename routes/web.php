@@ -5,10 +5,15 @@ use App\Http\Controllers\OrderController;
 use App\Http\Controllers\DeliveryController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\UpdateController;
+use App\Http\Controllers\DashboardController;
 
 Route::get('/', function () {
     return view('dashboard');
 })->name('dashboard');
+
+// DashboardControllerのindexメソッドを呼び出して、ダッシュボード画面を表示する
+Route::get('/', [DashboardController::class, 'index']);
+Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
 // 注文一覧ページ
 Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
@@ -41,6 +46,9 @@ Route::post('/deliveries/return', [DeliveryController::class, 'processReturn'])-
 // 顧客一覧ページ
 Route::get('/customers', [CustomerController::class, 'index'])->name('customers.index');
 
+
 // 顧客更新ページ
 Route::get('/customers/edit', [UpdateController::class, 'edit'])->name('customers.edit');
 Route::post('/customers/edit', [UpdateController::class, 'update']); // 処理用
+
+

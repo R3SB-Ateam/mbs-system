@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>注文一覧</title>
-    <link rel="stylesheet" href="{{ asset('css/orders.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/page/orders.css') }}">
     <script src="{{ asset('js/orders.js') }}"></script>
 
 </head>

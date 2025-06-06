@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>納品登録</title>
-    <link href="{{ asset('css/new_delivery.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/page/new_delivery.css') }}" rel="stylesheet">
 </head>
 <body>
     <div class="main-container">

@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>新規注文登録</title>
-    <link href="{{ asset('css/new_order.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/page/new_order.css') }}" rel="stylesheet">
     
     <script>
         function addProductRow() {

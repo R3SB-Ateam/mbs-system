@@ -34,11 +34,11 @@ h1 {
 #toast-message {
     position: fixed;
     width: 100%;
-    background-color: #16a34a;
-    color: white;
+    background-color: #dcfce7; /* 薄い緑背景 */
+    color: #166534;            /* 濃い緑の文字色 */
+    border: 1px solid #86efac; /* 明るめの緑のボーダー */
     padding: 10px 20px;
     border-radius: 5px;
-    z-index: 999;
 }
 
 /* エラーメッセージ */
@@ -48,8 +48,7 @@ h1 {
     background-color: #fee2e2;
     color: #b91c1c;
     border: 1px solid #fca5a5;
-    padding: 10px;
-    margin-bottom: 20px;
+    padding: 10px 20px;
     border-radius: 5px;
 }
 
@@ -57,6 +56,8 @@ h1 {
 .error-message {
     opacity: 1;
     transition: opacity 0.5s ease-out;
+    font-size: 14px;
+    line-height: 1.5;
 }
 
 

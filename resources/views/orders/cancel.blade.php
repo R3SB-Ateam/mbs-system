@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>注文詳細</title>
-    <link href="{{ asset('css/cancel.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/page/cancel.css') }}" rel="stylesheet">
 </head>
 <body>
     <div class="page-container">

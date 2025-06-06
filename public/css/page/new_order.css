@@ -278,3 +278,30 @@ body {
     margin-bottom: 1rem;
     border: 1px solid #bfdbfe;
 }
+
+/* スマホ対応 */
+@media screen and (max-width: 768px) {
+    .product-row {
+      display: grid;
+      grid-template-columns: 1fr; /* 1列に */
+      grid-template-rows: repeat(4, auto); /* 4行 */
+      gap: 0.5rem 0; /* 行間の余白 */
+    }
+  
+    .product-row > input,
+    .product-row > button {
+      width: 100%;  /* 幅いっぱいに広げる */
+    }
+  
+    .product-row > button {
+      justify-self: start; /* ボタンだけ左寄せにする場合 */
+    }
+    .form-group,
+    .form-input,
+    .form-select,
+    .form-textarea {
+        width: 100%;
+        box-sizing: border-box;
+    }
+}
+  

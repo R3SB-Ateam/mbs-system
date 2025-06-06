@@ -225,9 +225,9 @@ class UpdateController extends Controller
     $phoneNumber = $this->validateAndFormatPhoneNumber($row['F'] ?? '', $customerId); // F列：電話番号
 
     return [
+        'customer_id' => $customerId,                  // A列：顧客ID
         'store_id' => $storeId,
-        'customer_id' => $customerId,
-        'name' => $name,
+        'name' => $name,                               // C列：顧客名
         'staff' => trim($row['D'] ?? ''),              // D列：担当者名
         'address' => trim($row['E'] ?? ''),            // E列：住所
         'phone_number' => $phoneNumber,                // F列：電話番号
@@ -265,7 +265,7 @@ class UpdateController extends Controller
             // 既存データ取得
             $dbCustomers = DB::table('customers')
                 ->where('store_id', $storeId)
-                ->whereNull('deletion_flag')
+                ->where('deletion_flag', 0)
                 ->get()
                 ->keyBy('customer_id');
 
@@ -284,7 +284,7 @@ class UpdateController extends Controller
                     ->where('store_id', $storeId)
                     ->where('customer_id', $customerId)
                     ->update([
-                        'deletion_flag' => now(),
+                        'deletion_flag' => 1,
                         'updated_at' => now()
                     ]);
                 $deletedCount++;

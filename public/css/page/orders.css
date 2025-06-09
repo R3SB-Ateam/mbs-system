@@ -181,6 +181,7 @@ table {
     border-spacing: 0;
     /* collapse っぽく見せるため */
     display: table;
+    table-layout: fixed; /* 追加 */
 }
 
 

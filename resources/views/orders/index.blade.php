@@ -48,24 +48,38 @@
         <div class="table-wrapper">
             @csrf
             <table>
+            <colgroup>
+                <col style="width: 5%;">
+                <col style="width: 10%;">
+                <col style="width: 12%;">
+                <col style="width: 10%;">
+                <col style="width: 15%;">
+                <col style="width: 13%;">
+                <col style="width: 12%;">
+                <col style="width: 23%;">
+            </colgroup>
                 <thead>
                     <tr>
                         <th></th>
                         <th>注文ID</th>
+                        <th>納品状況</th>
                         <th>顧客ID</th>
                         <th>顧客名</th>
                         <th>注文日</th>
+                        <th>注文金額</th>
                         <th>備考</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach ($orders as $order)
                         <tr>
-                            <td><input type="checkbox" name="order_ids[]" value="{{ $order->order_id }}"></td>
-                            <td><a href="{{ route('orders.order_details', ['order_id' => $order->order_id]) }}" class="table-link">{{ $order->order_id }}</a></td>
+                            <td><input type="checkbox" name="order_ids[]" value="{{ number_format($order->order_id) }}"></td>
+                            <td><a href="{{ route('orders.order_details', ['order_id' => $order->order_id]) }}" class="table-link">{{ number_format($order->order_id) }}</a></td>
+                            <td>{{ $order->delivery_status_text }}
                             <td>{{ $order->customer_id }}</td>
                             <td>{{ $order->customer_name }}</td>
                             <td>{{ $order->order_date }}</td>
+                            <td>{{ number_format($order->total_amount) }}</td> <!-- 注文金額 -->
                             <td>{{ $order->remarks }}</td>
                         </tr>
                     @endforeach

@@ -21,7 +21,7 @@
         @endif
 
         <!-- タイトル -->
-        <h1 class="text-2xl font-bold mb-6 border-b pb-2">納品一覧★</h1>
+        <h1 class="text-2xl font-bold mb-6 border-b pb-2">納品一覧</h1>
 
         <!-- ボタン -->
         <div class="mb-6">

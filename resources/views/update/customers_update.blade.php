@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>顧客更新 - MBS System</title>
-    <link rel="stylesheet" href="{{ asset('css/customers-update.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/customers-update.css') }}?v=123">
 </head>
 <body>
     <div class="container">
@@ -32,7 +32,7 @@
                 <li>Excel形式（.xlsx, .xls）のファイルのみ</li>
                 <li>ファイル名に店舗情報（緑橋/今里/深江橋）を含める</li>
                 <li>ファイルサイズは10MB以下</li>
-                <li>A列：顧客ID、B列：名前は必須</li>
+                <li>A列：顧客ID、C列：名前は必須</li>
             </ul>
         </div>
 

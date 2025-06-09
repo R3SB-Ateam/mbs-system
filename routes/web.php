@@ -49,6 +49,6 @@ Route::get('/customers', [CustomerController::class, 'index'])->name('customers.
 
 // 顧客更新ページ
 Route::get('/customers/edit', [UpdateController::class, 'edit'])->name('customers.edit');
-Route::post('/customers/edit', [UpdateController::class, 'update']); // 処理用
+Route::post('/customers/edit', [UpdateController::class, 'update'])->name('edit'); // 処理用
 
 

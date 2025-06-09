@@ -7,6 +7,7 @@ use PhpOffice\PhpSpreadsheet\IOFactory;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Exception;
+use App\Models\Customers;
 
 class UpdateController extends Controller
 {
@@ -92,53 +93,64 @@ class UpdateController extends Controller
     }
 
     private function processExcelFile($file)
-    {
-        $fileName = $file->getClientOriginalName();
-        $storeId = $this->getStoreIdFromFileName($fileName);
-        
-        if (!$storeId) {
-            throw new Exception('ファイル名に店舗情報が含まれていません。');
-        }
+{
+    $fileName = $file->getClientOriginalName();
 
-        // メモリ監視開始
-        $initialMemory = memory_get_usage();
-        Log::info('Excel処理開始', [
+    $storeId = $this->getStoreIdFromFileName($fileName);
+
+    if (!$storeId) {
+        throw new Exception('ファイル名に店舗情報が含まれていません。');
+    }
+
+    // 顧客削除フラグ処理例（例: 顧客IDが1のデータを削除）
+    $customer = Customers::where('customer_id', 1)
+                      ->where('store_id', $storeId)
+                      ->first();
+    if ($customer) {
+        $customer->deletion_flag = 1;
+        $customer->save();
+    }
+
+    // メモリ監視開始
+    $initialMemory = memory_get_usage();
+    Log::info('Excel処理開始', [
+        'store_id' => $storeId,
+        'file_name' => $fileName,
+        'memory_usage' => $this->formatBytes($initialMemory)
+    ]);
+
+    try {
+        $spreadsheet = IOFactory::load($file->getRealPath());
+        $rows = $spreadsheet->getActiveSheet()->toArray(null, true, true, true);
+
+        // データ検証
+        $this->validateExcelData($rows);
+
+        // 顧客データ処理
+        $excelCustomers = $this->parseExcelData($rows, $storeId);
+        $result = $this->updateCustomerData($excelCustomers, $storeId);
+
+        // 処理完了ログ
+        $finalMemory = memory_get_usage();
+        Log::info('Excel処理完了', [
             'store_id' => $storeId,
-            'file_name' => $fileName,
-            'memory_usage' => $this->formatBytes($initialMemory)
+            'result' => $result,
+            'memory_usage' => $this->formatBytes($finalMemory),
+            'memory_increase' => $this->formatBytes($finalMemory - $initialMemory)
         ]);
 
-        try {
-            $spreadsheet = IOFactory::load($file->getRealPath());
-            $rows = $spreadsheet->getActiveSheet()->toArray(null, true, true, true);
+        return $result;
 
-            // データ検証
-            $this->validateExcelData($rows);
-
-            // 顧客データ処理
-            $excelCustomers = $this->parseExcelData($rows, $storeId);
-            $result = $this->updateCustomerData($excelCustomers, $storeId);
-
-            // 処理完了ログ
-            $finalMemory = memory_get_usage();
-            Log::info('Excel処理完了', [
-                'store_id' => $storeId,
-                'result' => $result,
-                'memory_usage' => $this->formatBytes($finalMemory),
-                'memory_increase' => $this->formatBytes($finalMemory - $initialMemory)
-            ]);
-
-            return $result;
-
-        } finally {
-            // メモリクリーンアップ
-            if (isset($spreadsheet)) {
-                $spreadsheet->disconnectWorksheets();
-                unset($spreadsheet);
-            }
-            gc_collect_cycles();
+    } finally {
+        // メモリクリーンアップ
+        if (isset($spreadsheet)) {
+            $spreadsheet->disconnectWorksheets();
+            unset($spreadsheet);
         }
+        gc_collect_cycles();
     }
+}
+
 
     private function getStoreIdFromFileName($fileName)
     {
@@ -285,7 +297,6 @@ class UpdateController extends Controller
                     ->where('customer_id', $customerId)
                     ->update([
                         'deletion_flag' => 1,
-                        'updated_at' => now()
                     ]);
                 $deletedCount++;
             }

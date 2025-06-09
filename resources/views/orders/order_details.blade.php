@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>注文詳細</title>
+    <title>注文明細</title>
     <link href="{{ asset('css/page/order_datails.css') }}" rel="stylesheet">
 </head>
 <body>
     <div class="container">
         <h1 class="page-title">
-            注文詳細 <span class="sub-title">(注文ID: {{ $order->order_id }})</span>
+            注文明細 <span class="sub-title">(注文ID: {{ $order->order_id }})</span>
         </h1>
 
         <!-- 注文情報 -->

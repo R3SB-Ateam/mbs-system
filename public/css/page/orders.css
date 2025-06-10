@@ -70,11 +70,12 @@ h1 {
 
 .button-link {
     text-decoration: none;
-    padding: 8px 16px;
+    padding: 10px 20px;
     margin-right: 10px;
     border-radius: 4px;
     color: white;
     font-size: 14px;
+    transition: all 0.2s ease-in-out;
 }
 
 .button-link.blue {
@@ -181,9 +182,13 @@ table {
     border-spacing: 0;
     /* collapse っぽく見せるため */
     display: table;
-    table-layout: fixed; /* 追加 */
+    table-layout: auto;
 }
 
+td:last-child {
+    word-break: break-word;
+    white-space: normal;
+}
 
 th,
 td {

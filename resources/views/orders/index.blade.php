@@ -55,8 +55,8 @@
                 <col style="width: 10%;">
                 <col style="width: 15%;">
                 <col style="width: 13%;">
-                <col style="width: 12%;">
-                <col style="width: 23%;">
+                <col style="min-width: 80px;">
+                <col style="min-width: 150px;">
             </colgroup>
                 <thead>
                     <tr>
@@ -73,9 +73,9 @@
                 <tbody>
                     @foreach ($orders as $order)
                         <tr>
-                            <td><input type="checkbox" name="order_ids[]" value="{{ number_format($order->order_id) }}"></td>
+                            <td><input type="checkbox" name="order_ids[]" value="{{ $order->order_id }}"></td>
                             <td><a href="{{ route('orders.order_details', ['order_id' => $order->order_id]) }}" class="table-link">{{ number_format($order->order_id) }}</a></td>
-                            <td>{{ $order->delivery_status_text }}
+                            <td>{{ $order->delivery_status_text }}</td>
                             <td>{{ $order->customer_id }}</td>
                             <td>{{ $order->customer_name }}</td>
                             <td>{{ $order->order_date }}</td>

@@ -30,7 +30,7 @@ body {
 /* 商品行のグリッドレイアウト */
 .product-row {
     display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-template-columns: repeat(5, minmax(0, 1fr));
     gap: 1.5rem;
     align-items: center;
     margin-bottom: 0.5rem;
@@ -221,6 +221,7 @@ body {
     padding: 0.5rem 1rem; 
     background-color: #4B5563; 
     color: white;
+    font-weight: 500;
     border-radius: 0.25rem; 
     transition: background-color 0.2s ease; 
     margin-right: 1.5rem;
@@ -289,7 +290,7 @@ body {
     .product-row {
       display: grid;
       grid-template-columns: 1fr; /* 1列に */
-      grid-template-rows: repeat(4, auto); /* 4行 */
+      grid-template-rows: repeat(5, auto); /* 4行 */
       gap: 0.5rem 0; /* 行間の余白 */
     }
   

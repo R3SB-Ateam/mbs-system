@@ -15,6 +15,7 @@
                 <input type="text" name="product_name[]" placeholder="商品名" required class="form-input">
                 <input type="number" name="unit_price[]" placeholder="単価" min="0" required class="form-input">
                 <input type="number" name="quantity[]" placeholder="数量" min="1" required class="form-input">
+                <input type="text" name="product_note[]" placeholder="備考" class="form-input">
                 <button type="button" onclick="removeProductRow(this)" class="btn-danger-text">削除</button>
             `;
             container.appendChild(newRow);
@@ -48,6 +49,7 @@
                     <input type="text" name="product_name[]" placeholder="商品名" required class="form-input">
                     <input type="number" name="unit_price[]" placeholder="単価" min="0" required class="form-input">
                     <input type="number" name="quantity[]" placeholder="数量" min="1" required class="form-input">
+                    <input type="text" name="product_note[]" placeholder="備考" class="form-input">
                 </div>
             </div>
 

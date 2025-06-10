@@ -20,6 +20,18 @@
         <h1>ようこそ、MBSシステムへ</h1>
         <p id="menu-info">左側のメニューから各機能へ移動できます。</p>
 
+        <form method="GET" action="{{ route('dashboard') }}" id="filter-form">
+            <label for="store-select">店舗を選択:</label>
+            <select name="store_id" id="store-select">
+                <option value="">全店舗</option>
+                @foreach ($stores as $store)
+                    <option value="{{ $store->store_id }}" {{ $selectedStoreId == $store->store_id ? 'selected' : '' }}>
+                        {{ $store->store_name }}
+                    </option>
+                @endforeach
+            </select>
+        </form>
+
         <form method="GET" action="{{ route('dashboard') }}" id="filter-toggle" class="filter-toggle">
         <fieldset>
         <legend>表示範囲</legend>

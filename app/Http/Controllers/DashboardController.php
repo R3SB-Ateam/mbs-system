@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\DB;
 use App\Models\Orders as Order;
 use App\Models\Deliveries;
 use App\Models\Customers;
+use App\Models\Store;  // 例：店舗モデルが Store なら
+
 
 class DashboardController extends Controller
 {
@@ -19,6 +21,9 @@ class DashboardController extends Controller
         if (!in_array($filter,['all','recent'],true)){
             $filter = 'all'; // 無効な値ならデフォルトに戻す
         }
+
+        // ここで全店舗を取得
+        $stores = Store::all();
 
         if ($filter === 'recent') {
             
@@ -37,6 +42,10 @@ class DashboardController extends Controller
             $total_price = DB::table('order_details')->sum('unit_price');
             $total_price = number_format($total_price);
         }
-        return view('dashboard', compact('orderCount', 'deliveryCount', 'total_price','filter'));
+
+        // 選択された店舗ID（もしあれば）
+        $selectedStoreId = $request->input('store_id', '');
+
+        return view('dashboard', compact('orderCount', 'deliveryCount', 'total_price','filter', 'stores', 'selectedStoreId'));
     }
 }

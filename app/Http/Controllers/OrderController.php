@@ -20,6 +20,16 @@ class OrderController extends Controller
         $storeId = $request->input('store_id');
         $keyword = $request->input('keyword');
 
+        if ($request->has('store_id') || $request->has('keyword')) {
+            session([
+                'orders_filter.store_id' => $request->input('store_id'),
+                'orders_filter.keyword' => $request->input('keyword'),
+            ]);
+        }
+
+        $storeId = $request->input('store_id', session('orders_filter.store_id'));
+        $keyword = $request->input('keyword', session('orders_filter.keyword'));
+
         // 店舗一覧を取得（セレクトボックス用）
         $orders = DB::table('orders')
             ->join('customers', 'orders.customer_id', '=', 'customers.customer_id')

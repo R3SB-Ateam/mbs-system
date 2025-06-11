@@ -4,38 +4,38 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>注文詳細</title>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.1.2/dist/tailwind.min.css" rel="stylesheet">
+    <link href="{{ asset('css/page/cancel.css') }}" rel="stylesheet">
 </head>
-<body class="bg-gray-50 text-gray-800">
-    <div class="max-w-4xl mx-auto p-6">
-        <h1 class="text-2xl font-bold mb-6">キャンセル対象一覧（注文ID: {{ $order->order_id }}）</h1>
+<body>
+    <div class="page-container">
+        <h1 class="page-title">キャンセル対象一覧（注文ID: {{ $order->order_id }}）</h1>
 
-        <form action="{{ route('orders.processCancel') }}" method="POST" class="space-y-4">
+        <form action="{{ route('orders.processCancel') }}" method="POST" class="form-container">
             @csrf
             <input type="hidden" name="order_id" value="{{ $order->order_id }}">
 
-            <div class="overflow-x-auto">
-                <table class="w-full table-auto border border-gray-300 bg-white shadow-md rounded-md">
-                    <thead class="bg-gray-100 text-left">
+            <div class="table-wrapper">
+                <table class="data-table">
+                    <thead class="table-header">
                         <tr>
-                            <th class="p-3 border">商品名</th>
-                            <th class="p-3 border">数量</th>
-                            <th class="p-3 border">キャンセル数</th>
-                            <th class="p-3 border">キャンセル理由</th>
+                            <th class="table-header-cell">商品名</th>
+                            <th class="table-header-cell">数量</th>
+                            <th class="table-header-cell">キャンセル数</th>
+                            <th class="table-header-cell">キャンセル理由</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach ($orderDetails as $detail)
-                        <tr class="hover:bg-gray-50">
-                            <td class="p-3 border">{{ $detail->product_name }}</td>
-                            <td class="p-3 border text-center">{{ $detail->quantity }}</td>
-                            <td class="p-3 border text-center">
+                        <tr class="table-row">
+                            <td class="table-cell">{{ $detail->product_name }}</td>
+                            <td class="table-cell-center">{{ number_format($detail->quantity) }}</td>
+                            <td class="table-cell-center">
                                 <input type="number" name="cancel_quantities[{{ $detail->order_detail_id }}]" min="0" max="{{ $detail->quantity }}"
-                                       class="w-full border rounded px-2 py-1">
+                                       class="input-number">
                             </td>
-                            <td class="p-3 border">
+                            <td class="table-cell">
                                 <input type="text" name="reasons[{{ $detail->order_detail_id }}]" maxlength="255"
-                                       class="w-full border rounded px-2 py-1">
+                                       class="input-text">
                             </td>
                         </tr>
                         @endforeach
@@ -43,8 +43,9 @@
                 </table>
             </div>
 
-            <div class="text-right">
-                <button type="submit" class="bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-4 rounded shadow">
+            <div class="btn">
+                <a href="{{ route('orders.order_details', ['order_id' => $order->order_id]) }}" class="btn btn-back">← 注文詳細へ戻る</a>
+                <button type="submit" class="btn btn-danger">
                     キャンセル実行
                 </button>
             </div>

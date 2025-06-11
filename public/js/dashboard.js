@@ -9,3 +9,7 @@ function updateMenuText() {
 
 window.addEventListener("load", updateMenuText);
 window.addEventListener("resize", updateMenuText);
+
+document.getElementById('store-select').addEventListener('change', function () {
+        document.getElementById('filter-form').submit();
+});

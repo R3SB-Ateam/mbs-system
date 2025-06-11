@@ -16,45 +16,48 @@ class DashboardController extends Controller
 {
     public function index(Request $request)
     {
-        $filter = $request->input('filter', 'all');
+        // URLパラメータかセッションの順で絞り込み条件を取得
+        $selectedStoreId = $request->input('store_id', session('dashboard_store_id', ''));
+        if ($selectedStoreId === null || $selectedStoreId === '') {
+            $selectedStoreId = '';
+        }
+
+        $filter = $request->input('filter', session('dashboard_filter', 'all'));
         if (!in_array($filter, ['all', 'recent'], true)) {
             $filter = 'all';
         }
 
-        $stores = Store::all();
-        $selectedStoreId = $request->input('store_id', '');
+        // 絞り込み条件をセッションに保存（次回アクセス用）
+        session([
+            'dashboard_store_id' => $selectedStoreId,
+            'dashboard_filter' => $filter,
+        ]);
 
+        $stores = Store::all();
         $oneWeekAgo = Carbon::now()->subDays(7);
 
-        // 注文数
         $orderQuery = DB::table('orders')
             ->join('customers', 'orders.customer_id', '=', 'customers.customer_id');
 
-        // 納品数（order_id 経由ではなく customer_id で直接つなぐ）
         $deliveryQuery = DB::table('deliveries')
             ->join('customers', 'deliveries.customer_id', '=', 'customers.customer_id');
 
-        // 合計金額（order_details → orders → customers）
         $priceQuery = DB::table('order_details')
             ->join('orders', 'order_details.order_id', '=', 'orders.order_id')
             ->join('customers', 'orders.customer_id', '=', 'customers.customer_id');
 
-
-        // 店舗絞り込み
         if (!empty($selectedStoreId)) {
             $orderQuery->where('customers.store_id', $selectedStoreId);
             $deliveryQuery->where('customers.store_id', $selectedStoreId);
             $priceQuery->where('customers.store_id', $selectedStoreId);
         }
 
-        // 日付絞り込み（直近1週間のみ）
         if ($filter === 'recent') {
             $orderQuery->where('orders.order_date', '>=', $oneWeekAgo);
             $deliveryQuery->where('deliveries.delivery_date', '>=', $oneWeekAgo);
-            $priceQuery->where('orders.order_date', '>=', $oneWeekAgo); // 商品ごとの注文日でフィルター
+            $priceQuery->where('orders.order_date', '>=', $oneWeekAgo);
         }
 
-        // 実行
         $orderCount = $orderQuery->count();
         $deliveryCount = $deliveryQuery->count();
         $total_price = number_format($priceQuery->sum(DB::raw('order_details.unit_price * order_details.quantity')));

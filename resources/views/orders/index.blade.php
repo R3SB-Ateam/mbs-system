@@ -31,7 +31,7 @@
         <form method="GET" action="{{ route('orders.index') }}" class="search-form">
             <label for="store_id">店舗を選択:</label>
             <select name="store_id" id="store_id">
-                <option value="">全店舗</option>
+                <option value="" {{ $selectedStoreId === '' ? 'selected' : '' }}>全店舗</option>
                 @foreach ($stores as $store)
                     <option value="{{ $store->store_id }}" {{ $selectedStoreId == $store->store_id ? 'selected' : '' }}>
                         {{ $store->store_name }}
@@ -73,7 +73,12 @@
                 <tbody>
                     @foreach ($orders as $order)
                         <tr>
-                            <td><input type="checkbox" name="order_ids[]" value="{{ $order->order_id }}"></td>
+                            <td><input 
+                                    type="checkbox" 
+                                    name="order_ids[]" 
+                                    value="{{ $order->order_id }}"
+                                    {{ $order->delivery_status_text === '納品済み' ? 'disabled' : '' }}>
+                            </td>
                             <td><a href="{{ route('orders.order_details', ['order_id' => $order->order_id]) }}" class="table-link">{{ number_format($order->order_id) }}</a></td>
                             <td>{{ $order->delivery_status_text }}</td>
                             <td>{{ $order->customer_id }}</td>
@@ -87,9 +92,8 @@
             </table>
             </div>
             <div class="nav-buttons">
-                <a href="{{ route('dashboard') }}" class="button-link gray">ダッシュボードに戻る</a>
+                <a href="{{ route('dashboard', ['store_id' => request('store_id', '')]) }}" class="button-link gray">ダッシュボードに戻る</a>
                 <a href="{{ route('orders.new_order') }}" class="button-link blue">新規注文登録</a>
-            
             <button type="submit" class="submit-button">納品登録</button>
             </div>
         </form>

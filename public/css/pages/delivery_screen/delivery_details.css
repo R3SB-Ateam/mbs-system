@@ -1,0 +1,17 @@
+/* 納品情報グリッドレイアウト */
+.p-delivery-info-grid {
+    display: grid; /* grid */
+    grid-template-columns: 1fr; /* grid-cols-1 */
+    gap: 1rem; /* gap-4 */
+}
+
+/* 中画面以上でのグリッドレイアウト（2カラム） */
+@media (min-width: 768px) { /* md: */
+    .p-delivery-info-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr)); /* md:grid-cols-2 */
+    }
+    /* 中画面以上での備考欄の横幅いっぱいに広げる */
+    .p-delivery-info-remarks {
+        grid-column: span 2 / span 2; /* md:col-span-2 */
+    }
+}

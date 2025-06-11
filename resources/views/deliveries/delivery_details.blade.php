@@ -4,10 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>納品詳細</title>
-    <link href="{{ asset('css/base.css') }}" rel="stylesheet">
-    <link href="{{ asset('css/components.css') }}" rel="stylesheet">
-    <link href="{{ asset('css/buttons/action_buttons.css') }}" rel="stylesheet">
-    <link href="{{ asset('css/pages/delivery_details.css') }}" rel="stylesheet">
+    {{-- すべてのCSSを統合したファイルを参照 --}}
+    <link href="{{ asset('css/page/delivery_details.css') }}" rel="stylesheet">
 </head>
 <body class="c-body">
     <div class="l-container">

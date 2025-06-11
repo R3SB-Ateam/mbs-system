@@ -4,10 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>返品処理</title>
-    <link href="{{ asset('css/base.css') }}" rel="stylesheet">
-    <link href="{{ asset('css/components.css') }}" rel="stylesheet">
-    <link href="{{ asset('css/pages/return_process.css') }}" rel="stylesheet">
-    <link href="{{ asset('css/buttons/general_buttons.css') }}" rel="stylesheet">
+    {{-- すべてのCSSを統合したファイルを参照 --}}
+    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 </head>
 <body class="c-body">
     <div class="l-container-narrow">
@@ -17,34 +15,36 @@
             @csrf
             <input type="hidden" name="delivery_id" value="{{ $delivery_id }}">
 
-            <table class="c-table c-table--bordered">
-                <thead>
-                    <tr class="c-table__head c-table__head--light">
-                        <th class="c-table__th c-table__th--padded">商品名</th>
-                        <th class="c-table__th c-table__th--padded">数量</th>
-                        <th class="c-table__th c-table__th--padded">返品数</th>
-                        <th class="c-table__th c-table__th--padded">返品理由</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach ($deliveryDetails as $detail)
-                        @if (!$detail->return_flag)
-                            <tr>
-                                <td class="c-table__td c-table__td--padded">{{ $detail->product_name }}</td>
-                                <td class="c-table__td c-table__td--padded">{{ $detail->delivery_quantity }}</td>
-                                <td class="c-table__td c-table__td--padded">
-                                    <input type="number" name="return_quantities[{{ $detail->delivery_detail_id }}]"
-                                           min="0" max="{{ $detail->delivery_quantity }}" class="c-form-input-small">
-                                </td>
-                                <td class="c-table__td c-table__td--padded">
-                                    <input type="text" name="reasons[{{ $detail->delivery_detail_id }}]"
-                                           maxlength="255" class="c-form-input-full">
-                                </td>
-                            </tr>
-                        @endif
-                    @endforeach
-                </tbody>
-            </table>
+            <div class="c-table-responsive"> {{-- テーブルがはみ出さないようにラッパーを追加 --}}
+                <table class="c-table c-table--bordered">
+                    <thead>
+                        <tr class="c-table__head c-table__head--light">
+                            <th class="c-table__th c-table__th--padded">商品名</th>
+                            <th class="c-table__th c-table__th--padded">数量</th>
+                            <th class="c-table__th c-table__th--padded">返品数</th>
+                            <th class="c-table__th c-table__th--padded">返品理由</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($deliveryDetails as $detail)
+                            @if (!$detail->return_flag)
+                                <tr class="c-table__row">
+                                    <td class="c-table__td c-table__td--padded">{{ $detail->product_name }}</td>
+                                    <td class="c-table__td c-table__td--padded">{{ $detail->delivery_quantity }}</td>
+                                    <td class="c-table__td c-table__td--padded">
+                                        <input type="number" name="return_quantities[{{ $detail->delivery_detail_id }}]"
+                                                min="0" max="{{ $detail->delivery_quantity }}" class="c-form-input c-form-input--small">
+                                    </td>
+                                    <td class="c-table__td c-table__td--padded">
+                                        <input type="text" name="reasons[{{ $detail->delivery_detail_id }}]"
+                                                maxlength="255" class="c-form-input c-form-input--full">
+                                    </td>
+                                </tr>
+                            @endif
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
 
             <button type="submit" class="c-button c-button--red c-button--mt4">
                 返品実行

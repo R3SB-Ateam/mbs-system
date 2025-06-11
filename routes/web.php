@@ -7,10 +7,6 @@ use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\UpdateController;
 use App\Http\Controllers\DashboardController;
 
-Route::get('/', function () {
-    return view('dashboard');
-})->name('dashboard');
-
 // DashboardControllerのindexメソッドを呼び出して、ダッシュボード画面を表示する
 Route::get('/', [DashboardController::class, 'index']);
 Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');

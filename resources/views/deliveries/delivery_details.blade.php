@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>納品詳細</title>
+    <title>納品明細</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.1.2/dist/tailwind.min.css" rel="stylesheet">
 </head>
 <body class="bg-gray-100 text-gray-800">
     <div class="max-w-5xl mx-auto p-6">
         <h1 class="text-2xl font-bold mb-6 border-b pb-2">
-            納品詳細 <span class="text-sm text-gray-600">(納品ID: {{ $delivery->delivery_id }})</span>
+            納品明細 <span class="text-sm text-gray-600">(納品ID: {{ $delivery->delivery_id }})</span>
         </h1>
 
         <!-- アクションボタン -->

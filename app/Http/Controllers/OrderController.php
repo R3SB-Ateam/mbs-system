@@ -16,26 +16,47 @@ class OrderController extends Controller
         // 店舗一覧を取得（セレクトボックス用）
         $stores = DB::table('stores')->get();
 
-        // GETパラメータからstore_idを取得
+        // GETパラメータからstore_idを取得 ← ここが重要
         $storeId = $request->input('store_id');
         $keyword = $request->input('keyword');
 
-        // ordersとcustomersを結合し、store_idで絞り込み
+        if ($request->has('store_id') || $request->has('keyword')) {
+            session([
+                'orders_filter.store_id' => $request->input('store_id'),
+                'orders_filter.keyword' => $request->input('keyword'),
+            ]);
+        }
+
+        $storeId = $request->input('store_id', session('orders_filter.store_id'));
+        $keyword = $request->input('keyword', session('orders_filter.keyword'));
+
+        // 店舗一覧を取得（セレクトボックス用）
         $orders = DB::table('orders')
             ->join('customers', 'orders.customer_id', '=', 'customers.customer_id')
+            ->leftJoin('order_details', 'orders.order_id', '=', 'order_details.order_id')
             ->when($storeId, function ($query, $storeId) {
-                return $query->where('customers.store_id', $storeId);
-            })
-            ->when($keyword, function ($query, $keyword) {
-                return $query->where(function ($q) use ($keyword) {
-                    $q->where('orders.order_id', 'like', "%{$keyword}%")
-                    ->orWhere('orders.remarks', 'like', "%{$keyword}%")
-                    ->orWhere('customers.name', 'like', "%{$keyword}%");
-                });
-            })
-            ->select('orders.*', 'customers.name as customer_name')
-            ->orderBy('orders.order_id', 'desc')
-            ->get();
+            return $query->where('customers.store_id', $storeId);
+        })
+        ->when($keyword, function ($query, $keyword) {
+            return $query->where(function ($q) use ($keyword) {
+                $q->where('orders.order_id', 'like', "%{$keyword}%")
+                ->orWhere('orders.remarks', 'like', "%{$keyword}%")
+                ->orWhere('customers.name', 'like', "%{$keyword}%");
+            });
+        })
+        ->select(
+            'orders.*',
+            'customers.name as customer_name',
+            DB::raw("CASE
+                WHEN MIN(order_details.delivery_status) = 1 THEN '納品済み'
+                WHEN MIN(order_details.delivery_status) = 0 THEN '未納品'
+                ELSE '不明'
+                END as delivery_status_text"),
+            DB::raw('COALESCE(SUM(order_details.unit_price * order_details.quantity), 0) as total_amount') // 追加部分
+        )
+        ->groupBy('orders.order_id', 'customers.name', 'orders.customer_id', 'orders.order_date', 'orders.remarks')
+        ->orderBy('orders.order_id', 'desc')
+        ->get();
 
         return view('orders.index', [
             'orders' => $orders,

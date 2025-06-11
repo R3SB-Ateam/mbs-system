@@ -16,36 +16,56 @@ class DashboardController extends Controller
 {
     public function index(Request $request)
     {
-        $filter = $request->input('filter','all'); // 'all' or 'recent'
-
-        if (!in_array($filter,['all','recent'],true)){
-            $filter = 'all'; // 無効な値ならデフォルトに戻す
+        $filter = $request->input('filter', 'all');
+        if (!in_array($filter, ['all', 'recent'], true)) {
+            $filter = 'all';
         }
 
-        // ここで全店舗を取得
         $stores = Store::all();
-
-        if ($filter === 'recent') {
-            
-            $today = Carbon::today();
-            $oneWeekAgo = Carbon::now()->subDays(7);
-
-            // 注文件数,納品件数,顧客数（過去一週間）
-            $orderCount = Order::where('order_date','>=',$oneWeekAgo)->count();
-            $deliveryCount = Deliveries::where('delivery_date','>=',$oneWeekAgo)->count();
-            $total_price = DB::table('order_details')->where('unit_price', '>=', $oneWeekAgo)->sum('unit_price');
-            $total_price = number_format($total_price);
-        }else{
-            // 合計件数（全体）
-            $orderCount = Order::count();         // ← 別名 Order を使用
-            $deliveryCount = Deliveries::count();
-            $total_price = DB::table('order_details')->sum('unit_price');
-            $total_price = number_format($total_price);
-        }
-
-        // 選択された店舗ID（もしあれば）
         $selectedStoreId = $request->input('store_id', '');
 
-        return view('dashboard', compact('orderCount', 'deliveryCount', 'total_price','filter', 'stores', 'selectedStoreId'));
+        $oneWeekAgo = Carbon::now()->subDays(7);
+
+        // 注文数
+        $orderQuery = DB::table('orders')
+            ->join('customers', 'orders.customer_id', '=', 'customers.customer_id');
+
+        // 納品数（order_id 経由ではなく customer_id で直接つなぐ）
+        $deliveryQuery = DB::table('deliveries')
+            ->join('customers', 'deliveries.customer_id', '=', 'customers.customer_id');
+
+        // 合計金額（order_details → orders → customers）
+        $priceQuery = DB::table('order_details')
+            ->join('orders', 'order_details.order_id', '=', 'orders.order_id')
+            ->join('customers', 'orders.customer_id', '=', 'customers.customer_id');
+
+
+        // 店舗絞り込み
+        if (!empty($selectedStoreId)) {
+            $orderQuery->where('customers.store_id', $selectedStoreId);
+            $deliveryQuery->where('customers.store_id', $selectedStoreId);
+            $priceQuery->where('customers.store_id', $selectedStoreId);
+        }
+
+        // 日付絞り込み（直近1週間のみ）
+        if ($filter === 'recent') {
+            $orderQuery->where('orders.order_date', '>=', $oneWeekAgo);
+            $deliveryQuery->where('deliveries.delivery_date', '>=', $oneWeekAgo);
+            $priceQuery->where('orders.order_date', '>=', $oneWeekAgo); // 商品ごとの注文日でフィルター
+        }
+
+        // 実行
+        $orderCount = $orderQuery->count();
+        $deliveryCount = $deliveryQuery->count();
+        $total_price = number_format($priceQuery->sum(DB::raw('order_details.unit_price * order_details.quantity')));
+
+        return view('dashboard', compact(
+            'orderCount',
+            'deliveryCount',
+            'total_price',
+            'filter',
+            'stores',
+            'selectedStoreId'
+        ));
     }
 }

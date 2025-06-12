@@ -152,6 +152,17 @@ class DeliveryController extends Controller
         $storeId = $request->input('store_id');
         $keyword = $request->input('keyword');
 
+        if ($request->has('store_id') || $request->has('keyword')) {
+            session([
+                'deliveries_filter.store_id' => $request->input('store_id'),
+                'deliveries_filter.keyword' => $request->input('keyword'),
+            ]);
+        }
+        
+        $storeId = $request->input('store_id', session('deliveries_filter.store_id'));
+        $keyword = $request->input('keyword', session('deliveries_filter.keyword'));
+        
+
         // deliveriesとcustomersを結合し、store_idで絞り込み
         $deliveries = DB::table('deliveries')
             ->join('customers', 'deliveries.customer_id', '=', 'customers.customer_id')

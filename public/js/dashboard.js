@@ -10,6 +10,12 @@ function updateMenuText() {
 window.addEventListener("load", updateMenuText);
 window.addEventListener("resize", updateMenuText);
 
-document.getElementById('store-select').addEventListener('change', function () {
-        document.getElementById('filter-form').submit();
-});
+const storeSelect = document.getElementById('store-select');
+if (storeSelect) {
+    storeSelect.addEventListener('change', function () {
+        const filterForm = document.getElementById('filter-form');
+        if (filterForm) {
+            filterForm.submit();
+        }
+    });
+}

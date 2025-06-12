@@ -22,8 +22,10 @@
 
         <h1 class="c-heading-primary">納品一覧</h1>
 
-        <div class="c-button-group">
-            <a href="{{ route('dashboard') }}" class="c-button c-button--gray">
+        <!-- ボタン -->
+        <div class="mb-6">
+            <a href="{{ route('dashboard', ['store_id' => request('store_id', '')]) }}" class="inline-block px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700">
+
                 ← ダッシュボードに戻る
             </a>
         </div>

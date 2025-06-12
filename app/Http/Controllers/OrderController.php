@@ -130,7 +130,13 @@ class OrderController extends Controller
 
 
     public function orderDetails($order_id){
-        $order = DB::table('orders')->where('order_id', $order_id)->first();
+        // 注文情報に顧客名を含めて取得
+        $order = DB::table('orders')
+            ->join('customers', 'orders.customer_id', '=', 'customers.customer_id')
+            ->select('orders.*', 'customers.name as customer_name')
+            ->where('orders.order_id', $order_id)
+            ->first();
+
         if (!$order) {
             abort(404, 'Order not found');
         }
@@ -226,9 +232,4 @@ class OrderController extends Controller
             return redirect()->route('orders.index')->withErrors('キャンセル処理中にエラーが発生しました。');
         }
     }
-
-
-
-
 }
-

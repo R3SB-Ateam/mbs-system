@@ -1,0 +1,262 @@
+/* ベーススタイル */
+body {
+    font-family: sans-serif;
+    background-color: #f9fafb;
+    margin: 0;
+    padding: 0;
+}
+
+html,
+body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+.l-container-wide {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh; /* ビューポートいっぱいに広げる */
+    padding: 16px;
+    box-sizing: border-box;
+    overflow-x: hidden; /* X軸のオーバーフローを非表示 */
+}
+
+/* コンポーネントスタイル */
+/* 見出し */
+.c-heading-primary {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+/* エラーメッセージ */
+.c-error-message {
+    background-color: #fee2e2;
+    color: #b91c1c;
+    border: 1px solid #fca5a5;
+    padding: 10px 20px;
+    border-radius: 5px;
+    margin-bottom: 1.5rem; /* Laravelのエラーメッセージ表示にも対応 */
+}
+
+.c-error-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.c-error-list li {
+    margin-bottom: 5px;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+/* フォーム要素 */
+.c-form-label {
+    display: block;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+}
+
+.c-form-select,
+.c-form-input {
+    padding: 0.5rem 0.75rem;
+    border: 1px solid #ccc;
+    border-radius: 0.25rem;
+    width: 100%; /* 親要素に合わせる */
+    box-sizing: border-box;
+    font-size: 1rem;
+}
+
+.c-form-select:focus,
+.c-form-input:focus {
+    outline: none;
+    border-color: #3b82f6; /* フォーカス時の色 */
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.5); /* フォーカス時のシャドウ */
+}
+
+
+/* テーブル */
+.c-table-wrap {
+    flex: 1;
+    overflow-x: auto; /* 横スクロールを有効化 */
+    min-height: 0;
+    border: 1px solid #ddd;
+    background-color: white;
+    margin-bottom: 1.5rem;
+    -webkit-overflow-scrolling: touch;
+}
+
+.c-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    border-spacing: 0;
+    min-width: 600px; /* 小画面でテーブルが小さくなりすぎないように */
+}
+
+.c-table__head {
+    background-color: #f3f4f6;
+}
+
+.c-table__head--list .c-table__th {
+    padding: 10px;
+    line-height: 1.4;
+    position: sticky;
+    top: 0;
+    background-color: #f3f4f6;
+    z-index: 10;
+    border-bottom: 2px solid #ddd;
+    text-align: left;
+}
+
+.c-table__body .c-table__td {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+    text-align: left;
+}
+
+.c-table__row--hover:hover {
+    background-color: #f3f4f6; /* ホバー時の背景色 */
+}
+
+.c-table__td:last-child {
+    word-break: break-word;
+    white-space: normal;
+}
+
+.c-link-primary {
+    color: #2563eb;
+    text-decoration: none;
+}
+
+.c-link-primary:hover {
+    text-decoration: underline;
+}
+
+/* ページ固有のスタイル */
+/* フィルターフォームのレイアウト */
+.p-filter-form {
+    margin-bottom: 1.5rem; /* mb-6 */
+    display: flex; /* flex */
+    flex-direction: column; /* flex-col */
+    gap: 1rem; /* gap-4 */
+}
+
+/* 中画面以上でのフィルターフォームのレイアウト */
+@media (min-width: 768px) { /* md: */
+    .p-filter-form {
+        flex-direction: row; /* md:flex-row */
+        align-items: flex-end; /* フォーム要素が揃うように調整 */
+    }
+}
+
+/* フィルターのキーワード入力欄ラッパー */
+.p-filter-keyword-wrap {
+    flex: 1; /* flex-1 */
+}
+
+/* フィルターボタンの配置調整 */
+.p-filter-button-wrap {
+    align-self: flex-end; /* self-end */
+}
+
+/* 中画面以上でのフィルターボタンの配置調整 */
+@media (min-width: 768px) { /* md: */
+    .p-filter-button-wrap {
+        align-self: auto; /* md:self-auto */
+    }
+}
+
+
+/* コンポーネント: ボタン */
+/* アクションボタンのラッパー */
+.c-action-buttons-wrap {
+    margin-bottom: 1.5rem; /* mb-6 */
+    display: flex; /* flex */
+    flex-wrap: wrap; /* flex-wrap */
+    gap: 1rem; /* gap-4 */
+}
+
+/* 基本ボタンのスタイル */
+.c-button {
+    display: inline-block; /* inline-block */
+    padding: 0.5rem 1rem; /* px-4 py-2 */
+    color: #ffffff; /* text-white */
+    border-radius: 0.25rem; /* rounded */
+    text-decoration: none; /* 下線を非表示 */
+    transition: all 0.2s ease-in-out; /* ホバー効果 */
+    cursor: pointer; /* カーソルをポインターに */
+    border: none; /* デフォルトのボーダーを削除 */
+}
+
+/* グレー色のボタン */
+.c-button--gray {
+    background-color: #4b5563; /* bg-gray-600 */
+}
+
+/* グレーボタンのホバー時の色 */
+.c-button--gray:hover {
+    background-color: #374151; /* hover:bg-gray-700 */
+    transform: translateY(-1px);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+/* 赤色のボタン */
+.c-button--red {
+    background-color: #ef4444; /* bg-red-500 */
+}
+
+/* 赤ボタンのホバー時の色 */
+.c-button--red:hover {
+    background-color: #dc2626; /* hover:bg-red-600 */
+    transform: translateY(-1px);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+/* 緑色のボタン */
+.c-button--green {
+    background-color: #10b981; /* bg-green-500 */
+}
+
+/* 緑ボタンのホバー時の色 */
+.c-button--green:hover {
+    background-color: #059669; /* hover:bg-green-600 */
+    transform: translateY(-1px);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+/* ボタンのグループ化 */
+.c-button-group {
+    margin-bottom: 1.5rem; /* mb-6 */
+    text-align: right; /* レイアウトに合わせて調整 */
+}
+
+/* レスポンシブ対応 */
+@media screen and (max-width: 768px) {
+    .l-container-wide {
+        padding: 8px;
+        min-height: auto; /* 小画面では高さの制約を解除 */
+    }
+
+    .c-table-wrap {
+        margin-bottom: 1rem; /* 小画面でのマージン調整 */
+    }
+
+    .c-button-group {
+        text-align: left; /* 小画面では左寄せに */
+    }
+
+    .c-button {
+        width: 100%; /* ボタンを横幅いっぱいに */
+        box-sizing: border-box;
+        margin-bottom: 0.5rem; /* ボタン間のスペース */
+    }
+
+    .c-button:last-child {
+        margin-bottom: 0;
+    }
+}

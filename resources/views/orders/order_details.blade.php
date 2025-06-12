@@ -18,6 +18,7 @@
             <div class="info-grid">
                 <p><span class="text-label">顧客ID:</span> {{ $order->customer_id }}</p>
                 <p><span class="text-label order-date">注文日:</span> {{ $order->order_date }}</p>
+                <p><span class="text-label">顧客名:</span> {{ $order->customer_name }}</p>
                 <p class="span-full"><span class="text-label remarks-text">備考:</span> {{ $order->remarks }}</p>
             </div>
         </div>

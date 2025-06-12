@@ -11,9 +11,9 @@
 <body>
     <div class="button-container">
         <h2>ダッシュボード</h2>
-        <a href="{{ route('orders.index', ['store_id' => $selectedStoreId]) }}" class="btn">注文一覧</a>
-        <a href="{{ route('deliveries.index', ['store_id' => $selectedStoreId]) }}" class="btn">納品一覧</a>
-        <a href="{{ route('customers.index', ['store_id' => $selectedStoreId]) }}" class="btn">顧客一覧</a>
+        <a href="{{ route('orders.index', ['store_id' => $selectedStoreId]) }}" class="btn">注文</a>
+        <a href="{{ route('deliveries.index', ['store_id' => $selectedStoreId]) }}" class="btn">納品</a>
+        <a href="{{ route('customers.index', ['store_id' => $selectedStoreId]) }}" class="btn">顧客</a>
         <a href="{{ route('customers.edit', ['store_id' => $selectedStoreId]) }}" class="btn">顧客更新</a>
 
     </div>

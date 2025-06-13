@@ -16,11 +16,16 @@
         <div class="order-summary">
             <h2 class="box-title">注文情報</h2>
             <div class="info-grid">
-                <p><span class="text-label">顧客ID:</span> {{ $order->customer_id }}</p>
-                <p><span class="text-label order-date">注文日:</span> {{ $order->order_date }}</p>
-                <p><span class="text-label">顧客名:</span> {{ $order->customer_name }}</p>
-                <p class="span-full"><span class="text-label remarks-text">備考:</span> {{ $order->remarks }}</p>
+            <p><span class="text-label">顧客ID:</span> {{ $order->customer_id }}</p>
+
+            <div class="grid-row">
+                
+                <p class="order-date-inline"><span class="text-label">注文日:</span> {{ $order->order_date }}</p>
             </div>
+            <p><span class="text-label">顧客名:</span> {{ $order->customer_name }}</p>
+            <p class="span-full"><span class="text-label">備考:</span> {{ $order->remarks }}</p>
+        </div>
+
         </div>
 
         <!-- 注文明細情報 -->

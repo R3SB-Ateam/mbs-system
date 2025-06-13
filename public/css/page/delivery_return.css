@@ -14,10 +14,6 @@ body {
     padding: 0;
 }
 
-.c-body {
-    /* 必要に応じて追加のボディスタイル */
-}
-
 /* レイアウトコンテナ */
 .l-container {
     max-width: 1200px; /* コンテナの最大幅 */
@@ -173,7 +169,7 @@ body {
     width: 100%;
     border-collapse: collapse;
     background: white;
-    /* min-width: 600px; /* 小画面でテーブルが小さくなりすぎないように */ */
+    /* min-width: 600px; /* 小画面でテーブルが小さくなりすぎないように */ 
 }
 
 .c-table--bordered {

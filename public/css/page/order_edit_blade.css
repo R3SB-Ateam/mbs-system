@@ -1,0 +1,113 @@
+/* =========================
+   注文修正ページ用の追加調整
+   ========================= */
+
+/* タイトルと全体ボックス */
+h1 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+  color: #1f2937;
+  border-bottom: 1px solid #e5e7eb;
+  padding-bottom: 0.5rem;
+}
+
+form > div:first-of-type {
+  background-color: #ffffff;
+  border: 1px solid #e5e7eb;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+form > div:first-of-type p {
+  margin: 0.5rem 0;
+  font-size: 1rem;
+}
+
+/* 備考エリア */
+.form-group label {
+  font-weight: 600;
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+textarea.form-control {
+  width: 100%;
+  padding: 0.75rem;
+  font-size: 1rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.5rem;
+  background-color: #ffffff;
+  resize: vertical;
+}
+
+/* テーブルの入力欄 */
+.table input[type="number"],
+.table input[type="text"] {
+  width: 100%;
+  padding: 0.5rem;
+  font-size: 0.95rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.375rem;
+  box-sizing: border-box;
+  background-color: #ffffff;
+}
+
+/* 小計セルをより目立たせる */
+.table td:last-child {
+  font-weight: bold;
+  color: #1f2937;
+  text-align: right;
+}
+
+/* ボタンとリンク */
+form a {
+  display: inline-block;
+  margin-top: 1rem;
+  margin-right: 1rem;
+  padding: 0.5rem 1rem;
+  background-color: #6b7280;
+  color: #fff;
+  border-radius: 0.375rem;
+  font-weight: 500;
+  transition: background-color 0.2s ease-in-out;
+}
+
+form a:hover {
+  background-color: #4b5563;
+  text-decoration: none;
+}
+
+form button.btn-primary {
+  background-color: #3b82f6;
+  color: white;
+  padding: 0.5rem 1.25rem;
+  border-radius: 0.375rem;
+  font-weight: 600;
+  border: none;
+  transition: background-color 0.2s ease-in-out;
+}
+
+form button.btn-primary:hover {
+  background-color: #2563eb;
+  cursor: pointer;
+}
+
+/* モバイル対応強化 */
+@media (max-width: 640px) {
+  .table th, .table td {
+    font-size: 0.85rem;
+  }
+
+  textarea.form-control {
+    font-size: 0.95rem;
+  }
+
+  form a, form button {
+    width: 100%;
+    display: block;
+    text-align: center;
+    margin-bottom: 0.75rem;
+  }
+}

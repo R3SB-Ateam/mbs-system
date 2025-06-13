@@ -21,6 +21,11 @@ Route::post('/orders/store', [OrderController::class, 'order_store'])->name('ord
 // 注文詳細ページ
 Route::get('/order_details/{order_id}', [OrderController::class, 'orderDetails'])->name('orders.order_details');
 
+// 注文修正ページ（GET）
+Route::get('/orders/{order_id}/edit', [OrderController::class, 'orderEdit'])->name('orders.order_edit');
+// 注文修正の保存処理（POST）
+Route::post('/orders/{order_id}/update', [OrderController::class, 'update'])->name('orders.update');
+
 // キャンセルページ
 Route::get('/order_details/{order_id}/cancel', [OrderController::class, 'showCancelForm'])->name('orders.cancel');
 Route::post('/order_details/cancel', [OrderController::class, 'processCancel'])->name('orders.processCancel');

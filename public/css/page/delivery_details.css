@@ -56,6 +56,8 @@ body {
     display: flex; /* flex */
     flex-wrap: wrap; /* flex-wrap */
     gap: 1rem; /* gap-4 */
+    justify-content: flex-end; /* ボタンを右寄せにする */
+    margin-top: 2rem; /* 上部に余白を追加 */
 }
 
 /* 基本ボタンのスタイル */
@@ -205,13 +207,15 @@ body {
     }
 
     .c-action-buttons-wrap {
-        flex-direction: column; /* ボタンを縦に並べる */
+        /* ここを修正しました */
+        flex-direction: column; /* ボタンを縦並びにする */
         gap: 0.5rem; /* ボタン間のスペースを調整 */
+        justify-content: center; /* 中央寄せに戻す */
     }
 
     .c-button {
         width: 100%; /* ボタンを横幅いっぱいに */
-        box-sizing: border-box;
+        box-sizing: border-box; /* パディングとボーダーを幅に含める */
     }
 
     .c-card {

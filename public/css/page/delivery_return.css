@@ -59,6 +59,8 @@ body {
     font-size: 1.25rem; /* text-xl */
     color: #6b7280; /* gray-500 */
     font-weight: 400; /* font-normal */
+    /* 顧客IDと納品IDの表示調整 */
+    margin-left: 0.5rem; /* 納品IDとの間に少しスペースを設ける */
 }
 
 .c-heading-secondary {
@@ -66,6 +68,8 @@ body {
     font-weight: 600; /* font-semibold */
     color: #1f2937; /* gray-900 */
     margin-bottom: 1.5rem; /* mb-6 - 返品処理ページに合わせて調整 */
+    display: flex; /* ID部分と並列にするため */
+    align-items: baseline; /* ベースラインで揃える */
 }
 
 .c-heading-secondary--mb4 {
@@ -169,7 +173,9 @@ body {
     width: 100%;
     border-collapse: collapse;
     background: white;
-    /* min-width: 600px; /* 小画面でテーブルが小さくなりすぎないように */ 
+    /* 列が減ったため、以前の min-width が不要になる可能性もありますが、
+       念のためコメントアウトで残し、必要に応じて調整してください */
+    /* min-width: 600px; */
 }
 
 .c-table--bordered {
@@ -239,10 +245,15 @@ body {
 }
 
 /* フォーム要素 */
+.c-form-group { /* フォーム要素をまとめるラッパー */
+    margin-bottom: 1rem; /* 下部にスペース */
+}
+
 .c-form-label { /* 納品一覧ページからコピー */
     display: block;
     font-weight: 500;
     margin-bottom: 0.5rem;
+    color: #374151; /* gray-700 */
 }
 
 .c-form-select { /* 納品一覧ページからコピー */
@@ -278,6 +289,7 @@ body {
 }
 
 .c-form-input--small {
+    /* このスタイルはもはや使用されないため、削除または維持しても影響はありません */
     width: 60px; /* 小さい入力欄の幅 */
     text-align: center;
 }
@@ -357,10 +369,14 @@ body {
     .c-heading-primary, .c-heading-secondary {
         font-size: 1.5rem; /* 小画面での見出しサイズ調整 */
         margin-bottom: 1rem;
+        flex-direction: column; /* 小画面では縦並びにする */
+        align-items: flex-start; /* 左寄せ */
     }
 
     .c-text-id {
         font-size: 1rem;
+        margin-left: 0; /* 小画面では左マージンをリセット */
+        margin-top: 0.25rem; /* 少しだけ上部にマージン */
     }
 
     .c-action-buttons-wrap {
@@ -399,6 +415,7 @@ body {
     }
 
     .c-form-input--small {
+        /* このスタイルはもはや使用されないため、削除または維持しても影響はありません */
         width: 100%; /* 小さい入力欄も横幅いっぱいに */
     }
 

@@ -22,12 +22,6 @@
 
         <h1 class="c-heading-primary">納品一覧</h1>
 
-        <div class="c-button-group">
-            <a href="{{ route('dashboard') }}" class="c-button c-button--gray">
-                ← ダッシュボードに戻る
-            </a>
-        </div>
-
         <form method="GET" action="{{ route('deliveries.index') }}" class="p-filter-form">
             <div>
                 <label for="store_id" class="c-form-label">店舗を選択:</label>
@@ -50,7 +44,7 @@
 
             <div class="p-filter-button-wrap">
                 <button type="submit" class="c-button c-button--green">
-                    絞り込み
+                    検索
                 </button>
             </div>
         </form>
@@ -83,6 +77,13 @@
                     @endforeach
                 </tbody>
             </table>
+        </div>
+
+        {{-- ここにボタンを移動しました --}}
+        <div class="c-button-group">
+            <a href="{{ route('dashboard') }}" class="c-button c-button--gray">
+                戻る
+            </a>
         </div>
 
     </div>

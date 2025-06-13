@@ -1,0 +1,448 @@
+/* ベーススタイル */
+body {
+    font-family: sans-serif;
+    background-color: #f9fafb;
+    margin: 0;
+    padding: 0;
+    line-height: 1.5; /* 基本的な行の高さを設定 */
+}
+
+html,
+body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+.c-body {
+    /* 必要に応じて追加のボディスタイル */
+}
+
+/* レイアウトコンテナ */
+.l-container {
+    max-width: 1200px; /* コンテナの最大幅 */
+    margin-left: auto;
+    margin-right: auto;
+    padding: 1.5rem; /* コンテナのパディング */
+    box-sizing: border-box;
+    min-height: 100vh; /* 少なくともビューポートの高さにする */
+    display: flex;
+    flex-direction: column;
+    overflow-x: hidden; /* X軸のオーバーフローを非表示 */
+}
+
+.l-container-wide { /* 納品一覧ページで使用 */
+    display: flex;
+    flex-direction: column;
+    height: 100vh; /* 注文一覧ページで使用 */
+    padding: 16px;
+    box-sizing: border-box;
+    overflow-x: visible !important;
+}
+
+.l-container-narrow {
+    max-width: 800px; /* 狭いコンテナの最大幅 */
+    margin-left: auto;
+    margin-right: auto;
+    padding: 1.5rem;
+    box-sizing: border-box;
+}
+
+/* コンポーネントスタイル */
+/* 見出し */
+.c-heading-primary {
+    font-size: 1.875rem; /* text-3xl */
+    font-weight: 700; /* font-bold */
+    margin-bottom: 1.5rem; /* mb-6 */
+    color: #1f2937; /* gray-900 */
+    border-bottom: 1px solid #e5e7eb; /* border-b border-gray-200 */
+    padding-bottom: 0.75rem; /* pb-3 */
+}
+
+.c-text-id {
+    font-size: 1.25rem; /* text-xl */
+    color: #6b7280; /* gray-500 */
+    font-weight: 400; /* font-normal */
+}
+
+.c-heading-secondary {
+    font-size: 1.25rem; /* text-xl */
+    font-weight: 600; /* font-semibold */
+    color: #1f2937; /* gray-900 */
+    margin-bottom: 1.5rem; /* mb-6 - 返品処理ページに合わせて調整 */
+}
+
+.c-heading-secondary--mb4 {
+    margin-bottom: 1rem; /* mb-4 */
+}
+
+/* アクションボタンのラッパー */
+.c-action-buttons-wrap {
+    margin-bottom: 1.5rem; /* mb-6 */
+    display: flex; /* flex */
+    flex-wrap: wrap; /* flex-wrap */
+    gap: 1rem; /* gap-4 */
+}
+
+/* 基本ボタンのスタイル */
+.c-button {
+    display: inline-block; /* inline-block */
+    padding: 0.5rem 1rem; /* px-4 py-2 */
+    color: #ffffff; /* text-white */
+    border-radius: 0.25rem; /* rounded */
+    text-decoration: none; /* 下線を非表示 */
+    transition: background-color 0.2s ease-in-out, transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+    cursor: pointer;
+    border: none;
+    font-size: 1rem;
+}
+
+/* グレー色のボタン */
+.c-button--gray {
+    background-color: #4b5563; /* bg-gray-600 */
+}
+
+/* グレーボタンのホバー時の色 */
+.c-button--gray:hover {
+    background-color: #374151; /* hover:bg-gray-700 */
+    transform: translateY(-1px);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+/* 赤色のボタン */
+.c-button--red {
+    background-color: #ef4444; /* bg-red-500 */
+}
+
+/* 赤ボタンのホバー時の色 */
+.c-button--red:hover {
+    background-color: #dc2626; /* hover:bg-red-600 */
+    transform: translateY(-1px);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+/* 緑色のボタン */
+.c-button--green {
+    background-color: #10b981; /* bg-green-500 */
+}
+
+/* 緑ボタンのホバー時の色 */
+.c-button--green:hover {
+    background-color: #059669; /* hover:bg-green-600 */
+    transform: translateY(-1px);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+/* ボタンのマージン */
+.c-button--mt4 {
+    margin-top: 1rem; /* mt-4 (Tailwind CSS の 16px) */
+}
+
+/* ボタンのグループ化 */
+.c-button-group {
+    margin-bottom: 1.5rem; /* mb-6 */
+    text-align: right; /* レイアウトに合わせて調整 */
+    display: flex;
+    justify-content: flex-end; /* 右寄せ */
+    gap: 1rem; /* ボタン間のスペース */
+    flex-wrap: wrap; /* 必要に応じて折り返し */
+}
+
+/* ボタングループのマージン */
+.c-button-group--mt4 {
+    margin-top: 1rem; /* mt-4 (Tailwind CSS の 16px) */
+}
+
+/* カードコンポーネント */
+.c-card {
+    background-color: #ffffff; /* bg-white */
+    border-radius: 0.5rem; /* rounded-lg */
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06); /* shadow-md */
+    padding: 1.5rem; /* p-6 */
+    margin-bottom: 1.5rem; /* mb-6 */
+}
+
+/* テーブル */
+.c-table-responsive {
+    overflow-x: auto; /* 横スクロールを有効化 */
+    -webkit-overflow-scrolling: touch;
+    margin-bottom: 1.5rem; /* テーブルの下にスペース */
+}
+
+.c-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    /* min-width: 600px; /* 小画面でテーブルが小さくなりすぎないように */ */
+}
+
+.c-table--bordered {
+    border: 1px solid #e5e7eb; /* border-gray-200 */
+    border-radius: 0.5rem; /* rounded-lg */
+    overflow: hidden; /* 角丸を適用するために必要 */
+}
+
+.c-table__head {
+    background-color: #f3f4f6; /* gray-100 */
+}
+
+.c-table__head--light {
+    background-color: #f9fafb; /* light gray for header */
+}
+
+.c-table__th {
+    padding: 0.75rem 1rem; /* py-3 px-4 */
+    text-align: left;
+    font-weight: 600; /* font-semibold */
+    color: #374151; /* gray-700 */
+    border-bottom: 1px solid #e5e7eb; /* border-b border-gray-200 */
+    white-space: nowrap; /* テキストの折り返しを防ぐ */
+}
+
+.c-table__th--padded {
+    padding: 1rem; /* more padding for header cells */
+}
+
+.c-table__td {
+    padding: 0.75rem 1rem; /* py-3 px-4 */
+    border-bottom: 1px solid #e5e7eb; /* border-b border-gray-200 */
+    color: #4b5563; /* gray-700 */
+}
+
+.c-table__td--padded {
+    padding: 1rem; /* more padding for table cells */
+}
+
+.c-table__row:last-child .c-table__td {
+    border-bottom: none; /* 最後の行の下線を削除 */
+}
+
+.c-table__row:hover {
+    background-color: #f9fafb; /* hover:bg-gray-50 */
+}
+
+/* ステータスバッジ */
+.c-status-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.25rem 0.5rem; /* px-2 py-1 */
+    border-radius: 9999px; /* rounded-full */
+    font-size: 0.75rem; /* text-xs */
+    font-weight: 600; /* font-medium */
+    text-transform: uppercase;
+}
+
+.c-status-badge--returned {
+    background-color: #fee2e2; /* bg-red-100 */
+    color: #b91c1c; /* text-red-700 */
+}
+
+.c-status-badge--not-returned {
+    background-color: #dcfce7; /* bg-green-100 */
+    color: #166534; /* text-green-700 */
+}
+
+/* フォーム要素 */
+.c-form-label { /* 納品一覧ページからコピー */
+    display: block;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+}
+
+.c-form-select { /* 納品一覧ページからコピー */
+    padding: 0.5rem 0.75rem;
+    border: 1px solid #ccc;
+    border-radius: 0.25rem;
+    width: 100%;
+    box-sizing: border-box;
+    font-size: 1rem;
+}
+
+.c-form-select:focus { /* 納品一覧ページからコピー */
+    outline: none;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.5);
+}
+
+.c-form-input {
+    padding: 0.5rem 0.75rem; /* px-3 py-2 */
+    border: 1px solid #d1d5db; /* border-gray-300 */
+    border-radius: 0.25rem; /* rounded-md */
+    width: 100%; /* full width */
+    box-sizing: border-box;
+    font-size: 0.875rem; /* text-sm */
+    color: #1f2937; /* text-gray-900 */
+    background-color: #ffffff; /* bg-white */
+}
+
+.c-form-input:focus {
+    outline: none;
+    border-color: #2563eb; /* ring-blue-500 */
+    box-shadow: 0 0 0 1px #2563eb; /* ring-1 */
+}
+
+.c-form-input--small {
+    width: 60px; /* 小さい入力欄の幅 */
+    text-align: center;
+}
+
+.c-form-input--full {
+    width: 100%; /* フル幅入力欄 */
+}
+
+/* エラーメッセージ (納品一覧ページからコピー) */
+.c-error-message {
+    background-color: #fee2e2;
+    color: #b91c1c;
+    border: 1px solid #fca5a5;
+    padding: 10px 20px;
+    border-radius: 5px;
+    margin-bottom: 1.5rem; /* Laravelのエラーメッセージ表示にも対応 */
+}
+
+.c-error-list { /* 納品一覧ページからコピー */
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.c-error-list li { /* 納品一覧ページからコピー */
+    margin-bottom: 5px;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+/* リンク */
+.c-link-primary { /* 納品一覧ページからコピー */
+    color: #2563eb;
+    text-decoration: none;
+}
+
+.c-link-primary:hover { /* 納品一覧ページからコピー */
+    text-decoration: underline;
+}
+
+/* ページ固有のスタイル */
+/* 納品情報グリッドレイアウト (納品詳細ページからコピー) */
+.p-delivery-info-grid {
+    display: grid; /* grid */
+    grid-template-columns: 1fr; /* grid-cols-1 */
+    gap: 1rem; /* gap-4 */
+}
+
+.p-delivery-info-grid p {
+    margin: 0; /* デフォルトのマージンをリセット */
+}
+
+/* フィルターフォームのレイアウト (納品一覧ページからコピー) */
+.p-filter-form {
+    margin-bottom: 1.5rem; /* mb-6 */
+    display: flex; /* flex */
+    flex-direction: column; /* flex-col */
+    gap: 1rem; /* gap-4 */
+}
+
+/* フィルターのキーワード入力欄ラッパー (納品一覧ページからコピー) */
+.p-filter-keyword-wrap {
+    flex: 1; /* flex-1 */
+}
+
+/* フィルターボタンの配置調整 (納品一覧ページからコピー) */
+.p-filter-button-wrap {
+    align-self: flex-end; /* self-end */
+}
+
+/* レスポンシブ対応 */
+@media screen and (max-width: 768px) {
+    .l-container-wide, .l-container, .l-container-narrow { /* すべてのコンテナのパディングを調整 */
+        padding: 1rem;
+    }
+
+    .c-heading-primary, .c-heading-secondary {
+        font-size: 1.5rem; /* 小画面での見出しサイズ調整 */
+        margin-bottom: 1rem;
+    }
+
+    .c-text-id {
+        font-size: 1rem;
+    }
+
+    .c-action-buttons-wrap {
+        flex-direction: column; /* ボタンを縦に並べる */
+        gap: 0.5rem; /* ボタン間のスペースを調整 */
+    }
+
+    .c-button {
+        width: 100%; /* ボタンを横幅いっぱいに */
+        box-sizing: border-box;
+    }
+
+    .c-button-group {
+        flex-direction: column; /* ボタングループを縦に並べる */
+        gap: 0.5rem;
+        align-items: stretch; /* 横幅いっぱいに広げる */
+        text-align: center; /* 中央寄せ */
+    }
+
+    /* テーブルのスタイル調整 */
+    .c-table-responsive {
+        /* overflow-x: auto; を維持 */
+        margin-bottom: 1rem; /* 小画面でのマージン調整 */
+    }
+
+    .c-table__th,
+    .c-table__td {
+        padding: 0.75rem; /* 小画面でのテーブルセルパディング */
+        font-size: 0.875rem; /* 文字サイズを少し小さく */
+    }
+
+    /* フォーム入力フィールドの調整 */
+    .c-form-select, .c-form-input { /* 全てのフォーム入力要素を調整 */
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .c-form-input--small {
+        width: 100%; /* 小さい入力欄も横幅いっぱいに */
+    }
+
+    .c-form-input--full {
+        width: 100%;
+    }
+
+    /* 納品一覧ページのフィルターフォームのレスポンシブ調整 */
+    .p-filter-form {
+        flex-direction: column;
+        align-items: stretch; /* stretchで子要素を横幅いっぱいに */
+    }
+
+    .p-filter-keyword-wrap {
+        width: 100%;
+    }
+
+    .p-filter-button-wrap {
+        align-self: stretch; /* 親要素の幅に合わせてstretch */
+    }
+
+    /* 中画面以上でのフィルターフォームのレイアウト */
+    @media (min-width: 768px) { /* md: */
+        .p-filter-form {
+            flex-direction: row; /* md:flex-row */
+            align-items: flex-end; /* フォーム要素が揃うように調整 */
+        }
+        .p-filter-button-wrap {
+            align-self: auto; /* md:self-auto */
+        }
+    }
+
+    /* 納品情報グリッドレイアウト（2カラム） (納品詳細ページからコピー) */
+    @media (min-width: 768px) { /* md: */
+        .p-delivery-info-grid {
+            grid-template-columns: repeat(2, minmax(0, 1fr)); /* md:grid-cols-2 */
+        }
+        /* 中画面以上での備考欄の横幅いっぱいに広げる (納品詳細ページからコピー) */
+        .p-delivery-info-remarks {
+            grid-column: span 2 / span 2; /* md:col-span-2 */
+        }
+    }
+}

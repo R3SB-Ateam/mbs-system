@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>返品処理</title>
     {{-- すべてのCSSを統合したファイルを参照 --}}
-    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/page/delivery_return.css') }}" rel="stylesheet">
 </head>
 <body class="c-body">
     <div class="l-container-narrow">

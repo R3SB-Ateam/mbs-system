@@ -4,15 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>納品一覧</title>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.1.2/dist/tailwind.min.css" rel="stylesheet">
+    {{-- すべてのCSSを統合したファイルを参照 --}}
+    <link href="{{ asset('css/page/delivery.css') }}" rel="stylesheet">
 </head>
-<body class="bg-gray-100 text-gray-800">
-    <div class="max-w-6xl mx-auto px-6 py-8">
+<body class="c-body">
+    <div class="l-container-wide">
 
-        <!-- エラーメッセージ -->
         @if ($errors->any())
-            <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-6">
-                <ul class="list-disc list-inside">
+            <div class="c-error-message">
+                <ul class="c-error-list">
                     @foreach ($errors->all() as $error)
                         <li>{{ $error }}</li>
                     @endforeach
@@ -20,21 +20,20 @@
             </div>
         @endif
 
-        <!-- タイトル -->
-        <h1 class="text-2xl font-bold mb-6 border-b pb-2">納品一覧</h1>
+        <h1 class="c-heading-primary">納品一覧</h1>
 
         <!-- ボタン -->
         <div class="mb-6">
-            <a href="{{ route('dashboard') }}" class="inline-block px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700">
+            <a href="{{ route('dashboard', ['store_id' => request('store_id', '')]) }}" class="inline-block px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700">
+
                 ← ダッシュボードに戻る
             </a>
         </div>
 
-        <!-- フィルター -->
-        <form method="GET" action="{{ route('deliveries.index') }}" class="mb-6 flex flex-col md:flex-row md:items-center gap-4">
+        <form method="GET" action="{{ route('deliveries.index') }}" class="p-filter-form">
             <div>
-                <label for="store_id" class="block mb-1 text-sm font-medium">店舗を選択:</label>
-                <select name="store_id" id="store_id" class="border border-gray-300 rounded px-3 py-2 w-48">
+                <label for="store_id" class="c-form-label">店舗を選択:</label>
+                <select name="store_id" id="store_id" class="c-form-select">
                     <option value="">全店舗</option>
                     @foreach ($stores as $store)
                         <option value="{{ $store->store_id }}" {{ $selectedStoreId == $store->store_id ? 'selected' : '' }}>
@@ -44,49 +43,55 @@
                 </select>
             </div>
 
-            <div class="flex-1">
-                <label for="keyword" class="block mb-1 text-sm font-medium">キーワード検索:</label>
+            <div class="p-filter-keyword-wrap">
+                <label for="keyword" class="c-form-label">キーワード検索:</label>
                 <input type="text" name="keyword" id="keyword" placeholder="納品ID、顧客名、備考で検索"
                     value="{{ $keyword ?? '' }}"
-                    class="border border-gray-300 rounded px-3 py-2 w-full">
+                    class="c-form-input">
             </div>
 
-            <div class="self-end md:self-auto">
-                <button type="submit" class="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600">
-                    絞り込み
+            <div class="p-filter-button-wrap">
+                <button type="submit" class="c-button c-button--green">
+                    検索
                 </button>
             </div>
         </form>
 
-        <!-- 納品テーブル -->
-        <div class="overflow-x-auto bg-white shadow-md rounded-lg">
-            <table class="min-w-full text-sm text-left">
-                <thead class="bg-gray-200 text-gray-700">
+        <div class="c-table-wrap">
+            <table class="c-table">
+                <thead class="c-table__head c-table__head--list">
                     <tr>
-                        <th class="px-4 py-3 border-b">納品ID</th>
-                        <th class="px-4 py-3 border-b">顧客ID</th>
-                        <th class="px-4 py-3 border-b">顧客名</th>
-                        <th class="px-4 py-3 border-b">納品日</th>
-                        <th class="px-4 py-3 border-b">備考</th>
+                        <th class="c-table__th">納品ID</th>
+                        <th class="c-table__th">顧客ID</th>
+                        <th class="c-table__th">顧客名</th>
+                        <th class="c-table__th">納品日</th>
+                        <th class="c-table__th">備考</th>
                     </tr>
                 </thead>
-                <tbody class="bg-white divide-y divide-gray-200">
+                <tbody class="c-table__body">
                     @foreach ($deliveries as $delivery)
-                        <tr class="hover:bg-gray-50">
-                            <td class="px-4 py-3">
+                        <tr class="c-table__row c-table__row--hover">
+                            <td class="c-table__td">
                                 <a href="{{ route('deliveries.details', ['delivery_id' => $delivery->delivery_id]) }}"
-                                   class="text-blue-600 hover:underline font-medium">
+                                   class="c-link-primary">
                                     {{ $delivery->delivery_id }}
                                 </a>
                             </td>
-                            <td class="px-4 py-3">{{ $delivery->customer_id }}</td>
-                            <td class="px-4 py-3">{{ $delivery->customer_name }}</td>
-                            <td class="px-4 py-3">{{ $delivery->delivery_date }}</td>
-                            <td class="px-4 py-3">{{ $delivery->remarks }}</td>
+                            <td class="c-table__td">{{ $delivery->customer_id }}</td>
+                            <td class="c-table__td">{{ $delivery->customer_name }}</td>
+                            <td class="c-table__td">{{ $delivery->delivery_date }}</td>
+                            <td class="c-table__td">{{ $delivery->remarks }}</td>
                         </tr>
                     @endforeach
                 </tbody>
             </table>
+        </div>
+
+        {{-- ここにボタンを移動しました --}}
+        <div class="c-button-group">
+            <a href="{{ route('dashboard') }}" class="c-button c-button--gray">
+                戻る
+            </a>
         </div>
 
     </div>

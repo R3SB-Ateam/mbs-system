@@ -33,6 +33,7 @@ body {
     margin-bottom: 1rem;
     line-height: 2rem;
     color: #111827;
+    border-bottom: 1px solid #e5e7eb;
 }
 
 /* セクションタイトル */
@@ -177,6 +178,8 @@ body {
 .btn {
     display: flex;
     margin-top: 1.5rem;
+    justify-content: space-between;
+    align-items: center;
 }
 
 .btn-back {
@@ -187,6 +190,7 @@ body {
     border-radius: 0.25rem; /* rounded → 4px */
     transition: background-color 0.2s ease; /* hover切り替え用 */
     margin-right: 1.5rem;
+    text-decoration: none; 
 }
 
 .btn-back:hover {

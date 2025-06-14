@@ -12,18 +12,20 @@
 <body>
     <div class="button-container">
         <h2>ダッシュボード</h2>
-        <a href="{{ route('orders.index') }}" class="btn">注文一覧</a>
-        <a href="{{ route('deliveries.index') }}" class="btn">納品一覧</a>
-        <a href="{{ route('customers.index') }}" class="btn">顧客一覧</a>
-        <a href="{{ route('customers.edit') }}" class="btn">顧客更新</a>
+        <a href="{{ route('orders.index', ['store_id' => $selectedStoreId]) }}" class="btn">注文</a>
+        <a href="{{ route('deliveries.index', ['store_id' => $selectedStoreId]) }}" class="btn">納品</a>
+        <a href="{{ route('customers.index', ['store_id' => $selectedStoreId]) }}" class="btn">顧客</a>
+        <a href="{{ route('customers.edit', ['store_id' => $selectedStoreId]) }}" class="btn">顧客更新</a>
+
     </div>
     <div class="content">
         <h1>ようこそ、MBSシステムへ</h1>
         <p id="menu-info">左側のメニューから各機能へ移動できます。</p>
 
-        <form method="GET" action="{{ route('dashboard') }}" id="filter-form">
+        <!-- 店舗選択フォーム -->
+        <form method="GET" action="{{ route('dashboard') }}" id="store-select-form">
             <label for="store-select">店舗を選択:</label>
-            <select name="store_id" id="store-select">
+            <select name="store_id" id="store-select" onchange="this.form.submit()">
                 <option value="">全店舗</option>
                 @foreach ($stores as $store)
                     <option value="{{ $store->store_id }}" {{ $selectedStoreId == $store->store_id ? 'selected' : '' }}>
@@ -33,15 +35,21 @@
             </select>
         </form>
 
+        <!-- 表示範囲フォーム -->
         <form method="GET" action="{{ route('dashboard') }}" id="filter-toggle" class="filter-toggle">
-        <fieldset>
-        <legend>表示範囲</legend>
-            <input type="radio" name="filter" value="all" id="filter-all" onchange="this.form.submit()" {{ $filter === 'all' ? 'checked' : '' }}>
-            <label for="filter-all">全体</label>
+            <!-- ここで現在選択中のstore_idを隠しフィールドで渡す -->
+            <input type="hidden" name="store_id" value="{{ $selectedStoreId }}">
 
-            <input type="radio" name="filter" value="recent" id="filter-recent" onchange="this.form.submit()" {{ $filter === 'recent' ? 'checked' : '' }}>
-            <label for="filter-recent">直近1週間</label>
-        </fieldset>
+            <fieldset>
+                <legend>表示範囲</legend>
+                <input type="radio" name="filter" value="all" id="filter-all" onchange="this.form.submit()" {{ $filter === 'all' ? 'checked' : '' }}>
+                <label for="filter-all">全体</label>
+
+                <input type="radio" name="filter" value="recent" id="filter-recent" onchange="this.form.submit()" {{ $filter === 'recent' ? 'checked' : '' }}>
+                <label for="filter-recent">直近1週間</label>
+            </fieldset>
+        </form>
+
 
         <div class="status-cards">
             <div class="status-card" style="border-left-color: #3498db;">

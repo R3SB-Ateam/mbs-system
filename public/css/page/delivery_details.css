@@ -1,0 +1,230 @@
+/* ベーススタイル */
+body {
+    font-family: sans-serif;
+    background-color: #f9fafb;
+    margin: 0;
+    padding: 0;
+    line-height: 1.5; /* 基本的な行の高さを設定 */
+}
+
+html,
+body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+.l-container {
+    max-width: 1200px; /* コンテナの最大幅 */
+    margin-left: auto;
+    margin-right: auto;
+    padding: 1.5rem; /* コンテナのパディング */
+    box-sizing: border-box;
+}
+
+/* コンポーネントスタイル */
+/* 見出し */
+.c-heading-primary {
+    font-size: 1.875rem; /* text-3xl */
+    font-weight: 700; /* font-bold */
+    margin-bottom: 1.5rem; /* mb-6 */
+    color: #1f2937; /* gray-900 */
+    border-bottom: 1px solid #e5e7eb; /* border-b border-gray-200 */
+    padding-bottom: 0.75rem; /* pb-3 */
+}
+
+.c-text-id {
+    font-size: 1.25rem; /* text-xl */
+    color: #6b7280; /* gray-500 */
+    font-weight: 400; /* font-normal */
+}
+
+.c-heading-secondary {
+    font-size: 1.25rem; /* text-xl */
+    font-weight: 600; /* font-semibold */
+    color: #1f2937; /* gray-900 */
+    margin-bottom: 1rem; /* mb-4 */
+}
+
+.c-heading-secondary--mb4 {
+    margin-bottom: 1rem; /* mb-4 */
+}
+
+/* アクションボタンのラッパー */
+.c-action-buttons-wrap {
+    margin-bottom: 1.5rem; /* mb-6 */
+    display: flex; /* flex */
+    flex-wrap: wrap; /* flex-wrap */
+    gap: 1rem; /* gap-4 */
+    justify-content: flex-end; /* ボタンを右寄せにする */
+    margin-top: 2rem; /* 上部に余白を追加 */
+}
+
+/* 基本ボタンのスタイル */
+.c-button {
+    display: inline-block; /* inline-block */
+    padding: 0.5rem 1rem; /* px-4 py-2 */
+    color: #ffffff; /* text-white */
+    border-radius: 0.25rem; /* rounded */
+    text-decoration: none; /* 下線を非表示 */
+    transition: background-color 0.2s ease-in-out, transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+    cursor: pointer;
+    border: none;
+    font-size: 1rem;
+}
+
+/* グレー色のボタン */
+.c-button--gray {
+    background-color: #4b5563; /* bg-gray-600 */
+}
+
+/* グレーボタンのホバー時の色 */
+.c-button--gray:hover {
+    background-color: #374151; /* hover:bg-gray-700 */
+    transform: translateY(-1px);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+/* 赤色のボタン */
+.c-button--red {
+    background-color: #ef4444; /* bg-red-500 */
+}
+
+/* 赤ボタンのホバー時の色 */
+.c-button--red:hover {
+    background-color: #dc2626; /* hover:bg-red-600 */
+    transform: translateY(-1px);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+/* カードコンポーネント */
+.c-card {
+    background-color: #ffffff; /* bg-white */
+    border-radius: 0.5rem; /* rounded-lg */
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06); /* shadow-md */
+    padding: 1.5rem; /* p-6 */
+    margin-bottom: 1.5rem; /* mb-6 */
+}
+
+/* テーブル */
+.c-table-responsive {
+    overflow-x: auto; /* 横スクロールを有効化 */
+    -webkit-overflow-scrolling: touch;
+}
+
+.c-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    /* min-width: 600px; /* 小画面でテーブルが小さくなりすぎないように */ 
+}
+
+.c-table__head {
+    background-color: #f3f4f6; /* gray-100 */
+}
+
+.c-table__th {
+    padding: 0.75rem 1rem; /* py-3 px-4 */
+    text-align: left;
+    font-weight: 600; /* font-semibold */
+    color: #374151; /* gray-700 */
+    border-bottom: 1px solid #e5e7eb; /* border-b border-gray-200 */
+    white-space: nowrap; /* テキストの折り返しを防ぐ */
+}
+
+.c-table__td {
+    padding: 0.75rem 1rem; /* py-3 px-4 */
+    border-bottom: 1px solid #e5e7eb; /* border-b border-gray-200 */
+    color: #4b5563; /* gray-700 */
+}
+
+.c-table__row:last-child .c-table__td {
+    border-bottom: none; /* 最後の行の下線を削除 */
+}
+
+.c-table__row:hover {
+    background-color: #f9fafb; /* hover:bg-gray-50 */
+}
+
+/* ステータスバッジ */
+.c-status-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.25rem 0.5rem; /* px-2 py-1 */
+    border-radius: 9999px; /* rounded-full */
+    font-size: 0.75rem; /* text-xs */
+    font-weight: 600; /* font-medium */
+    text-transform: uppercase;
+}
+
+.c-status-badge--returned {
+    background-color: #fee2e2; /* bg-red-100 */
+    color: #b91c1c; /* text-red-700 */
+}
+
+.c-status-badge--not-returned {
+    background-color: #dcfce7; /* bg-green-100 */
+    color: #166534; /* text-green-700 */
+}
+
+/* ページ固有のスタイル */
+/* 納品情報グリッドレイアウト */
+.p-delivery-info-grid {
+    display: grid; /* grid */
+    grid-template-columns: 1fr; /* grid-cols-1 */
+    gap: 1rem; /* gap-4 */
+}
+
+.p-delivery-info-grid p {
+    margin: 0; /* デフォルトのマージンをリセット */
+}
+
+/* 中画面以上でのグリッドレイアウト（2カラム） */
+@media (min-width: 768px) { /* md: */
+    .p-delivery-info-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr)); /* md:grid-cols-2 */
+    }
+    /* 中画面以上での備考欄の横幅いっぱいに広げる */
+    .p-delivery-info-remarks {
+        grid-column: span 2 / span 2; /* md:col-span-2 */
+    }
+}
+
+
+/* レスポンシブ対応 */
+@media screen and (max-width: 768px) {
+    .l-container {
+        padding: 1rem; /* 小画面でのパディングを調整 */
+    }
+
+    .c-heading-primary {
+        font-size: 1.5rem; /* 小画面での見出しサイズ調整 */
+        margin-bottom: 1rem;
+    }
+
+    .c-text-id {
+        font-size: 1rem;
+    }
+
+    .c-action-buttons-wrap {
+        /* ここを修正しました */
+        flex-direction: column; /* ボタンを縦並びにする */
+        gap: 0.5rem; /* ボタン間のスペースを調整 */
+        justify-content: center; /* 中央寄せに戻す */
+    }
+
+    .c-button {
+        width: 100%; /* ボタンを横幅いっぱいに */
+        box-sizing: border-box; /* パディングとボーダーを幅に含める */
+    }
+
+    .c-card {
+        padding: 1rem; /* 小画面でのカードパディング */
+        margin-bottom: 1rem;
+    }
+
+    .c-table__th,
+    .c-table__td {
+        padding: 0.5rem 0.75rem; /* 小画面でのテーブルセルパディング */
+    }
+}

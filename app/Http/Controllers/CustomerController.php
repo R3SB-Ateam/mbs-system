@@ -11,7 +11,14 @@ class CustomerController extends Controller
     public function index(Request $request)
     {
         $stores = DB::table('stores')->get();
-        $storeId = $request->input('store_id');
+
+        // store_idがリクエストにあればセッションに保存
+        if ($request->has('store_id')) {
+            session(['customers_filter.store_id' => $request->input('store_id')]);
+        }
+
+        // セッションから store_id を取得、リクエストがあれば優先
+        $storeId = $request->input('store_id', session('customers_filter.store_id'));
         $now = Carbon::now()->startOfDay()->toDateString(); // 今日の日付（文字列）
 
         // 顧客情報 + 売上 + 平均RTを集計

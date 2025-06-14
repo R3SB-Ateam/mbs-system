@@ -28,6 +28,8 @@
                 <table class="c-table">
                     <thead class="c-table__head">
                         <tr>
+                            <th class="c-table__th">注文ID</th>
+                            <th class="c-table__th">注文明細ID</th>
                             <th class="c-table__th">商品名</th>
                             <th class="c-table__th">数量</th>
                             <th class="c-table__th">備考</th>
@@ -37,6 +39,8 @@
                     <tbody>
                         @foreach ($deliveryDetails as $detail)
                             <tr class="c-table__row">
+                                <td class="c-table__td">{{ $detail->order_id }}</td>
+                                <td class="c-table__td">{{ $detail->order_detail_id }}</td>
                                 <td class="c-table__td">{{ $detail->product_name }}</td>
                                 <td class="c-table__td">{{ $detail->delivery_quantity }}</td>
                                 <td class="c-table__td">{{ $detail->remarks }}</td>

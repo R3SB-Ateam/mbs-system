@@ -111,7 +111,7 @@ class OrderController extends Controller
                     'product_name' => $productNames[$i],
                     'unit_price' => $unitPrices[$i],
                     'quantity' => $quantities[$i],
-                    'delivery_status' => 0, // ← 文字列 '未納品' を数値 0 に
+                    'delivery_quantity' => 0,
                     'remarks' => null,
                     'cancell_flag' => 0,
                 ]);

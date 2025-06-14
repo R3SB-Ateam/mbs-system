@@ -125,6 +125,14 @@ body {
   background-color: #4b5563;
 }
 
+.btn-edit {
+  background-color: #0055ff;
+}
+
+.btn-edit:hover {
+  background-color: #0055ff;
+}
+
 .btn-cancel {
   background-color: #ef4444;
   color: #ffffff;

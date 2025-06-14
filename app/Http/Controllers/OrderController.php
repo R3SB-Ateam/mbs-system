@@ -233,4 +233,62 @@ class OrderController extends Controller
             return redirect()->route('orders.index')->withErrors('キャンセル処理中にエラーが発生しました。');
         }
     }
+
+    public function orderEdit($order_id)
+    {
+        $order = DB::table('orders')
+            ->join('customers', 'orders.customer_id', '=', 'customers.customer_id')
+            ->select('orders.*', 'customers.name as customer_name')
+            ->where('orders.order_id', $order_id)
+            ->first();
+
+        if (!$order) {
+            abort(404);
+        }
+
+        $orderDetails = DB::table('order_details')
+            ->where('order_id', $order_id)
+            ->where('cancell_flag', 0)
+            ->get();
+
+        return view('orders.order_edit', compact('order', 'orderDetails'));
+    }
+
+    public function update(Request $request, $order_id)
+    {
+        $validated = $request->validate([
+            'remarks' => 'nullable|string',
+            'order_details.*.unit_price' => 'required|numeric|min:0',
+            'order_details.*.quantity' => 'required|integer|min:1',
+            'order_details.*.remarks' => 'nullable|string',
+        ]);
+
+        DB::beginTransaction();
+
+        try {
+            // 注文情報更新
+            DB::table('orders')
+                ->where('order_id', $order_id)
+                ->update(['remarks' => $request->remarks]);
+
+            // 注文明細の更新
+            foreach ($request->order_details as $detailId => $data) {
+                DB::table('order_details')
+                    ->where('order_detail_id', $detailId)
+                    ->update([
+                        'unit_price' => $data['unit_price'],
+                        'quantity' => $data['quantity'],
+                        'remarks' => $data['remarks'],
+                    ]);
+            }
+
+            DB::commit();
+            return redirect()->route('orders.index')->with('success', '注文を更新しました。');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            \Log::error("注文修正エラー: " . $e->getMessage());
+            return back()->withErrors('注文の更新中にエラーが発生しました。');
+        }
+    }
+
 }

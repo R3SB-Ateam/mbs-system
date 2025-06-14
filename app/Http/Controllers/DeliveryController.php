@@ -22,13 +22,14 @@ class DeliveryController extends Controller
         'order_detail_ids' => 'required|array',
         'order_detail_ids.*' => 'required|exists:order_details,order_detail_id',
         'delivery_quantities' => 'required|array',
-        'delivery_quantities.*' => 'required|integer|min:1', // ★ここが重要★
+        'delivery_quantities.*' => 'required|integer|min:0',
     ],
     [
         'delivery_quantities.*.min' => '納品数量は1以上で入力してください。',
         'delivery_quantities.*.required' => '納品数量は必須です。',
         'delivery_quantities.*.integer' => '納品数量は数値で入力してください。',
     ]);
+
 
     DB::beginTransaction();
 

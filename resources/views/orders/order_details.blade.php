@@ -40,7 +40,6 @@
                         <col style="width: 11%;">  <!-- 単価 -->
                         <col style="width: 9%;">   <!-- 数量 -->
                         <col style="width: 13%;">  <!-- 納品状況 -->
-                        <col style="width: 13%;">  <!-- 納品日 -->
                         <col style="width: 22%;">  <!-- 備考（キャンセル理由が入るので広め） -->
                         <col style="width: 12%;">  <!-- キャンセル（キャンセル済み表示のスペース確保） -->
                     </colgroup>
@@ -52,7 +51,6 @@
                             <th>単価</th>
                             <th>数量</th>
                             <th>納品数量</th>
-                            <th>納品日</th>
                             <th>備考</th>
                             <th>キャンセル</th>
                         </tr>
@@ -67,7 +65,6 @@
                                 <td>
                                     {{ number_format($orderDetail->delivery_quantity) }} / {{ number_format($orderDetail->quantity) }}
                                 </td>
-                                <td>{{ $orderDetail->delivery_date ?? '-' }}</td>
                                 <td class="remarks-cell">{{ $orderDetail->remarks }}</td>
                                 <td class="last-child">
                                     @if ($orderDetail->cancell_flag == 1)

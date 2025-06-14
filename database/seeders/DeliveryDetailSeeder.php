@@ -48,7 +48,6 @@ class DeliveryDetailSeeder extends Seeder
             // 納品済みに更新
             $orderDetail->update([
                 'delivery_quantity' => $orderDetail->quantity,
-                'delivery_date' => now(),
             ]);
         }
         DB::statement('SET FOREIGN_KEY_CHECKS=1;');

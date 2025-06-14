@@ -28,7 +28,7 @@
                     <thead>
                         <tr class="table-header">
                             <th class="table-cell-header">商品名</th>
-                            <th class="table-cell-header">注文数</th>
+                            <th class="table-cell-header">数量</th>
                             <th class="table-cell-header">単価</th>
                             <th class="table-cell-header">納品数</th>
                         </tr>
@@ -41,11 +41,11 @@
                         @foreach ($orderDetails as $orderDetail)
                             <tr>
                                 <td class="table-cell">{{ $orderDetail->product_name }}</td>
-                                <td class="table-cell">{{ number_format($orderDetail->quantity) }}</td>
+                                <td class="table-cell">{{ number_format($orderDetail->undelivered_quantity) }}</td>
                                 <td class="table-cell">{{ number_format($orderDetail->unit_price,0) }}</td>
                                 <td class="table-cell">
                                     <input type="hidden" name="order_detail_ids[]" value="{{ $orderDetail->order_detail_id }}">
-                                    <input type="number" name="delivery_quantities[]" value="0" min="0" max="{{ $orderDetail->quantity }}" required class="quantity-input">
+                                    <input type="number" name="delivery_quantities[]" value="0" min="1" max="{{ $orderDetail->quantity }}" required class="quantity-input">
                                 </td>
                             </tr>
                         @endforeach

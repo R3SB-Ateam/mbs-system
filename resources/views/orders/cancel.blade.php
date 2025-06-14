@@ -28,9 +28,12 @@
                         @foreach ($orderDetails as $detail)
                         <tr class="table-row">
                             <td class="table-cell">{{ $detail->product_name }}</td>
-                            <td class="table-cell-center">{{ number_format($detail->quantity) }}</td>
+                            <td class="table-cell-center">{{ number_format($detail->cancellable_quantity) }}</td>
                             <td class="table-cell-center">
-                                <input type="number" name="cancel_quantities[{{ $detail->order_detail_id }}]" min="0" max="{{ $detail->quantity }}"
+                                <input type="number" name="cancel_quantities[{{ $detail->order_detail_id }}]"
+                                       min="1"
+                                       max="{{ $detail->cancellable_quantity }}"
+                                       value="0"
                                        class="input-number">
                             </td>
                             <td class="table-cell">

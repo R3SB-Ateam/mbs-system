@@ -48,12 +48,13 @@ class OrderController extends Controller
             'orders.*',
             'customers.name as customer_name',
             DB::raw("CASE
-                WHEN MIN(order_details.delivery_status) = 1 THEN '納品済み'
-                WHEN MIN(order_details.delivery_status) = 0 THEN '未納品'
+                WHEN MIN(order_details.quantity - COALESCE(order_details.delivery_quantity, 0)) = 0 THEN '納品済み'
+                WHEN MIN(order_details.quantity - COALESCE(order_details.delivery_quantity, 0)) > 0 THEN '未納品'
                 ELSE '不明'
                 END as delivery_status_text"),
-            DB::raw('COALESCE(SUM(order_details.unit_price * order_details.quantity), 0) as total_amount') // 追加部分
+            DB::raw('COALESCE(SUM(order_details.unit_price * order_details.quantity), 0) as total_amount')
         )
+
         ->groupBy('orders.order_id', 'customers.name', 'orders.customer_id', 'orders.order_date', 'orders.remarks')
         ->orderBy('orders.order_id', 'desc')
         ->get();
@@ -78,7 +79,6 @@ class OrderController extends Controller
 
     public function order_store(Request $request){
 
-        Log::debug('リクエスト内容:', $request->all());
 
         // バリデーション
         $validated = $request->validate([
@@ -159,13 +159,18 @@ class OrderController extends Controller
         // 納品済・キャンセル済を除外した注文詳細を取得
         $orderDetails = DB::table('order_details')
             ->where('order_id', $order_id)
-            ->where('delivery_status', 0)
             ->where('cancell_flag', 0)
+            ->whereColumn('delivery_quantity', '<', 'quantity')
             ->get();
 
         if ($orderDetails->isEmpty()) {
             return redirect()->route('orders.index')->withErrors('キャンセル可能な商品がありません。');
         }
+
+        $orderDetails->each(function ($item) {
+            // 未納品数 = 注文数 - 納品済み数量
+            $item->cancellable_quantity = $item->quantity - ($item->delivery_quantity ?? 0);
+        });
 
         return view('orders.cancel', compact('order', 'orderDetails'));
     }
@@ -176,6 +181,20 @@ class OrderController extends Controller
 
     public function processCancel(Request $request)
     {
+        $request->validate([
+            'order_id' => 'required|exists:orders,order_id',
+            'cancel_quantities' => 'array',
+            'cancel_quantities.*' => 'nullable|integer|min:0',
+            'reasons' => 'array',
+            'reasons.*' => 'nullable|string|max:255',
+        ],
+        [
+            'cancel_quantities.*.min' => 'キャンセル数量は0以上で入力してください。',
+            'cancel_quantities.*.integer' => 'キャンセル数量は数値で入力してください。',
+            'reasons.*.max' => 'キャンセル理由は255文字以内で入力してください。',
+        ]);
+
+
         $cancelQuantities = $request->input('cancel_quantities', []);
         $reasons = $request->input('reasons', []);
         $order_id = $request->order_id;
@@ -183,6 +202,19 @@ class OrderController extends Controller
         DB::beginTransaction();
 
         try {
+            $targetOrderDetailIds = array_keys(array_filter($cancelQuantities, fn($qty) => (int)$qty > 0));
+
+            if (empty($targetOrderDetailIds)) {
+                DB::rollBack();
+                return redirect()->route('orders.order_details', ['order_id' => $order_id])->withErrors('キャンセルする商品が選択されていないか、数量が0です。');
+            }
+
+            $detailsToProcess = DB::table('order_details')
+                ->whereIn('order_detail_id', $targetOrderDetailIds)
+                ->where('order_id', $order_id)
+                ->where('cancell_flag', 0)
+                ->get()->keyBy('order_detail_id');
+
             foreach ($cancelQuantities as $orderDetailId => $cancelQty) {
                 $cancelQty = (int)$cancelQty;
 
@@ -190,41 +222,52 @@ class OrderController extends Controller
                     continue;
                 }
 
-                $detail = DB::table('order_details')->where('order_detail_id', $orderDetailId)->first();
+                $detail = $detailsToProcess->get($orderDetailId);
 
-                if (!$detail || $detail->delivery_status == 1 || $detail->cancell_flag == 1) {
+                if (!$detail || $detail->cancell_flag == 1 || ($detail->delivery_quantity ?? 0) >= $detail->quantity) {
                     continue;
                 }
 
                 $originalQty = (int)$detail->quantity;
-                $remainingQty = $originalQty - $cancelQty;
+                $deliveredQty = (int)($detail->delivery_quantity ?? 0);
+                $currentAvailableQty = $originalQty - $deliveredQty;
 
-                // 元データをキャンセル済みにする
-                DB::table('order_details')->where('order_detail_id', $orderDetailId)->update([
-                    'cancell_flag' => 1,
-                    'remarks' => DB::raw("CONCAT(IFNULL(remarks, ''), '【キャンセル理由】" . $reasons[$orderDetailId] . "')"),
-                ]);
+                if ($cancelQty > $currentAvailableQty) {
+                    throw new \Exception("キャンセル数量が未納品数を超えています（商品ID: {$orderDetailId}、未納品数: {$currentAvailableQty}）");
+                }
 
-                // 残りがある場合、新規に登録
-                if ($remainingQty > 0) {
-                    DB::table('order_details')->insert([
-                        'order_id' => $detail->order_id,
-                        'product_name' => $detail->product_name,
-                        'unit_price' => $detail->unit_price,
-                        'quantity' => $remainingQty,
-                        'delivery_status' => 0,
-                        'cancell_flag' => 0,
-                        'remarks' => $detail->remarks,
+                // 元の商品数量をキャンセル分だけ減らす
+                $newOriginalQty = $originalQty - $cancelQty;
+
+                // 元の商品の数量が0になる場合、その行を削除
+                if ($newOriginalQty <= 0) {
+                    DB::table('order_details')->where('order_detail_id', $orderDetailId)->delete();
+                } else {
+                    // そうでない場合、数量を更新
+                    DB::table('order_details')->where('order_detail_id', $orderDetailId)->update([
+                        'quantity' => $newOriginalQty,
                     ]);
                 }
+
+                // キャンセルされた商品を新しい order_detail_id で登録
+                DB::table('order_details')->insert([
+                    'order_id' => $detail->order_id,
+                    'product_name' => $detail->product_name,
+                    'unit_price' => $detail->unit_price,
+                    'quantity' => $cancelQty, // キャンセル数量を登録
+                    'delivery_quantity' => 0, // キャンセル商品は納品ゼロ
+                    'cancell_flag' => 1, // キャンセル済みフラグを立てる
+                    // 元の備考にキャンセル理由を追加
+                    'remarks' => DB::raw("CONCAT(IFNULL('" . addslashes($detail->remarks) . "', ''), '【キャンセル理由】" . ($reasons[$orderDetailId] ?? '') . "')"),
+                ]);
             }
 
             DB::commit();
-            return redirect()->route('orders.index')->with('success', 'キャンセル処理が完了しました。');
+            return redirect()->route('orders.order_details', ['order_id' => $order_id])->with('success', 'キャンセル処理が完了しました。');
         } catch (\Exception $e) {
             DB::rollBack();
             \Log::error('キャンセル処理エラー: ' . $e->getMessage());
-            return redirect()->route('orders.index')->withErrors('キャンセル処理中にエラーが発生しました。');
+            return redirect()->route('orders.order_details', ['order_id' => $order_id])->withErrors('キャンセル処理中にエラーが発生しました。' . $e->getMessage());
         }
     }
 

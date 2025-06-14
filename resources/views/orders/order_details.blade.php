@@ -45,7 +45,7 @@
                             <th>商品名</th>
                             <th>単価</th>
                             <th>数量</th>
-                            <th>納品状況</th>
+                            <th>納品数量</th>
                             <th>納品日</th>
                             <th>備考</th>
                             <th>キャンセル</th>
@@ -59,9 +59,7 @@
                                 <td>{{ number_format($orderDetail->unit_price) }} 円</td>
                                 <td>{{ number_format($orderDetail->quantity) }}</td>
                                 <td>
-                                    <span class="badge {{ $orderDetail->delivery_status == 1 ? 'badge-success' : 'badge-warning' }}">
-                                        {{ $orderDetail->delivery_status == 1 ? '納品済み' : '未納品' }}
-                                    </span>
+                                    {{ number_format($orderDetail->delivery_quantity) }} / {{ number_format($orderDetail->quantity) }}
                                 </td>
                                 <td>{{ $orderDetail->delivery_date ?? '-' }}</td>
                                 <td class="remarks-cell">{{ $orderDetail->remarks }}</td>

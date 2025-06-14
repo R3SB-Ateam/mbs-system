@@ -192,7 +192,12 @@ class DeliveryController extends Controller
 
     public function show($delivery_id) // 納品詳細を表示する処理
     {
-        $delivery = DB::table('deliveries')->where('delivery_id', $delivery_id)->first();
+        $delivery = DB::table('deliveries')
+        ->join('customers', 'deliveries.customer_id', '=', 'customers.customer_id')
+        ->select('deliveries.*', 'customers.name as customer_name')
+        ->where('delivery_id', $delivery_id)
+        ->first();
+        
         $deliveryDetails = DB::table('delivery_details')
             ->where('delivery_id', $delivery_id)
             ->get();

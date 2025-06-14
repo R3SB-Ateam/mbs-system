@@ -3,25 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>納品詳細</title>
+    <title>納品明細</title>
     {{-- すべてのCSSを統合したファイルを参照 --}}
     <link href="{{ asset('css/page/delivery_details.css') }}" rel="stylesheet">
 </head>
 <body class="c-body">
     <div class="l-container">
         <h1 class="c-heading-primary">
-            納品詳細 <span class="c-text-id">(納品ID: {{ $delivery->delivery_id }})</span>
+            納品明細 <span class="c-text-id">(納品ID: {{ $delivery->delivery_id }})</span>
         </h1>
-
-        <div class="c-action-buttons-wrap">
-            <a href="{{ route('deliveries.index') }}" class="c-button c-button--gray">
-                ← 納品一覧に戻る
-            </a>
-            <a href="{{ route('deliveries.return_form', ['delivery_id' => $delivery->delivery_id]) }}"
-               class="c-button c-button--red">
-                返品処理
-            </a>
-        </div>
 
         <div class="c-card">
             <h2 class="c-heading-secondary">納品情報</h2>
@@ -60,6 +50,16 @@
                     </tbody>
                 </table>
             </div>
+        </div>
+
+        <div class="c-action-buttons-wrap">
+            <a href="{{ route('deliveries.index') }}" class="c-button c-button--gray">
+                戻る
+            </a>
+            <a href="{{ route('deliveries.return_form', ['delivery_id' => $delivery->delivery_id]) }}"
+               class="c-button c-button--red">
+                返品
+            </a>
         </div>
     </div>
 </body>

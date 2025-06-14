@@ -52,7 +52,7 @@
 
             <div class="p-filter-button-wrap">
                 <button type="submit" class="c-button c-button--green">
-                    絞り込み
+                    検索
                 </button>
             </div>
         </form>
@@ -85,6 +85,13 @@
                     @endforeach
                 </tbody>
             </table>
+        </div>
+
+        {{-- ここにボタンを移動しました --}}
+        <div class="c-button-group">
+            <a href="{{ route('dashboard') }}" class="c-button c-button--gray">
+                戻る
+            </a>
         </div>
 
     </div>

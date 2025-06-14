@@ -18,7 +18,6 @@ return new class extends Migration
             $table->decimal('unit_price', 10, 2)->comment('単価');
             $table->integer('quantity')->comment('数量');
             $table->integer('delivery_quantity')->default(0)->comment('納品数量');
-            $table->date('delivery_date')->nullable()->comment('納品日');
             $table->text('remarks')->nullable()->comment('備考');
             $table->boolean('cancell_flag')->default(false)->comment('キャンセルフラグ');
             $table->comment('注文明細テーブル');

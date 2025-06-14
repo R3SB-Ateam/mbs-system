@@ -34,7 +34,6 @@ class OrderDetailSeeder extends Seeder
                 'unit_price' => fake()->numberBetween(50, 100) * 10,
                 'quantity' => fake()->numberBetween(1, 5),
                 'delivery_quantity' => 0, // 初期値
-                'delivery_date' => null,
                 'remarks' => null,
                 'cancell_flag' => false,
             ]);

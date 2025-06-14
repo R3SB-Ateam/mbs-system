@@ -22,7 +22,8 @@
                             <th class="c-table__th c-table__th--padded">納品明細ID</th>
                             <th class="c-table__th c-table__th--padded">商品名</th>
                             <th class="c-table__th c-table__th--padded">単価</th>
-                            <th class="c-table__th c-table__th--padded">数量</th>
+                            <th class="c-table__th c-table__th--padded">返品可能数量</th>
+                            <th class="c-table__th c-table__th--padded">返品数量</th>
                             <th class="c-table__th c-table__th--padded">備考</th>
                         </tr>
                     </thead>
@@ -34,6 +35,10 @@
                                     <td class="c-table__td c-table__td--padded">{{ $detail->product_name }}</td>
                                     <td class="c-table__td c-table__td--padded">{{ number_format($detail->unit_price) }}円</td>
                                     <td class="c-table__td c-table__td--padded">{{ $detail->delivery_quantity }}</td>
+                                    <td class="c-table__td c-table__td--padded">
+                                        <input type="number" name="return_quantities[{{ $detail->delivery_detail_id }}]"
+                                        min="0" max="{{ $detail->delivery_quantity }}" class="c-form-input c-form-input--small">
+                                    </td>
                                     <td class="c-table__td c-table__td--padded">{{ $detail->notes ?? '' }}</td>
                                 </tr>
                             @endif

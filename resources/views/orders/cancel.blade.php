@@ -31,7 +31,7 @@
                             <td class="table-cell-center">{{ number_format($detail->cancellable_quantity) }}</td>
                             <td class="table-cell-center">
                                 <input type="number" name="cancel_quantities[{{ $detail->order_detail_id }}]"
-                                       min="1"
+                                       min="0"
                                        max="{{ $detail->cancellable_quantity }}"
                                        value="0"
                                        class="input-number">

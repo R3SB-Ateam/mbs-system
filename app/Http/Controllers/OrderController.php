@@ -121,11 +121,11 @@ class OrderController extends Controller
         DB::commit();
         return redirect()->route('orders.order_details', ['order_id' => $order->order_id])
                          ->with('success', '注文が登録されました');
-    } catch (\Exception $e) {
-        DB::rollBack();
-        Log::error('注文登録エラー: ' . $e->getMessage());
-        return redirect()->back()->withErrors(['error' => '注文の登録中にエラーが発生しました'])->withInput();
-    }
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error('注文登録エラー: ' . $e->getMessage());
+            return redirect()->back()->withErrors(['error' => '注文の登録中にエラーが発生しました'])->withInput();
+        }
     
     }
 

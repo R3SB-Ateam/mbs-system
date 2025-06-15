@@ -31,53 +31,59 @@
         <!-- 注文明細情報 -->
         <div class="order-details">
             <h2 class="section-title-detail">注文商品の詳細</h2>
+            <div class="search-container">
+                <form method="GET" action="{{ route('orders.details.search', ['order_id' => $order->order_id]) }}">
+                    <input type="text" name="keyword" placeholder="検索ワードを入力" class="search-input">
+                    <button type="submit" class="search-button">検索</button>
+                </form>
+            </div>
             <div class="table-container">
-                <table class="table">
-                    <div class="table-wrapper">
-                    <colgroup>
-                        <col style="width: 12%;">  <!-- 注文詳細ID -->
-                        <col style="width: 13%;">  <!-- 商品名 -->
-                        <col style="width: 11%;">  <!-- 単価 -->
-                        <col style="width: 9%;">   <!-- 数量 -->
-                        <col style="width: 13%;">  <!-- 納品状況 -->
-                        <col style="width: 22%;">  <!-- 備考（キャンセル理由が入るので広め） -->
-                        <col style="width: 12%;">  <!-- キャンセル（キャンセル済み表示のスペース確保） -->
-                    </colgroup>
-                    
-                    <thead class="table-head">
-                        <tr>
-                            <th>注文詳細ID</th>
-                            <th>商品名</th>
-                            <th>単価</th>
-                            <th>数量</th>
-                            <th>納品数量</th>
-                            <th>備考</th>
-                            <th>キャンセル</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach ($orderDetails as $orderDetail)
-                            <tr class="table-row">
-                                <td>{{ $orderDetail->order_detail_id }}</td>
-                                <td>{{ $orderDetail->product_name }}</td>
-                                <td>{{ number_format($orderDetail->unit_price) }} 円</td>
-                                <td>{{ number_format($orderDetail->quantity) }}</td>
-                                <td>
-                                    {{ number_format($orderDetail->delivery_quantity) }} / {{ number_format($orderDetail->quantity) }}
-                                </td>
-                                <td class="remarks-cell">{{ $orderDetail->remarks }}</td>
-                                <td class="last-child">
-                                    @if ($orderDetail->cancell_flag == 1)
-                                        <span class="text-cancel">キャンセル済</span>
-                                    @else
-                                        -
-                                    @endif
-                                </td>
+                <div class="table-wrapper">
+                    <table class="table">
+                        <colgroup>
+                            <col style="width: 15%;">  <!-- 注文詳細ID -->
+                            <col style="width: 15%;">  <!-- 商品名 -->
+                            <col style="width: 10%;">  <!-- 単価 -->
+                            <col style="width: 10%;">  <!-- 数量 -->
+                            <col style="width: 15%;">  <!-- 納品日 -->
+                            <col style="width: 15%;">  <!-- 納品状況 -->
+                            <col style="width: 35%;">  <!-- 備考 -->
+                        </colgroup>
+                        
+                        <thead class="table-head">
+                            <tr>
+                                <th>注文詳細ID</th>
+                                <th>商品名</th>
+                                <th>単価</th>
+                                <th>数量</th>
+                                <th>納品日</th>
+                                <th>納品状況</th>
+                                <th>備考</th>
                             </tr>
-                        @endforeach
-                    </tbody>
-                    </div>
-                </table>
+                        </thead>
+                        <tbody>
+                            @foreach ($orderDetails as $orderDetail)
+                                <tr class="table-row">
+                                    <td>{{ $orderDetail->order_detail_id }}</td>
+                                    <td>{{ $orderDetail->product_name }}</td>
+                                    <td>{{ number_format($orderDetail->unit_price) }} 円</td>
+                                    <td>{{ number_format($orderDetail->quantity) }}</td>
+                                    <td>{{ $orderDetail->delivery_date ?? '-'  }}</td>
+                                    <td>
+                                        @if(isset($orderDetail->delivery_status))
+                                            <span class="badge {{ $orderDetail->delivery_status == 1 ? 'badge-success' : 'badge-warning' }}">
+                                                {{ $orderDetail->delivery_status == 1 ? '納品済み' : '未納品' }}
+                                            </span>
+                                        @else
+                                            <span class="badge badge-secondary">不明</span>
+                                        @endif
+                                    </td>
+                                    <td class="remarks-cell">{{ $orderDetail->remarks }}</td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
 

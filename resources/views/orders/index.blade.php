@@ -48,16 +48,16 @@
         <div class="table-wrapper">
             @csrf
             <table>
-            <colgroup>
-                <col style="width: 5%;">
-                <col style="width: 10%;">
-                <col style="width: 12%;">
-                <col style="width: 10%;">
-                <col style="width: 15%;">
-                <col style="width: 13%;">
-                <col style="min-width: 80px;">
-                <col style="min-width: 150px;">
-            </colgroup>
+                <colgroup>
+                    <col style="width: 5%;">
+                    <col style="width: 10%;">
+                    <col style="width: 12%;">
+                    <col style="width: 10%;">
+                    <col style="width: 15%;">
+                    <col style="width: 13%;">
+                    <col style="min-width: 80px;">
+                    <col style="min-width: 150px;">
+                </colgroup>
                 <thead>
                     <tr>
                         <th></th>
@@ -82,7 +82,7 @@
                             <td><a href="{{ route('orders.order_details', ['order_id' => $order->order_id]) }}" class="table-link">{{ number_format($order->order_id) }}</a></td>
                             <td>{{ $order->delivery_status_text }}</td>
                             <td>{{ $order->customer_id }}</td>
-                            <td>{{ $order->customer_name }}</td>
+                            <td>{{ $order->customer->name ?? '不明'}}</td>
                             <td>{{ $order->order_date }}</td>
                             <td>{{ number_format($order->total_amount) }}</td> <!-- 注文金額 -->
                             <td>{{ $order->remarks }}</td>

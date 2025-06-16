@@ -24,5 +24,11 @@ class Orders extends Model
         'order_date',
         'remarks',
     ];
+
+    // 追加：顧客とのリレーション
+    public function customer()
+    {
+        return $this->belongsTo(Customer::class, 'customer_id', 'customer_id');
+    }
 }
 

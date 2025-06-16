@@ -71,7 +71,19 @@ body {
 
 .info-grid {
   display: grid;
-  grid-template-columns: 1fr;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.5rem 1.5rem;
+  align-items: center;
+}
+
+.info-grid p {
+  margin: 0.25rem 0;
+}
+
+.order-date-center {
+  grid-column: 1 / -1;
+  text-align: center;
+  font-weight: bold;
 }
 
 @media (min-width: 768px) {

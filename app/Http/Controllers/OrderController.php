@@ -118,19 +118,26 @@ class OrderController extends Controller
             }
 
         DB::commit();
-        return redirect()->route('orders.index')->with('success', '注文が登録されました');
+        return redirect()->route('orders.order_details', ['order_id' => $orderId])
+                         ->with('success', '注文が登録されました');
 
         } catch (\Exception $e) {
             DB::rollback();
             Log::error('注文登録エラー: ' . $e->getMessage());
-            return route('orders.index')->withErrors('注文の登録中にエラーが発生しました');
+            return redirect()->back()->withErrors(['error' => '注文の登録中にエラーが発生しました'])->withInput();
         }
     
     }
 
 
     public function orderDetails($order_id){
-        $order = DB::table('orders')->where('order_id', $order_id)->first();
+        // 注文情報に顧客名を含めて取得
+        $order = DB::table('orders')
+            ->join('customers', 'orders.customer_id', '=', 'customers.customer_id')
+            ->select('orders.*', 'customers.name as customer_name')
+            ->where('orders.order_id', $order_id)
+            ->first();
+
         if (!$order) {
             abort(404, 'Order not found');
         }
@@ -226,9 +233,4 @@ class OrderController extends Controller
             return redirect()->route('orders.index')->withErrors('キャンセル処理中にエラーが発生しました。');
         }
     }
-
-
-
-
 }
-

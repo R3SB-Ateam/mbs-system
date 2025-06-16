@@ -152,6 +152,9 @@ class DeliveryController extends Controller
         $storeId = $request->input('store_id');
         $keyword = $request->input('keyword');
 
+        $sortBy = $request->input('sort_by');
+        $order = $request->input('order', 'desc');
+
         // deliveriesとcustomersを結合し、store_idで絞り込み
         $deliveries = DB::table('deliveries')
             ->join('customers', 'deliveries.customer_id', '=', 'customers.customer_id')
@@ -165,15 +168,27 @@ class DeliveryController extends Controller
                     ->orWhere('customers.name', 'like', "%{$keyword}%");
                 });
             })
-            ->select('deliveries.*', 'customers.name as customer_name')
-            ->orderBy('deliveries.delivery_id', 'desc')
-            ->get();
+            ->select('deliveries.*', 'customers.name as customer_name');
+
+
+            // ソートの適用
+        if ($sortBy === 'delivery_date') {
+            // 'delivery_date' が指定された場合、その順序でソート
+            $deliveries->orderBy('deliveries.delivery_date', $order);
+        } else {
+            // それ以外（デフォルトまたは未指定）の場合は、delivery_id で降順ソート
+            $deliveries->orderBy('deliveries.delivery_id', 'desc');
+        }
+
+        $deliveries = $deliveries->get();
 
         return view('deliveries.index', [
             'deliveries' => $deliveries,
             'stores' => $stores,
             'selectedStoreId' => $storeId,
             'keyword' => $keyword,
+            'sortBy' => $sortBy,
+            'order' => $order,
         ]);
     }
 

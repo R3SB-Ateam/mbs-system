@@ -56,9 +56,12 @@ body {
 
 /* フォーム要素 */
 .c-form-label {
-    display: block;
+    /* ラベルと入力ボックスを横並びにするため、inline-blockまたは flex アイテムに変更 */
+    /* 今回は flex アイテムの一部として機能させ、幅を明示的に指定 */
     font-weight: 500;
-    margin-bottom: 0.5rem;
+    margin-bottom: 0; /* ラベルと入力ボックスの間の縦マージンをなくす */
+    min-width: 80px; /* ラベルの最小幅を設定して、揃いやすくする */
+    white-space: nowrap; /* ラベルが改行されないようにする */
 }
 
 .c-form-select,
@@ -66,7 +69,7 @@ body {
     padding: 0.5rem 0.75rem;
     border: 1px solid #ccc;
     border-radius: 0.25rem;
-    width: 100%; /* 親要素に合わせる */
+    flex-grow: 1; /* 残りのスペースを埋めるようにする */
     box-sizing: border-box;
     font-size: 1rem;
 }
@@ -111,6 +114,7 @@ body {
     z-index: 10;
     border-bottom: 2px solid #ddd;
     text-align: left;
+    white-space: nowrap; /* ヘッダーのテキストが折り返さないように */
 }
 
 .c-table__body .c-table__td {
@@ -141,34 +145,23 @@ body {
 /* フィルターフォームのレイアウト */
 .p-filter-form {
     margin-bottom: 1.5rem; /* mb-6 */
-    display: flex; /* flex */
-    flex-direction: column; /* flex-col */
-    gap: 1rem; /* gap-4 */
+    display: flex;
+    flex-direction: column; /* 各フォーム行（ラベル＋入力）が縦に並ぶ */
+    gap: 1rem; /* 各フォーム行間のスペース */
 }
 
-/* 中画面以上でのフィルターフォームのレイアウト */
-@media (min-width: 768px) { /* md: */
-    .p-filter-form {
-        flex-direction: row; /* md:flex-row */
-        align-items: flex-end; /* フォーム要素が揃うように調整 */
-    }
-}
-
-/* フィルターのキーワード入力欄ラッパー */
-.p-filter-keyword-wrap {
-    flex: 1; /* flex-1 */
+/* 各フォームグループ（ラベルと入力ボックスを囲むdiv）のレイアウト */
+.p-filter-form > div {
+    display: flex; /* ラベルと入力ボックスを横並びにする */
+    align-items: center; /* 垂直方向の中央揃え */
+    gap: 1rem; /* ラベルと入力ボックスの間のスペース */
+    width: 100%; /* 親の幅いっぱいに広がる */
 }
 
 /* フィルターボタンの配置調整 */
 .p-filter-button-wrap {
-    align-self: flex-end; /* self-end */
-}
-
-/* 中画面以上でのフィルターボタンの配置調整 */
-@media (min-width: 768px) { /* md: */
-    .p-filter-button-wrap {
-        align-self: auto; /* md:self-auto */
-    }
+    align-self: flex-end; /* ボタンは右寄せを維持 */
+    /* ボタン自体はflexアイテムではないので、flexプロパティは不要 */
 }
 
 
@@ -259,4 +252,17 @@ body {
     .c-button:last-child {
         margin-bottom: 0;
     }
+}
+
+/* 新しいソートリンクのスタイル */
+.c-sort-toggle-link {
+    text-decoration: none;
+    color: #555; /* 落ち着いた色 */
+    margin-left: 8px; /* 納品日との間隔 */
+    font-size: 1.1em; /* 少し大きめに */
+    transition: color 0.2s ease-in-out;
+}
+
+.c-sort-toggle-link:hover {
+    color: #007bff; /* ホバー時の色 */
 }

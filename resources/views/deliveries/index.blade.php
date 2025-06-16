@@ -24,7 +24,7 @@
 
         <form method="GET" action="{{ route('deliveries.index') }}" class="p-filter-form">
             <div>
-                <label for="store_id" class="c-form-label">店舗を選択:</label>
+                <label for="store_id" class="c-form-label">店舗:</label>
                 <select name="store_id" id="store_id" class="c-form-select">
                     <option value="">全店舗</option>
                     @foreach ($stores as $store)
@@ -36,11 +36,13 @@
             </div>
 
             <div class="p-filter-keyword-wrap">
-                <label for="keyword" class="c-form-label">キーワード検索:</label>
+                <label for="keyword" class="c-form-label">検索:</label>
                 <input type="text" name="keyword" id="keyword" placeholder="納品ID、顧客名、備考で検索"
                     value="{{ $keyword ?? '' }}"
                     class="c-form-input">
             </div>
+
+            {{-- 以前ここにあったソート用のプルダウンは削除しました --}}
 
             <div class="p-filter-button-wrap">
                 <button type="submit" class="c-button c-button--green">
@@ -56,7 +58,24 @@
                         <th class="c-table__th">納品ID</th>
                         <th class="c-table__th">顧客ID</th>
                         <th class="c-table__th">顧客名</th>
-                        <th class="c-table__th">納品日</th>
+                        <th class="c-table__th">
+                            納品日
+                            {{-- 納品日のソートボタンをここに再配置します --}}
+                            @php
+                                // 現在のソート基準が 'delivery_date' であれば、現在のソート方向を取得。なければ 'desc' をデフォルトとする
+                                $currentOrder = (isset($sortBy) && $sortBy == 'delivery_date') ? ($order ?? 'desc') : 'desc';
+
+                                // 次にクリックしたときに適用するソート方向を決定
+                                // 現在降順なら次は昇順、それ以外（現在昇順またはソートなし）なら降順
+                                $nextOrder = ($currentOrder == 'desc') ? 'asc' : 'desc';
+
+                                // 表示する矢印を決定（現在のソート方向を示す）
+                                $arrow = ($currentOrder == 'desc') ? '↓' : '↑';
+                            @endphp
+                            <a href="{{ route('deliveries.index', array_merge(request()->query(), ['sort_by' => 'delivery_date', 'order' => $nextOrder])) }}" class="c-sort-toggle-link">
+                                {{ $arrow }}
+                            </a>
+                        </th>
                         <th class="c-table__th">備考</th>
                     </tr>
                 </thead>
@@ -65,7 +84,7 @@
                         <tr class="c-table__row c-table__row--hover">
                             <td class="c-table__td">
                                 <a href="{{ route('deliveries.details', ['delivery_id' => $delivery->delivery_id]) }}"
-                                   class="c-link-primary">
+                                    class="c-link-primary">
                                     {{ $delivery->delivery_id }}
                                 </a>
                             </td>
@@ -79,7 +98,6 @@
             </table>
         </div>
 
-        {{-- ここにボタンを移動しました --}}
         <div class="c-button-group">
             <a href="{{ route('dashboard') }}" class="c-button c-button--gray">
                 戻る

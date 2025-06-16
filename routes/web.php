@@ -20,6 +20,7 @@ Route::post('/orders/store', [OrderController::class, 'order_store'])->name('ord
 
 // 注文詳細ページ
 Route::get('/order_details/{order_id}', [OrderController::class, 'orderDetails'])->name('orders.order_details');
+Route::get('/orders/{order_id}/details/search', [OrderController::class, 'searchOrderDetails'])->name('orders.details.search');
 
 // 注文修正ページ（GET）
 Route::get('/orders/{order_id}/edit', [OrderController::class, 'orderEdit'])->name('orders.order_edit');

@@ -27,7 +27,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
     checkboxes.forEach(cb => {
         if (cb.disabled) {
-            // 納品済みチェックボックスのIDはlocalStorageから削除
             selectedIds = selectedIds.filter(id => id !== cb.value);
         } else if (selectedIds.includes(cb.value)) {
             cb.checked = true;
@@ -45,6 +44,16 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
-    // 納品済みIDを削除した状態で保存
+    // チェック復元後に再保存（無効チェックボックス除外）
     localStorage.setItem(storageKey, JSON.stringify(selectedIds));
+
+    // ✅ フォーム送信時にlocalStorageを確実に削除
+    const form = document.querySelector('form');
+    if (form) {
+        form.addEventListener('submit', (e) => {
+            e.preventDefault(); // 一旦送信を止める
+            localStorage.removeItem(storageKey); // 確実に削除してから
+            form.submit(); // 手動で送信
+        });
+    }
 });

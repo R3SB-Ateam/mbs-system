@@ -254,13 +254,15 @@ class OrderController extends Controller
         return view('orders.order_edit', compact('order', 'orderDetails'));
     }
 
-    public function update(Request $request, $order_id)
+    public function orderUpdate(Request $request, $order_id)
     {
         $validated = $request->validate([
             'remarks' => 'nullable|string',
-            'order_details.*.unit_price' => 'required|numeric|min:0',
-            'order_details.*.quantity' => 'required|integer|min:1',
-            'order_details.*.remarks' => 'nullable|string',
+            'details.*.order_detail_id' => 'required|integer',
+            'details.*.product_name' => 'required|string',
+            'details.*.unit_price' => 'required|numeric|min:0',
+            'details.*.quantity' => 'required|integer|min:1',
+            'details.*.remarks' => 'nullable|string',
         ]);
 
         DB::beginTransaction();
@@ -272,13 +274,14 @@ class OrderController extends Controller
                 ->update(['remarks' => $request->remarks]);
 
             // 注文明細の更新
-            foreach ($request->order_details as $detailId => $data) {
+            foreach ($request->details as $detail) {
                 DB::table('order_details')
-                    ->where('order_detail_id', $detailId)
+                    ->where('order_detail_id', $detail['order_detail_id'])
                     ->update([
-                        'unit_price' => $data['unit_price'],
-                        'quantity' => $data['quantity'],
-                        'remarks' => $data['remarks'],
+                        'product_name' => $detail['product_name'],
+                        'unit_price' => $detail['unit_price'],
+                        'quantity' => $detail['quantity'],
+                        'remarks' => $detail['remarks'],
                     ]);
             }
 

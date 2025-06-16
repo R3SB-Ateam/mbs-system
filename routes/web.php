@@ -23,8 +23,12 @@ Route::get('/order_details/{order_id}', [OrderController::class, 'orderDetails']
 
 // 注文修正ページ（GET）
 Route::get('/orders/{order_id}/edit', [OrderController::class, 'orderEdit'])->name('orders.order_edit');
-// 注文修正の保存処理（POST）
-Route::post('/orders/{order_id}/update', [OrderController::class, 'update'])->name('orders.update');
+// 修正前（POSTになってる場合）
+Route::post('/orders/{order}/update', [OrderController::class, 'orderUpdate'])->name('orders.update');
+
+// ✅ 修正後（PUTに対応させる）
+Route::put('/orders/{order}/update', [OrderController::class, 'orderUpdate'])->name('orders.update');
+
 
 // キャンセルページ
 Route::get('/order_details/{order_id}/cancel', [OrderController::class, 'showCancelForm'])->name('orders.cancel');

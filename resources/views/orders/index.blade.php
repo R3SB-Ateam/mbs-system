@@ -49,14 +49,14 @@
             @csrf
             <table>
                 <colgroup>
-                    <col style="width: 5%;">
-                    <col style="width: 10%;">
-                    <col style="width: 12%;">
-                    <col style="width: 10%;">
-                    <col style="width: 15%;">
-                    <col style="width: 13%;">
-                    <col style="min-width: 80px;">
-                    <col style="min-width: 150px;">
+                    <col style="width: 5%;"> <!-- チェックボックス --> 
+                    <col style="width: 10%;"> <!-- 注文ID --> 
+                    <col style="width: 10%;"> <!-- 納品状況 --> 
+                    <col style="width: 10%;"> <!-- 顧客ID --> 
+                    <col style="width: 15%;"> <!-- 顧客名 --> 
+                    <col style="width: 13%;"> <!-- 注文日 --> 
+                    <col style="min-width: 80px;"> <!-- 注文金額 --> 
+                    <col style="min-width: 150px;"> <!-- 備考 --> 
                 </colgroup>
                 <thead>
                     <tr>

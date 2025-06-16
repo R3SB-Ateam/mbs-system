@@ -15,7 +15,7 @@ class Orders extends Model
     protected $primaryKey = 'order_id';
 
     // 自動インクリメントを無効にする場合
-    public $incrementing = false;
+    public $incrementing = true;
 
     // タイムスタンプを無視（必要に応じて）
     public $timestamps = false;

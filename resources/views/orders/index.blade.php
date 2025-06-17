@@ -60,7 +60,11 @@
                 </colgroup>
                 <thead>
                     <tr>
-                        <th></th>
+                        <th><!-- テーブル上部などに配置 -->
+                            <div class="table-actions">
+                                <input type="checkbox" id="select-all-checkbox" title="全選択/全解除">
+                            </div>
+                        </th>
                         <th>注文ID</th>
                         <th>納品状況</th>
                         <th>顧客ID</th>

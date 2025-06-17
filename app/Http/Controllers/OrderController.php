@@ -334,4 +334,13 @@ class OrderController extends Controller
         }
     }
 
+    public function showPrintPage(Orders $order)
+    {
+        // 注文に紐づく顧客と明細データを読み込む
+        $order->load(['customer', 'details']);
+
+        // 印刷レイアウト用のビューを返す
+        return view('orders.print', compact('order'));
+    }
+
 }

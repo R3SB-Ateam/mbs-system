@@ -97,7 +97,13 @@
                class="btn btn-cancel">
                 キャンセル
             </a>
+            <button id="print-order-btn"
+                    class="btn btn-primary"
+                    data-print-url="{{ route('orders.print_page', ['order' => $order->order_id]) }}">
+                注文書印刷
+            </button>
         </div>
     </div>
+    <script src="{{ asset('js/print.js') }}" defer></script>
 </body>
 </html>

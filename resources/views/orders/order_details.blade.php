@@ -31,12 +31,6 @@
         <!-- 注文明細情報 -->
         <div class="order-details">
             <h2 class="section-title-detail">注文商品の詳細</h2>
-            <div class="search-container">
-                <form method="GET" action="{{ route('orders.details.search', ['order_id' => $order->order_id]) }}">
-                    <input type="text" name="keyword" placeholder="検索ワードを入力" class="search-input">
-                    <button type="submit" class="search-button">検索</button>
-                </form>
-            </div>
             <div class="table-container">
                 <div class="table-wrapper">
                     <table class="table">

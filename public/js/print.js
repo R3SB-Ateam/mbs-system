@@ -41,18 +41,17 @@ const triggerPrint = (url) => {
 // HTMLドキュメントの読み込みが完了したら、以下の処理を実行
 document.addEventListener('DOMContentLoaded', () => {
     // 印刷ボタン要素を取得
-    const printButton = document.getElementById('print-order-btn');
+    const printButtons = document.querySelectorAll('.js-print-btn');
 
-    // ボタンが存在する場合のみ、イベントリスナーを設定
-    if (printButton) {
-        printButton.addEventListener('click', () => {
-            // ボタンのdata-print-url属性から、印刷ページのURLを取得
-            const printUrl = printButton.dataset.printUrl;
+    // 各ボタンにイベントリスナーを設定
+    printButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            const printUrl = button.dataset.printUrl;
             if (printUrl) {
                 triggerPrint(printUrl);
             } else {
                 console.error('印刷用のURLが指定されていません。');
             }
         });
-    }
+    });
 });

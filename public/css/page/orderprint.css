@@ -43,7 +43,6 @@ body {
     line-height: 1.8; /* ★行間を調整 */
 }
 
-/* ★★★ 日付のスタイルを追加 ★★★ */
 .header-info .date span {
     display: inline-block;
     min-width: 4em; /* 年(YYYY)が入る幅を確保 */
@@ -64,7 +63,7 @@ body {
     margin-top: 15mm;
     margin-bottom: 10mm;
 }
-/* ★★★ 宛名の下線を調整 ★★★ */
+
 .address .customer-name {
     font-size: 14pt;
 }

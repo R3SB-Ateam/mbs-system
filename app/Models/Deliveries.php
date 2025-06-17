@@ -18,6 +18,11 @@ class Deliveries extends Model
         'remarks'
     ];
 
+    public function customer()
+    {
+        return $this->belongsTo(customers::class, 'customer_id', 'customer_id');
+    }
+
     public function deliveryDetails()
     {
         return $this->hasMany(DeliveryDetails::class, 'delivery_id');

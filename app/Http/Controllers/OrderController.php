@@ -95,6 +95,7 @@ class OrderController extends Controller
         'product_name.*' => 'required|string',
         'unit_price.*' => 'required|numeric|min:0',
         'quantity.*' => 'required|integer|min:1',
+        'product_note.*' => 'nullable|string|max:255',
         'remarks' => 'nullable|string',
     ]);
 
@@ -113,7 +114,7 @@ class OrderController extends Controller
                 'unit_price' => $request->unit_price[$i],
                 'quantity' => $request->quantity[$i],
                 'delivery_quantity' => 0,
-                'remarks' => null,
+                'remarks' => $request->product_note[$i],
                 'cancell_flag' => 0,
             ]);
         }

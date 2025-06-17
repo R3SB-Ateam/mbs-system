@@ -28,7 +28,13 @@ class Orders extends Model
     // 追加：顧客とのリレーション
     public function customer()
     {
-        return $this->belongsTo(Customer::class, 'customer_id', 'customer_id');
+        return $this->belongsTo(customers::class, 'customer_id', 'customer_id');
     }
+
+    public function orderDetails()
+    {
+        return $this->hasMany(OrderDetails::class, 'order_id', 'order_id');
+    }
+    
 }
 

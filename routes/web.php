@@ -26,6 +26,9 @@ Route::get('/orders/{order_id}/edit', [OrderController::class, 'orderEdit'])->na
 // 注文修正の保存処理（POST）
 Route::post('/orders/{order_id}/update', [OrderController::class, 'update'])->name('orders.update');
 
+//　注文書印刷
+Route::get('/orders/{order}/print-page', [OrderController::class, 'showPrintPage'])->name('orders.print_page');
+
 // キャンセルページ
 Route::get('/order_details/{order_id}/cancel', [OrderController::class, 'showCancelForm'])->name('orders.cancel');
 Route::post('/order_details/cancel', [OrderController::class, 'processCancel'])->name('orders.processCancel');

@@ -44,6 +44,9 @@ Route::get('/deliveries', [DeliveryController::class, 'index'])->name('deliverie
 // 納品詳細ページ
 Route::get('/deliveries/{delivery_id}', [DeliveryController::class, 'show'])->name('deliveries.details');
 
+// 納品書印刷
+Route::get('/deliveries/{delivery}/print-page', [DeliveryController::class, 'showPrintPage'])->name('deliveries.print_page');
+
 // 返品ページ
 Route::get('/deliveries/{delivery_id}/return', [DeliveryController::class, 'showReturnForm'])->name('deliveries.return_form');
 Route::post('/deliveries/return', [DeliveryController::class, 'processReturn'])->name('deliveries.processReturn');

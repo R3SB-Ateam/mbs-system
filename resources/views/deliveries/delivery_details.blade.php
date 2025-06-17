@@ -65,7 +65,12 @@
                class="c-button c-button--red">
                 返品
             </a>
+            <button class="btn btn-primary js-print-btn"
+                    data-print-url="{{ route('deliveries.print_page', ['delivery' => $delivery->delivery_id]) }}">
+                納品書を印刷
+            </button>
         </div>
     </div>
+    <script src="{{ asset('js/print.js') }}" defer></script>
 </body>
 </html>

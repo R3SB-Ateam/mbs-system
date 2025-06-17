@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\OrderDetails; // ← ★ これを追加
+use App\Models\Customers;    // ← これも必要（なければ）
 
 class Orders extends Model
 {
@@ -13,7 +15,7 @@ class Orders extends Model
     protected $primaryKey = 'order_id';
 
     // 自動インクリメントを無効にする場合
-    public $incrementing = false;
+    public $incrementing = true;
 
     // タイムスタンプを無視（必要に応じて）
     public $timestamps = false;

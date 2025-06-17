@@ -31,31 +31,35 @@
         <!-- 注文明細情報 -->
         <div class="order-details">
             <h2 class="section-title-detail">注文商品の詳細</h2>
+            <div class="search-container">
+                <form method="GET" action="{{ route('orders.details.search', ['order_id' => $order->order_id]) }}">
+                    <input type="text" name="keyword" placeholder="検索ワードを入力" class="search-input">
+                    <button type="submit" class="search-button">検索</button>
+                </form>
+            </div>
             <div class="table-container">
-                <table class="table">
-                    <div class="table-wrapper">
-                    <colgroup>
-                        <col style="width: 12%;">  <!-- 注文詳細ID -->
-                        <col style="width: 13%;">  <!-- 商品名 -->
-                        <col style="width: 11%;">  <!-- 単価 -->
-                        <col style="width: 9%;">   <!-- 数量 -->
-                        <col style="width: 13%;">  <!-- 納品状況 -->
-                        <col style="width: 22%;">  <!-- 備考（キャンセル理由が入るので広め） -->
-                        <col style="width: 12%;">  <!-- キャンセル（キャンセル済み表示のスペース確保） -->
-                    </colgroup>
-                    
-                    <thead class="table-head">
-                        <tr>
-                            <th>注文詳細ID</th>
-                            <th>商品名</th>
-                            <th>単価</th>
-                            <th>数量</th>
-                            <th>納品数量</th>
-                            <th>備考</th>
-                            <th>キャンセル</th>
-                        </tr>
-                    </thead>
-                    <tbody>
+                <div class="table-wrapper">
+                    <table class="table">
+                        <colgroup>
+                            <col style="width: 15%;">  <!-- 注文詳細ID -->
+                            <col style="width: 15%;">  <!-- 商品名 -->
+                            <col style="width: 10%;">  <!-- 単価 -->
+                            <col style="width: 10%;">  <!-- 数量 -->
+                            <col style="width: 15%;">  <!-- 納品数量 -->
+                            <col style="width: 35%;">  <!-- 備考 -->
+                        </colgroup>
+                        
+                        <thead class="table-head">
+                            <tr>
+                                <th>注文詳細ID</th>
+                                <th>商品名</th>
+                                <th>単価</th>
+                                <th>数量</th>
+                                <th>納品数量</th>
+                                <th>備考</th>
+                            </tr>
+                        </thead>
+                        <tbody>
                         @foreach ($orderDetails as $orderDetail)
                             <tr class="table-row">
                                 <td>{{ $orderDetail->order_detail_id }}</td>
@@ -75,9 +79,9 @@
                                 </td>
                             </tr>
                         @endforeach
-                    </tbody>
-                    </div>
-                </table>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
 

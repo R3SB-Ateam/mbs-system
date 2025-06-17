@@ -41,7 +41,7 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach ($order->orderDetails as $index => $detail)
+                @foreach ($order->details as $index => $detail)
                     @if(!$detail->cancell_flag)
                         <tr>
                             <td class="num">{{ $index + 1 }}</td>
@@ -53,7 +53,7 @@
                     @endif
                 @endforeach
                 
-                @for ($i = $order->orderDetails->where('cancell_flag', 0)->count(); $i < 13; $i++)
+                @for ($i = $order->details->where('cancell_flag', 0)->count(); $i < 13; $i++)
                     <tr>
                         <td class="num">{{ $i + 1 }}</td>
                         <td>&nbsp;</td>

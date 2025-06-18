@@ -85,5 +85,57 @@
         </div>
     </form>
 </div>
+@if (session('update_success'))
+<script>
+    alert('修正が完了しました');
+    window.location.href = "{{ route('orders.order_details', ['order_id' => $order->order_id]) }}";
+</script>
+@endif
+
+<script>
+document.querySelector('form').addEventListener('submit', function(e) {
+    let hasInvalid = false;
+    let message = '';
+
+    const unitPrices = document.querySelectorAll('input[name^="details"][name$="[unit_price]"]');
+    const quantities = document.querySelectorAll('input[name^="details"][name$="[quantity]"]');
+    const productNames = document.querySelectorAll('input[name^="details"][name$="[product_name]"]');
+
+    // 単価・数量 = 0 チェック
+    unitPrices.forEach((unitInput, index) => {
+        const quantityInput = quantities[index];
+        const unit = parseFloat(unitInput.value) || 0;
+        const qty = parseFloat(quantityInput.value) || 0;
+
+        if (unit <= 0 || qty <= 0) {
+            hasInvalid = true;
+            message += `明細 ${index + 1}: 単価・数量は1以上で入力してください。`;
+        }
+    });
+
+    if (hasInvalid) {
+        e.preventDefault();
+        alert(message);
+        return;
+    }
+
+    // 商品名空欄チェック
+    let hasEmptyName = false;
+    productNames.forEach((p) => {
+        if (p.value.trim() === '') {
+            hasEmptyName = true;
+        }
+    });
+
+    if (hasEmptyName) {
+        const result = confirm('商品名が空白の明細があります。本当に登録してよろしいですか？');
+        if (!result) {
+            e.preventDefault(); // 「いいえ」を選んだら止める
+        }
+        // 「はい」の場合は何もしない → フォーム送信継続される
+    }
+});
+</script>
+
 </body>
 </html>

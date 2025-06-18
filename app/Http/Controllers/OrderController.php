@@ -286,7 +286,7 @@ class OrderController extends Controller
             }
 
             DB::commit();
-            return redirect()->route('orders.index')->with('success', '注文を更新しました。');
+            return redirect()->route('orders.order_details', ['order_id' => $order_id])->with('update_success','注文を修正しました。', true);
         } catch (\Exception $e) {
             DB::rollBack();
             \Log::error("注文修正エラー: " . $e->getMessage());

@@ -300,43 +300,32 @@ class OrderController extends Controller
 
     public function orderUpdate(Request $request, $order_id)
     {
-        $validated = $request->validate([
-            'remarks' => 'nullable|string',
-            'details.*.order_detail_id' => 'required|integer',
-            'details.*.product_name' => 'required|string',
+        $request->validate([
+            'remarks' => 'nullable|string|max:1000',
+            'details.*.product_name' => 'required|string|max:255',
             'details.*.unit_price' => 'required|numeric|min:0',
             'details.*.quantity' => 'required|integer|min:1',
-            'details.*.remarks' => 'nullable|string',
         ]);
 
-        DB::beginTransaction();
+        // 注文の更新
+        $order = Orders::findOrFail($order_id);
+        $order->remarks = $request->input('remarks'); // ← 備考を更新
+        $order->save();
 
-        try {
-            // 注文情報更新
-            DB::table('orders')
-                ->where('order_id', $order_id)
-                ->update(['remarks' => $request->remarks]);
-
-            // 注文明細の更新
-            foreach ($request->details as $detail) {
-                DB::table('order_details')
-                    ->where('order_detail_id', $detail['order_detail_id'])
-                    ->update([
-                        'product_name' => $detail['product_name'],
-                        'unit_price' => $detail['unit_price'],
-                        'quantity' => $detail['quantity'],
-                        'remarks' => $detail['remarks'],
-                    ]);
-            }
-
-            DB::commit();
-            return redirect()->route('orders.order_details', ['order_id' => $order_id])->with('update_success','注文を修正しました。', true);
-        } catch (\Exception $e) {
-            DB::rollBack();
-            \Log::error("注文修正エラー: " . $e->getMessage());
-            return back()->withErrors('注文の更新中にエラーが発生しました。');
+        // 注文明細の更新
+        foreach ($request->input('details') as $detailData) {
+            $detail = OrderDetails::findOrFail($detailData['order_detail_id']);
+            $detail->product_name = $detailData['product_name'];
+            $detail->unit_price = $detailData['unit_price'];
+            $detail->quantity = $detailData['quantity'];
+            $detail->remarks = $detailData['remarks'] ?? null;
+            $detail->save();
         }
+
+        return redirect()->route('orders.order_edit', ['order_id' => $order_id])
+                        ->with('update_success', '注文内容を更新しました。');
     }
+
 
     public function showPrintPage(Orders $order)
     {

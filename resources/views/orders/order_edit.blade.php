@@ -124,15 +124,14 @@ document.querySelector('form').addEventListener('submit', function(e) {
     productNames.forEach((p) => {
         if (p.value.trim() === '') {
             hasEmptyName = true;
+            message += `明細 ${index + 1}: 商品名は1文字以上で入力してください。`;
         }
     });
 
     if (hasEmptyName) {
-        const result = confirm('商品名が空白の明細があります。本当に登録してよろしいですか？');
-        if (!result) {
-            e.preventDefault(); // 「いいえ」を選んだら止める
-        }
-        // 「はい」の場合は何もしない → フォーム送信継続される
+        e.preventDefault();
+        alert(message);
+        return;
     }
 });
 </script>

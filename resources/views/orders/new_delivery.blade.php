@@ -10,6 +10,10 @@
 <body>
     <div class="main-container">
         <h1 class="page-title">納品登録</h1>
+        <div class="form-group">
+            <label class="text-label">顧客名:</label>
+            <p class="customer-name">{{ $customer_name }}</p>
+        </div>
         <form method="POST" action="{{ route('orders.delivery_store') }}">
             @csrf
 
@@ -55,7 +59,9 @@
                                 <td class="table-cell">{{ $orderDetail->order_detail_id }}</td> <!-- 注文明細ID --> 
                                 <td class="table-cell">{{ $orderDetail->product_name }}</td>
                                 <td class="table-cell">{{ number_format($orderDetail->undelivered_quantity) }}</td>
-                                <td class="table-cell">{{ number_format($orderDetail->unit_price,0) }}</td>
+                                <td class="table-cell">
+                                    <input type="number" name="unit_prices[]" value="{{ number_format($orderDetail->unit_price) }}" min="0" step="1" required class="unit-price-input">
+                                </td>
                                 <td class="table-cell">
                                     <input type="hidden" name="order_ids[]" value="{{ $orderDetail->order_id }}">
                                     <input type="hidden" name="order_detail_ids[]" value="{{ $orderDetail->order_detail_id }}">

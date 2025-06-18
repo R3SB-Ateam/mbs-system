@@ -32,6 +32,7 @@
                             <th class="c-table__th">注文ID</th>
                             <th class="c-table__th">注文明細ID</th>
                             <th class="c-table__th">商品名</th>
+                            {{-- <th class="c-table__th">単価</th> ← 削除しました --}}
                             <th class="c-table__th">数量</th>
                             <th class="c-table__th">備考</th>
                             <th class="c-table__th">返品状況</th>
@@ -43,6 +44,7 @@
                                 <td class="c-table__td">{{ $detail->order_id }}</td>
                                 <td class="c-table__td">{{ $detail->order_detail_id }}</td>
                                 <td class="c-table__td">{{ $detail->product_name }}</td>
+                                {{-- <td class="c-table__td">{{ number_format($detail->unit_price) }}円</td> ← 削除しました --}}
                                 <td class="c-table__td">{{ $detail->delivery_quantity }}</td>
                                 <td class="c-table__td">{{ $detail->remarks }}</td>
                                 <td class="c-table__td">
@@ -55,6 +57,9 @@
                     </tbody>
                 </table>
             </div>
+            {{-- <div class="p-total-amount"> ← 削除しました --}}
+            {{--     <p><strong>合計金額:</strong> {{ number_format($totalAmount) }}円</p> ← 削除しました --}}
+            {{-- </div> ← 削除しました --}}
         </div>
 
         <div class="c-action-buttons-wrap">
@@ -65,7 +70,7 @@
                class="c-button c-button--red">
                 返品
             </a>
-            <button class="btn btn-primary js-print-btn"
+            <button class="c-button c-button--blue js-print-btn"
                     data-print-url="{{ route('deliveries.print_page', ['delivery' => $delivery->delivery_id]) }}">
                 納品書を印刷
             </button>

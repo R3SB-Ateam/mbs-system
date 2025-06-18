@@ -53,7 +53,7 @@
             </div>
 
             <button type="submit" class="c-button c-button--red c-button--mt4">
-                送信
+                確定
             </button>
         </form>
 

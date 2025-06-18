@@ -56,7 +56,8 @@ body {
     display: flex; /* flex */
     flex-wrap: wrap; /* flex-wrap */
     gap: 1rem; /* gap-4 */
-    justify-content: flex-end; /* ボタンを右寄せにする */
+    /* ボタンアイテム全体を中央揃えにする */
+    justify-content: center;
     margin-top: 2rem; /* 上部に余白を追加 */
 }
 
@@ -71,6 +72,8 @@ body {
     cursor: pointer;
     border: none;
     font-size: 1rem;
+    /* ボタン内のテキストを中央揃えにする */
+    text-align: center;
 }
 
 /* グレー色のボタン */
@@ -97,6 +100,18 @@ body {
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
 }
 
+/* 青色のボタン（印刷用） */
+.c-button--blue {
+    background-color: #3b82f6; /* Tailwind: bg-blue-500 */
+}
+
+/* 青ボタンのホバー時の色 */
+.c-button--blue:hover {
+    background-color: #2563eb; /* Tailwind: hover:bg-blue-600 */
+    transform: translateY(-1px);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
 /* カードコンポーネント */
 .c-card {
     background-color: #ffffff; /* bg-white */
@@ -116,7 +131,6 @@ body {
     width: 100%;
     border-collapse: collapse;
     background: white;
-    /* min-width: 600px; /* 小画面でテーブルが小さくなりすぎないように */ 
 }
 
 .c-table__head {
@@ -139,66 +153,65 @@ body {
 }
 
 .c-table__row:last-child .c-table__td {
-    border-bottom: none; /* 最後の行の下線を削除 */
+    border-bottom: none;
 }
 
 .c-table__row:hover {
-    background-color: #f9fafb; /* hover:bg-gray-50 */
+    background-color: #f9fafb;
 }
 
 /* ステータスバッジ */
 .c-status-badge {
     display: inline-flex;
     align-items: center;
-    padding: 0.25rem 0.5rem; /* px-2 py-1 */
-    border-radius: 9999px; /* rounded-full */
-    font-size: 0.75rem; /* text-xs */
-    font-weight: 600; /* font-medium */
+    padding: 0.25rem 0.5rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 600;
     text-transform: uppercase;
 }
 
 .c-status-badge--returned {
-    background-color: #fee2e2; /* bg-red-100 */
-    color: #b91c1c; /* text-red-700 */
+    background-color: #fee2e2;
+    color: #b91c1c;
 }
 
 .c-status-badge--not-returned {
-    background-color: #dcfce7; /* bg-green-100 */
-    color: #166534; /* text-green-700 */
+    background-color: #dcfce7;
+    color: #166534;
 }
 
 /* ページ固有のスタイル */
 /* 納品情報グリッドレイアウト */
 .p-delivery-info-grid {
-    display: grid; /* grid */
-    grid-template-columns: 1fr; /* grid-cols-1 */
-    gap: 1rem; /* gap-4 */
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
 }
 
 .p-delivery-info-grid p {
-    margin: 0; /* デフォルトのマージンをリセット */
+    margin: 0;
 }
 
 /* 中画面以上でのグリッドレイアウト（2カラム） */
-@media (min-width: 768px) { /* md: */
+@media (min-width: 768px) {
     .p-delivery-info-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr)); /* md:grid-cols-2 */
+        grid-template-columns: repeat(2, minmax(0, 1fr));
     }
     /* 中画面以上での備考欄の横幅いっぱいに広げる */
     .p-delivery-info-remarks {
-        grid-column: span 2 / span 2; /* md:col-span-2 */
+        grid-column: span 2 / span 2;
     }
 }
-
 
 /* レスポンシブ対応 */
 @media screen and (max-width: 768px) {
     .l-container {
-        padding: 1rem; /* 小画面でのパディングを調整 */
+        padding: 1rem;
     }
 
     .c-heading-primary {
-        font-size: 1.5rem; /* 小画面での見出しサイズ調整 */
+        font-size: 1.5rem;
         margin-bottom: 1rem;
     }
 
@@ -207,24 +220,25 @@ body {
     }
 
     .c-action-buttons-wrap {
-        /* ここを修正しました */
-        flex-direction: column; /* ボタンを縦並びにする */
-        gap: 0.5rem; /* ボタン間のスペースを調整 */
-        justify-content: center; /* 中央寄せに戻す */
+        flex-direction: column;
+        gap: 0.5rem;
+        /* 小画面でもボタンアイテム全体を中央揃えにする */
+        justify-content: center;
     }
 
     .c-button {
         width: 100%; /* ボタンを横幅いっぱいに */
-        box-sizing: border-box; /* パディングとボーダーを幅に含める */
+        box-sizing: border-box;
+        /* text-align: center; はすでに .c-button に適用されているため、ここでは不要です */
     }
 
     .c-card {
-        padding: 1rem; /* 小画面でのカードパディング */
+        padding: 1rem;
         margin-bottom: 1rem;
     }
 
     .c-table__th,
     .c-table__td {
-        padding: 0.5rem 0.75rem; /* 小画面でのテーブルセルパディング */
+        padding: 0.5rem 0.75rem;
     }
 }

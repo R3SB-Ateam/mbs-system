@@ -1,0 +1,46 @@
+/* 基本設定 */
+body { font-family: 'Hiragino Mincho ProN', 'MS Mincho', serif; background-color: #FFF; color: #000; margin: 0; font-size: 10pt; line-height: 1.4; }
+@page { size: A4; margin: 0; }
+.container { width: 210mm; height: 297mm; padding: 15mm; box-sizing: border-box; }
+.header { position: relative; text-align: center; margin-bottom: 8mm; border-bottom: 1.5px solid #000; padding-bottom: 4mm; }
+.header h1 { font-size: 22pt; letter-spacing: 8px; margin: 0 0 10mm 0; }
+.header-info { position: absolute; top: 5px; right: 0; text-align: right; font-size: 10pt; }
+.header-info p { margin: 0; line-height: 1.8; }
+.address { margin-top: 15mm; margin-bottom: 10mm; }
+.address .customer-name { font-size: 14pt; }
+.address .customer-name span { display: inline-block; min-width: 250px; border-bottom: 1px solid #000; padding-bottom: 2px; }
+
+/* 明細テーブル */
+.details-table { width: 100%; border-collapse: collapse; }
+.details-table th, .details-table td { border: 1px solid #000; padding: 2mm; vertical-align: middle; }
+.details-table th { font-weight: normal; text-align: center; }
+.details-table tbody td { text-align: center; height: 8mm; }
+.details-table .product-name { text-align: left; }
+.details-table .price { text-align: right; }
+
+/* ★★★ フッターのスタイルを全面的に修正 ★★★ */
+.details-table tfoot td {
+    border: 1px solid #000;
+    vertical-align: top;
+}
+.details-table .summary-box {
+    padding: 0;
+    text-align: center;
+}
+.details-table .summary-title {
+    padding: 1.5mm;
+    border-bottom: 1px solid #000;
+    background-color: #f2f2f2;
+}
+.details-table .summary-value {
+    padding: 3mm 2mm;
+    text-align: right;
+    font-size: 11pt;
+}
+.details-table .total-box {
+    background-color: #f2f2f2;
+}
+.details-table .total-box .summary-title,
+.details-table .total-box .summary-value {
+    font-weight: bold;
+}

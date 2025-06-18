@@ -43,6 +43,35 @@ body {
   margin-bottom: 1.5rem;
 }
 
+.order-details {
+    position: relative;
+    padding-top: 2.5em; /* 検索フォームのために余白を確保 */
+}
+
+.search-input {
+    padding: 0.3em 0.5em;
+    font-size: 0.9em;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+}
+
+.search-button {
+    padding: 0.3em 0.8em;
+    font-size: 0.9em;
+    margin-left: 0.5em;
+    cursor: pointer;
+    background-color: #007bff;
+    border: none;
+    color: white;
+    border-radius: 3px;
+    transition: background-color 0.3s ease;
+}
+
+.search-button:hover {
+    background-color: #0056b3;
+}
+
+
 .box-title,
 .section-title,
 .section-title-detail {

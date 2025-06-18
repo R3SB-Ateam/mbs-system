@@ -12,21 +12,41 @@ class CustomerController extends Controller
     {
         $stores = DB::table('stores')->get();
 
-        // store_idがリクエストにあればセッションに保存
         if ($request->has('store_id')) {
             session(['customers_filter.store_id' => $request->input('store_id')]);
         }
 
-        // セッションから store_id を取得、リクエストがあれば優先
         $storeId = $request->input('store_id', session('customers_filter.store_id'));
-        $now = Carbon::now()->startOfDay()->toDateString(); // 今日の日付（文字列）
+        $today = Carbon::now()->toDateString();
 
-        // 顧客情報 + 売上 + 平均RTを集計
+        // 注文明細ごとの集計サブクエリ
+        $orderDetailsSummary = DB::table('order_details as od')
+            ->join('orders as o', 'od.order_id', '=', 'o.order_id')
+            ->leftJoin('delivery_details as dd', function ($join) {
+                $join->on('od.order_detail_id', '=', 'dd.order_detail_id')
+                     ->where('dd.return_flag', '=', 0);
+            })
+            ->leftJoin('deliveries as d', 'dd.delivery_id', '=', 'd.delivery_id')
+            ->where('od.cancell_flag', 0)
+            ->select(
+                'o.customer_id',
+                'od.quantity as total_order_quantity'
+            )
+            ->selectRaw('COALESCE(SUM(dd.unit_price * dd.delivery_quantity), 0) as sales_per_detail')
+            ->selectRaw(
+                // 納品済み分: (納品日 - 注文日 - 1) * 納品数量
+                'COALESCE(SUM(GREATEST(0, DATEDIFF(d.delivery_date, o.order_date) - 1) * dd.delivery_quantity), 0) + ' .
+                // 未納分: (今日 - 注文日 - 1) * 未納数量
+                '(GREATEST(0, DATEDIFF(?, o.order_date) - 1) * (od.quantity - COALESCE(SUM(dd.delivery_quantity), 0))) as weighted_days_per_detail',
+                [$today]
+            )
+            ->groupBy('od.order_detail_id', 'o.customer_id', 'o.order_date', 'od.quantity');
+
+        // 顧客ごとの最終集計
         $customers = DB::table('customers')
-            ->leftJoin('deliveries', 'customers.customer_id', '=', 'deliveries.customer_id')
-            ->leftJoin('delivery_details', 'deliveries.delivery_id', '=', 'delivery_details.delivery_id')
-            ->leftJoin('orders', 'customers.customer_id', '=', 'orders.customer_id')
-            ->leftJoin('order_details', 'orders.order_id', '=', 'order_details.order_id')
+            ->leftJoinSub($orderDetailsSummary, 'summary', function ($join) {
+                $join->on('customers.customer_id', '=', 'summary.customer_id');
+            })
             ->when($storeId, function ($query, $storeId) {
                 return $query->where('customers.store_id', $storeId);
             })
@@ -34,28 +54,11 @@ class CustomerController extends Controller
                 'customers.customer_id',
                 'customers.name',
                 'customers.registration_date',
-                'customers.phone_number',
-                DB::raw('COALESCE(SUM(DISTINCT delivery_details.unit_price * delivery_details.delivery_quantity), 0) as total_sales'),
-
-                // RT関連：納品日と注文日の差（日数）× 数量（キャンセル除外）
-                DB::raw('SUM(CASE 
-                    WHEN order_details.cancell_flag = 0 THEN 
-                        DATEDIFF(
-                            CASE 
-                                WHEN order_details.delivery_status = 1 THEN order_details.delivery_date
-                                ELSE "' . $now . '"
-                            END,
-                            orders.order_date
-                        ) * order_details.quantity
-                    ELSE 0 END
-                ) as total_weighted_days'),
-
-                // RT関連：有効な数量（キャンセル除外）
-                DB::raw('SUM(CASE 
-                    WHEN order_details.cancell_flag = 0 THEN order_details.quantity
-                    ELSE 0 END
-                ) as total_quantity')
+                'customers.phone_number'
             )
+            ->selectRaw('COALESCE(SUM(summary.sales_per_detail), 0) as total_sales')
+            ->selectRaw('COALESCE(SUM(summary.weighted_days_per_detail), 0) as total_weighted_days')
+            ->selectRaw('COALESCE(SUM(summary.total_order_quantity), 0) as total_quantity')
             ->groupBy(
                 'customers.customer_id',
                 'customers.name',
@@ -65,9 +68,13 @@ class CustomerController extends Controller
             ->orderBy('customers.customer_id')
             ->get()
             ->map(function ($customer) {
+                // 平均リードタイムを計算
                 $customer->average_rt = ($customer->total_quantity > 0)
                     ? round($customer->total_weighted_days / $customer->total_quantity, 2)
                     : null;
+
+                unset($customer->total_weighted_days, $customer->total_quantity);
+
                 return $customer;
             });
 
@@ -78,4 +85,3 @@ class CustomerController extends Controller
         ]);
     }
 }
-

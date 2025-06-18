@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>納品登録</title>
     <link href="{{ asset('css/page/new_delivery.css') }}" rel="stylesheet">
+    <script src="{{ asset('js/orders.js') }}"></script>
 </head>
 <body>
     <div class="main-container">
@@ -25,10 +26,20 @@
             <h2 class="section-title">注文商品一覧</h2>
             <div class="table-container">
                 <table class="data-table">
+                    <colgroup>
+                        <col style="width: 10%;">
+                        <col style="width: 12%;">
+                        <col style="width: 30%;">
+                        <col style="width: 10%;">
+                        <col style="width: 15%;">
+                        <col style="width: 23%;">
+                    </colgroup>
                     <thead>
                         <tr class="table-header">
+                            <th class="table-cell-header">注文ID</th>
+                            <th class="table-cell-header">注文明細ID</th>
                             <th class="table-cell-header">商品名</th>
-                            <th class="table-cell-header">注文数</th>
+                            <th class="table-cell-header">数量</th>
                             <th class="table-cell-header">単価</th>
                             <th class="table-cell-header">納品数</th>
                         </tr>
@@ -40,12 +51,15 @@
                         @endforeach
                         @foreach ($orderDetails as $orderDetail)
                             <tr>
+                                <td class="table-cell">{{ $orderDetail->order_id }}</td> <!-- 注文ID -->
+                                <td class="table-cell">{{ $orderDetail->order_detail_id }}</td> <!-- 注文明細ID --> 
                                 <td class="table-cell">{{ $orderDetail->product_name }}</td>
-                                <td class="table-cell">{{ number_format($orderDetail->quantity) }}</td>
+                                <td class="table-cell">{{ number_format($orderDetail->undelivered_quantity) }}</td>
                                 <td class="table-cell">{{ number_format($orderDetail->unit_price,0) }}</td>
                                 <td class="table-cell">
+                                    <input type="hidden" name="order_ids[]" value="{{ $orderDetail->order_id }}">
                                     <input type="hidden" name="order_detail_ids[]" value="{{ $orderDetail->order_detail_id }}">
-                                    <input type="number" name="delivery_quantities[]" value="0" min="0" max="{{ $orderDetail->quantity }}" required class="quantity-input">
+                                    <input type="number" name="delivery_quantities[]" value="0" min="1" max="{{ $orderDetail->quantity }}" required class="quantity-input">
                                 </td>
                             </tr>
                         @endforeach

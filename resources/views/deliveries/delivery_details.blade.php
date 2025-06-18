@@ -17,6 +17,7 @@
             <h2 class="c-heading-secondary">納品情報</h2>
             <div class="p-delivery-info-grid">
                 <p><strong>顧客ID:</strong> {{ $delivery->customer_id }}</p>
+                <p><strong>顧客名:</strong> {{ $delivery->customer_name }}</p>
                 <p><strong>納品日:</strong> {{ $delivery->delivery_date }}</p>
                 <p class="p-delivery-info-remarks"><strong>備考:</strong> {{ $delivery->remarks }}</p>
             </div>
@@ -28,6 +29,8 @@
                 <table class="c-table">
                     <thead class="c-table__head">
                         <tr>
+                            <th class="c-table__th">注文ID</th>
+                            <th class="c-table__th">注文明細ID</th>
                             <th class="c-table__th">商品名</th>
                             <th class="c-table__th">数量</th>
                             <th class="c-table__th">備考</th>
@@ -37,6 +40,8 @@
                     <tbody>
                         @foreach ($deliveryDetails as $detail)
                             <tr class="c-table__row">
+                                <td class="c-table__td">{{ $detail->order_id }}</td>
+                                <td class="c-table__td">{{ $detail->order_detail_id }}</td>
                                 <td class="c-table__td">{{ $detail->product_name }}</td>
                                 <td class="c-table__td">{{ $detail->delivery_quantity }}</td>
                                 <td class="c-table__td">{{ $detail->remarks }}</td>
@@ -60,7 +65,12 @@
                class="c-button c-button--red">
                 返品
             </a>
+            <button class="btn btn-primary js-print-btn"
+                    data-print-url="{{ route('deliveries.print_page', ['delivery' => $delivery->delivery_id]) }}">
+                納品書を印刷
+            </button>
         </div>
     </div>
+    <script src="{{ asset('js/print.js') }}" defer></script>
 </body>
 </html>

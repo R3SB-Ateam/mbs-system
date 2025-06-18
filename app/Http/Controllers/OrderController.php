@@ -9,62 +9,72 @@ use App\Models\Orders;
 use App\Models\OrderDetails;
 
 
+
 class OrderController extends Controller
 {
     public function index(Request $request)
     {
-        // 店舗一覧を取得（セレクトボックス用）
         $stores = DB::table('stores')->get();
 
-        // GETパラメータからstore_idを取得 ← ここが重要
-        $storeId = $request->input('store_id');
+        $selectedStoreId = $request->input('store_id');
         $keyword = $request->input('keyword');
 
         if ($request->has('store_id') || $request->has('keyword')) {
             session([
-                'orders_filter.store_id' => $request->input('store_id'),
-                'orders_filter.keyword' => $request->input('keyword'),
+                'orders_filter.store_id' => $selectedStoreId,
+                'orders_filter.keyword' => $keyword,
             ]);
         }
 
-        $storeId = $request->input('store_id', session('orders_filter.store_id'));
-        $keyword = $request->input('keyword', session('orders_filter.keyword'));
+        $selectedStoreId = $selectedStoreId ?? session('orders_filter.store_id');
+        $keyword = $keyword ?? session('orders_filter.keyword');
 
-        // 店舗一覧を取得（セレクトボックス用）
-        $orders = DB::table('orders')
-            ->join('customers', 'orders.customer_id', '=', 'customers.customer_id')
-            ->leftJoin('order_details', 'orders.order_id', '=', 'order_details.order_id')
-            ->when($storeId, function ($query, $storeId) {
-            return $query->where('customers.store_id', $storeId);
-        })
-        ->when($keyword, function ($query, $keyword) {
-            return $query->where(function ($q) use ($keyword) {
-                $q->where('orders.order_id', 'like', "%{$keyword}%")
-                ->orWhere('orders.remarks', 'like', "%{$keyword}%")
-                ->orWhere('customers.name', 'like', "%{$keyword}%");
+        $orders = Orders::with(['customer', 'details'])
+            ->when($selectedStoreId, function ($query, $selectedStoreId) {
+                return $query->whereHas('customer', function ($q) use ($selectedStoreId) {
+                    $q->where('store_id', $selectedStoreId);
+                });
+            })
+            ->when($keyword, function ($query, $keyword) {
+                $query->where(function ($q) use ($keyword) {
+                    $q->where('order_id', 'like', "%{$keyword}%")
+                        ->orWhere('remarks', 'like', "%{$keyword}%")
+                        ->orWhereHas('customer', function ($q2) use ($keyword) {
+                            $q2->where('name', 'like', "%{$keyword}%");
+                        });
+                });
+            })
+            ->withCount(['details as delivery_status_text' => function ($query) {
+                $query->select(DB::raw("CASE
+                    WHEN MIN(quantity - COALESCE(delivery_quantity, 0)) = 0 THEN '納品済み'
+                    WHEN MIN(quantity - COALESCE(delivery_quantity, 0)) > 0 THEN '未納品'
+                    ELSE '不明'
+                END"));
+            }])
+            ->get()
+            ->each(function ($order) {
+                $order->total_amount = $order->details->sum(function ($detail) {
+                    return $detail->unit_price * $detail->quantity;
+                });
             });
-        })
-        ->select(
-            'orders.*',
-            'customers.name as customer_name',
-            DB::raw("CASE
-                WHEN MIN(order_details.delivery_status) = 1 THEN '納品済み'
-                WHEN MIN(order_details.delivery_status) = 0 THEN '未納品'
-                ELSE '不明'
-                END as delivery_status_text"),
-            DB::raw('COALESCE(SUM(order_details.unit_price * order_details.quantity), 0) as total_amount') // 追加部分
-        )
-        ->groupBy('orders.order_id', 'customers.name', 'orders.customer_id', 'orders.order_date', 'orders.remarks')
-        ->orderBy('orders.order_id', 'desc')
-        ->get();
 
-        return view('orders.index', [
-            'orders' => $orders,
-            'stores' => $stores,
-            'selectedStoreId' => $storeId, // ← 選択状態保持のため
-            'keyword' => $keyword,
+         return view('orders.index', compact('orders', 'stores', 'selectedStoreId', 'keyword'));
+    }
+
+    public function searchOrderDetails(Request $request, $order_id)
+    {
+        $keyword = $request->input('keyword');
+
+        $order = Orders::with(['details' => function ($query) use ($keyword) {
+            $query->where('product_name', 'like', "%{$keyword}%");
+        }, 'customer'])->findOrFail($order_id);
+
+        return view('orders.order_details', [
+            'order' => $order,
+            'orderDetails' => $order->details,
         ]);
     }
+
 
 
     public function newOrder(){
@@ -78,51 +88,42 @@ class OrderController extends Controller
 
     public function order_store(Request $request){
 
-        Log::debug('リクエスト内容:', $request->all());
 
         // バリデーション
         $validated = $request->validate([
-            'customer_id' => 'required|integer',
-            'product_name.*' => 'required|string',
-            'unit_price.*' => 'required|numeric|min:0',
-            'quantity.*' => 'required|integer|min:1',
-            'remarks' => 'nullable|string',
+        'customer_id' => 'required|integer',
+        'product_name.*' => 'required|string',
+        'unit_price.*' => 'required|numeric|min:0',
+        'quantity.*' => 'required|integer|min:1',
+        'product_note.*' => 'nullable|string|max:255',
+        'remarks' => 'nullable|string',
+    ]);
+
+    DB::beginTransaction();
+
+    try {
+        $order = Orders::create([
+            'customer_id' => $request->customer_id,
+            'order_date' => now(),
+            'remarks' => $request->remarks,
         ]);
 
-        DB::beginTransaction();
-
-        try {
-            // orders テーブルに注文を登録
-            $orderId = DB::table('orders')->insertGetId([
-                'customer_id' => $request->customer_id,
-                'order_date' => now(), // 現在の日付
-                'remarks' => $request->remarks,
+        foreach ($request->product_name as $i => $name) {
+            $order->details()->create([
+                'product_name' => $name,
+                'unit_price' => $request->unit_price[$i],
+                'quantity' => $request->quantity[$i],
+                'delivery_quantity' => 0,
+                'remarks' => $request->product_note[$i],
+                'cancell_flag' => 0,
             ]);
-
-            // order_details テーブルに商品明細を登録
-            $productNames = $request->product_name;
-            $unitPrices = $request->unit_price;
-            $quantities = $request->quantity;
-
-            for ($i = 0; $i < count($productNames); $i++) {
-                // Laravel側の修正（delivery_status を数値で）
-                DB::table('order_details')->insert([
-                    'order_id' => $orderId,
-                    'product_name' => $productNames[$i],
-                    'unit_price' => $unitPrices[$i],
-                    'quantity' => $quantities[$i],
-                    'delivery_status' => 0, // ← 文字列 '未納品' を数値 0 に
-                    'remarks' => null,
-                    'cancell_flag' => 0,
-                ]);
-            }
+        }
 
         DB::commit();
-        return redirect()->route('orders.order_details', ['order_id' => $orderId])
+        return redirect()->route('orders.order_details', ['order_id' => $order->order_id])
                          ->with('success', '注文が登録されました');
-
         } catch (\Exception $e) {
-            DB::rollback();
+            DB::rollBack();
             Log::error('注文登録エラー: ' . $e->getMessage());
             return redirect()->back()->withErrors(['error' => '注文の登録中にエラーが発生しました'])->withInput();
         }
@@ -130,26 +131,29 @@ class OrderController extends Controller
     }
 
 
-    public function orderDetails($order_id){
-        // 注文情報に顧客名を含めて取得
+    public function orderDetails($order_id)
+    {
+        // 注文情報を取得（customer_name を結合）
         $order = DB::table('orders')
             ->join('customers', 'orders.customer_id', '=', 'customers.customer_id')
             ->select('orders.*', 'customers.name as customer_name')
             ->where('orders.order_id', $order_id)
             ->first();
 
-        if (!$order) {
-            abort(404, 'Order not found');
-        }
-
+        // 注文詳細を取得（必要なすべてのカラムを明示的に指定）
         $orderDetails = DB::table('order_details')
-            ->where('order_id', $order_id)
+            ->leftJoin('delivery_details', 'order_details.order_detail_id', '=', 'delivery_details.order_detail_id')
+            ->leftJoin('deliveries', 'delivery_details.delivery_id', '=', 'deliveries.delivery_id')
+            ->select(
+                'order_details.*',
+                'delivery_details.delivery_detail_id',
+                'deliveries.delivery_date',
+                'delivery_details.remarks as delivery_remarks'
+            )
+            ->where('order_details.order_id', $order_id)
             ->get();
 
-        return view('orders.order_details', [
-            'order' => $order,
-            'orderDetails' => $orderDetails,
-        ]);
+        return view('orders.order_details', compact('order', 'orderDetails'));
     }
 
 
@@ -165,13 +169,18 @@ class OrderController extends Controller
         // 納品済・キャンセル済を除外した注文詳細を取得
         $orderDetails = DB::table('order_details')
             ->where('order_id', $order_id)
-            ->where('delivery_status', 0)
             ->where('cancell_flag', 0)
+            ->whereColumn('delivery_quantity', '<', 'quantity')
             ->get();
 
         if ($orderDetails->isEmpty()) {
             return redirect()->route('orders.index')->withErrors('キャンセル可能な商品がありません。');
         }
+
+        $orderDetails->each(function ($item) {
+            // 未納品数 = 注文数 - 納品済み数量
+            $item->cancellable_quantity = $item->quantity - ($item->delivery_quantity ?? 0);
+        });
 
         return view('orders.cancel', compact('order', 'orderDetails'));
     }
@@ -182,6 +191,18 @@ class OrderController extends Controller
 
     public function processCancel(Request $request)
     {
+        $request->validate([
+            'order_id' => 'required|exists:orders,order_id',
+            'cancel_quantities' => 'array',
+            'cancel_quantities.*' => 'nullable|integer|min:0',
+            'reasons' => 'array',
+            'reasons.*' => 'nullable|string|max:255',
+        ], [
+            'cancel_quantities.*.min' => 'キャンセル数量は0以上で入力してください。',
+            'cancel_quantities.*.integer' => 'キャンセル数量は数値で入力してください。',
+            'reasons.*.max' => 'キャンセル理由は255文字以内で入力してください。',
+        ]);
+
         $cancelQuantities = $request->input('cancel_quantities', []);
         $reasons = $request->input('reasons', []);
         $order_id = $request->order_id;
@@ -189,48 +210,71 @@ class OrderController extends Controller
         DB::beginTransaction();
 
         try {
+            $targetOrderDetailIds = array_keys(array_filter($cancelQuantities, fn($qty) => (int)$qty > 0));
+
+            if (empty($targetOrderDetailIds)) {
+                DB::rollBack();
+                return redirect()->route('orders.order_details', ['order_id' => $order_id])
+                    ->withErrors('キャンセルする商品が選択されていないか、数量が0です。');
+            }
+
+            $detailsToProcess = DB::table('order_details')
+                ->whereIn('order_detail_id', $targetOrderDetailIds)
+                ->where('order_id', $order_id)
+                ->where('cancell_flag', 0)
+                ->get()->keyBy('order_detail_id');
+
             foreach ($cancelQuantities as $orderDetailId => $cancelQty) {
                 $cancelQty = (int)$cancelQty;
 
-                if ($cancelQty <= 0) {
-                    continue;
-                }
+                if ($cancelQty <= 0) continue;
 
-                $detail = DB::table('order_details')->where('order_detail_id', $orderDetailId)->first();
+                $detail = $detailsToProcess->get($orderDetailId);
 
-                if (!$detail || $detail->delivery_status == 1 || $detail->cancell_flag == 1) {
+                if (!$detail || $detail->cancell_flag == 1 || ($detail->delivery_quantity ?? 0) >= $detail->quantity) {
                     continue;
                 }
 
                 $originalQty = (int)$detail->quantity;
-                $remainingQty = $originalQty - $cancelQty;
+                $deliveredQty = (int)($detail->delivery_quantity ?? 0);
+                $currentAvailableQty = $originalQty - $deliveredQty;
 
-                // 元データをキャンセル済みにする
-                DB::table('order_details')->where('order_detail_id', $orderDetailId)->update([
-                    'cancell_flag' => 1,
-                    'remarks' => DB::raw("CONCAT(IFNULL(remarks, ''), '【キャンセル理由】" . $reasons[$orderDetailId] . "')"),
-                ]);
+                if ($cancelQty > $currentAvailableQty) {
+                    throw new \Exception("キャンセル数量が未納品数を超えています（商品ID: {$orderDetailId}、未納品数: {$currentAvailableQty}）");
+                }
 
-                // 残りがある場合、新規に登録
-                if ($remainingQty > 0) {
-                    DB::table('order_details')->insert([
-                        'order_id' => $detail->order_id,
-                        'product_name' => $detail->product_name,
-                        'unit_price' => $detail->unit_price,
-                        'quantity' => $remainingQty,
-                        'delivery_status' => 0,
-                        'cancell_flag' => 0,
-                        'remarks' => $detail->remarks,
+                // 元の商品数量をキャンセル分だけ減らす
+                $newOriginalQty = $originalQty - $cancelQty;
+
+                if ($newOriginalQty <= 0) {
+                    DB::table('order_details')->where('order_detail_id', $orderDetailId)->delete();
+                } else {
+                    DB::table('order_details')->where('order_detail_id', $orderDetailId)->update([
+                        'quantity' => $newOriginalQty,
                     ]);
                 }
+
+                // remarksはPHPで結合してから登録する
+                $newRemarks = ($detail->remarks ?? '') . '【キャンセル理由】' . ($reasons[$orderDetailId] ?? '');
+
+                DB::table('order_details')->insert([
+                    'order_id' => $detail->order_id,
+                    'product_name' => $detail->product_name,
+                    'unit_price' => $detail->unit_price,
+                    'quantity' => $cancelQty,
+                    'delivery_quantity' => 0,
+                    'cancell_flag' => 1,
+                    'remarks' => $newRemarks,
+                ]);
             }
 
             DB::commit();
-            return redirect()->route('orders.index')->with('success', 'キャンセル処理が完了しました。');
+            return redirect()->route('orders.order_details', ['order_id' => $order_id])->with('success', 'キャンセル処理が完了しました。');
+
         } catch (\Exception $e) {
             DB::rollBack();
-            \Log::error('キャンセル処理エラー: ' . $e->getMessage());
-            return redirect()->route('orders.index')->withErrors('キャンセル処理中にエラーが発生しました。');
+            Log::error('キャンセル処理エラー: ' . $e->getMessage());
+            return redirect()->route('orders.order_details', ['order_id' => $order_id])->withErrors('キャンセル処理中にエラーが発生しました。' . $e->getMessage());
         }
     }
 
@@ -292,6 +336,15 @@ class OrderController extends Controller
             \Log::error("注文修正エラー: " . $e->getMessage());
             return back()->withErrors('注文の更新中にエラーが発生しました。');
         }
+    }
+
+    public function showPrintPage(Orders $order)
+    {
+        // 注文に紐づく顧客と明細データを読み込む
+        $order->load(['customer', 'details']);
+
+        // 印刷レイアウト用のビューを返す
+        return view('orders.print', compact('order'));
     }
 
 }

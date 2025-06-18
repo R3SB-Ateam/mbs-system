@@ -48,19 +48,23 @@
         <div class="table-wrapper">
             @csrf
             <table>
-            <colgroup>
-                <col style="width: 5%;">
-                <col style="width: 10%;">
-                <col style="width: 12%;">
-                <col style="width: 10%;">
-                <col style="width: 15%;">
-                <col style="width: 13%;">
-                <col style="min-width: 80px;">
-                <col style="min-width: 150px;">
-            </colgroup>
+                <colgroup>
+                    <col style="width: 5%;"> <!-- チェックボックス --> 
+                    <col style="width: 10%;"> <!-- 注文ID --> 
+                    <col style="width: 10%;"> <!-- 納品状況 --> 
+                    <col style="width: 10%;"> <!-- 顧客ID --> 
+                    <col style="width: 15%;"> <!-- 顧客名 --> 
+                    <col style="width: 13%;"> <!-- 注文日 --> 
+                    <col style="min-width: 80px;"> <!-- 注文金額 --> 
+                    <col style="min-width: 150px;"> <!-- 備考 --> 
+                </colgroup>
                 <thead>
                     <tr>
-                        <th></th>
+                        <th><!-- テーブル上部などに配置 -->
+                            <div class="table-actions">
+                                <input type="checkbox" id="select-all-checkbox" title="全選択/全解除">
+                            </div>
+                        </th>
                         <th>注文ID</th>
                         <th>納品状況</th>
                         <th>顧客ID</th>
@@ -82,7 +86,7 @@
                             <td><a href="{{ route('orders.order_details', ['order_id' => $order->order_id]) }}" class="table-link">{{ number_format($order->order_id) }}</a></td>
                             <td>{{ $order->delivery_status_text }}</td>
                             <td>{{ $order->customer_id }}</td>
-                            <td>{{ $order->customer_name }}</td>
+                            <td>{{ $order->customer->name ?? '不明'}}</td>
                             <td>{{ $order->order_date }}</td>
                             <td>{{ number_format($order->total_amount) }}</td> <!-- 注文金額 -->
                             <td>{{ $order->remarks }}</td>

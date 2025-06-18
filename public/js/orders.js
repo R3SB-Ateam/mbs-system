@@ -1,35 +1,27 @@
-/* error文が5秒ほどでフェードアウト*/
 window.addEventListener('DOMContentLoaded', () => {
+    // 🔹 トースト＆エラーのフェードアウト
     const toast = document.getElementById('toast-message');
     const error = document.querySelector('.error-message');
 
-    if (toast) {
-        setTimeout(() => {
-            toast.style.transition = 'opacity 0.5s ease-out';
-            toast.style.opacity = '0';
-            setTimeout(() => toast.remove(), 500); // DOMから削除（任意）
-        }, 5000);
-    }
+    [toast, error].forEach(el => {
+        if (el) {
+            setTimeout(() => {
+                el.style.transition = 'opacity 0.5s ease-out';
+                el.style.opacity = '0';
+                setTimeout(() => el.remove(), 500);
+            }, 5000);
+        }
+    });
 
-    if (error) {
-        setTimeout(() => {
-            error.style.transition = 'opacity 0.5s ease-out';
-            error.style.opacity = '0';
-            setTimeout(() => error.remove(), 500); // DOMから削除（任意）
-        }, 5000);
-    }
-});
-
-document.addEventListener('DOMContentLoaded', function () {
-    const checkboxes = document.querySelectorAll('input[name="order_ids[]"]');
+    // 🔹 チェックボックスの状態保存と復元
+    const checkboxes = document.querySelectorAll('input[name="order_ids[]"]:not(:disabled)');
     const storageKey = 'selectedOrderIds_ordersPage';
     let selectedIds = JSON.parse(localStorage.getItem(storageKey) || '[]');
 
+    const selectAllCheckbox = document.getElementById('select-all-checkbox');
+
     checkboxes.forEach(cb => {
-        if (cb.disabled) {
-            // 納品済みチェックボックスのIDはlocalStorageから削除
-            selectedIds = selectedIds.filter(id => id !== cb.value);
-        } else if (selectedIds.includes(cb.value)) {
+        if (selectedIds.includes(cb.value)) {
             cb.checked = true;
         }
 
@@ -42,9 +34,41 @@ document.addEventListener('DOMContentLoaded', function () {
                 selectedIds = selectedIds.filter(id => id !== cb.value);
             }
             localStorage.setItem(storageKey, JSON.stringify(selectedIds));
+            updateSelectAllCheckbox();
         });
     });
 
-    // 納品済みIDを削除した状態で保存
-    localStorage.setItem(storageKey, JSON.stringify(selectedIds));
+    function updateSelectAllCheckbox() {
+        if (selectAllCheckbox) {
+            const allChecked = Array.from(checkboxes).every(cb => cb.checked);
+            selectAllCheckbox.checked = allChecked;
+        }
+    }
+
+    updateSelectAllCheckbox(); // 初期反映
+
+    // 🔹 全選択・全解除処理
+    if (selectAllCheckbox) {
+        selectAllCheckbox.addEventListener('change', () => {
+            const checked = selectAllCheckbox.checked;
+            selectedIds = [];
+
+            checkboxes.forEach(cb => {
+                cb.checked = checked;
+                if (checked) selectedIds.push(cb.value);
+            });
+
+            localStorage.setItem(storageKey, JSON.stringify(selectedIds));
+        });
+    }
+
+    // 🔹 フォーム送信時にlocalStorage削除（納品登録など）
+    const form = document.querySelector('form');
+    if (form) {
+        form.addEventListener('submit', (e) => {
+            e.preventDefault(); // 一旦止めて
+            localStorage.removeItem(storageKey); // チェック状態をクリア
+            form.submit(); // 再送信
+        });
+    }
 });

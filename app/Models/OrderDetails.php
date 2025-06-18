@@ -10,7 +10,7 @@ class OrderDetails extends Model
 
     protected $primaryKey = 'order_detail_id';
 
-    public $incrementing = false;
+    public $incrementing = true;
 
     public $timestamps = false;
 
@@ -20,7 +20,6 @@ class OrderDetails extends Model
         'unit_price',
         'quantity',
         'delivery_status',
-        'delivery_date',
         'remarks',
         'cancell_flag'
     ];

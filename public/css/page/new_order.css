@@ -234,6 +234,22 @@ body {
     text-decoration: none;
 }
 
+/* アラート */
+.fixed-alert {
+    position: fixed;
+    top: 1rem;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 9999;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    transition: opacity 0.5s ease, top 0.5s ease;
+}
+.fixed-alert.hide {
+    opacity: 0;
+    top: 0;
+    pointer-events: none;
+}
+
 /* エラーアラート */
 .alert-error {
     background-color: #fef2f2;

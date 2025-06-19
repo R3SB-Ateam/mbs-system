@@ -57,7 +57,7 @@
                 @endforeach
                 
                 {{-- テンプレートの5行に合わせるため、空の行を追加 --}}
-                @for ($i = $delivery->deliveryDetails->where('return_flag', 0)->count(); $i < 5; $i++)
+                @for ($i = $delivery->deliveryDetails->where('return_flag', 0)->count(); $i < 13; $i++)
                     <tr>
                         <td>&nbsp;</td>
                         <td></td>

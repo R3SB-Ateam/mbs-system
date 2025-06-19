@@ -322,8 +322,9 @@ class OrderController extends Controller
             $detail->save();
         }
 
-        return redirect()->route('orders.order_edit', ['order_id' => $order_id])
-                        ->with('update_success', '注文内容を更新しました。');
+        return redirect()->route('orders.order_details', ['order_id' => $order_id])
+                 ->with('update_success', '注文内容を更新しました。');
+
     }
 
 

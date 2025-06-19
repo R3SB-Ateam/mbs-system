@@ -9,8 +9,12 @@
 <div class="container">
     <h1>注文修正 <span class="sub">（注文ID: {{ $order->order_id }}）</span></h1>
 
-    <!-- 注文情報 -->
-    <div class="card">
+    <!-- 商品修正フォーム -->
+    <form method="POST" action="{{ route('orders.update', $order->order_id) }}">
+        @csrf
+        @method('PUT')
+
+        <div class="card">
         <h2>注文情報</h2>
         <div class="info-grid">
             <div>
@@ -23,13 +27,8 @@
                 <textarea name="remarks" rows="2" class="form-control">{{ old('remarks', $order->remarks) }}</textarea>
             </div>
         </div>
-    </div>
-
-    <!-- 商品修正フォーム -->
-    <form method="POST" action="{{ route('orders.update', $order->order_id) }}">
-        @csrf
-        @method('PUT')
-
+        </div>
+        
         <div class="order-details">
             <h2 class="section-title-detail">注文商品の修正</h2>
             <div class="table-container">
@@ -64,7 +63,6 @@
                                 <input type="number" name="details[{{ $index }}][unit_price]" 
                                     value="{{ old("details.$index.unit_price", intval($detail->unit_price)) }}" 
                                     class="form-input" step="1">
-                                <span>円</span>
                             </td>
                             <td>
                                 <input type="number" name="details[{{ $index }}][quantity]" value="{{ old("details.$index.quantity", $detail->quantity) }}" class="form-input" step="1">
@@ -100,41 +98,39 @@ document.querySelector('form').addEventListener('submit', function(e) {
     const unitPrices = document.querySelectorAll('input[name^="details"][name$="[unit_price]"]');
     const quantities = document.querySelectorAll('input[name^="details"][name$="[quantity]"]');
     const productNames = document.querySelectorAll('input[name^="details"][name$="[product_name]"]');
+    const orderDetailIds = document.querySelectorAll('input[name^="details"][name$="[order_detail_id]"]');
 
     // 単価・数量 = 0 チェック
     unitPrices.forEach((unitInput, index) => {
         const quantityInput = quantities[index];
         const unit = parseFloat(unitInput.value) || 0;
         const qty = parseFloat(quantityInput.value) || 0;
+        const id = orderDetailIds[index].value;
 
         if (unit <= 0 || qty <= 0) {
             hasInvalid = true;
-            message += `明細 ${index + 1}: 単価・数量は1以上で入力してください。`;
+            message += `(明細ID: ${id}): 単価・数量は1以上で入力してください。\n`;
         }
     });
-
-    if (hasInvalid) {
-        e.preventDefault();
-        alert(message);
-        return;
-    }
 
     // 商品名空欄チェック
     let hasEmptyName = false;
-    productNames.forEach((p) => {
+    productNames.forEach((p, index) => {
+        const id = orderDetailIds[index].value;
         if (p.value.trim() === '') {
             hasEmptyName = true;
-            message += `明細 ${index + 1}: 商品名は1文字以上で入力してください。`;
+            message += `(明細ID: ${id}): 商品名は1文字以上で入力してください。\n`;
         }
     });
 
-    if (hasEmptyName) {
+    if (hasInvalid || hasEmptyName) {
         e.preventDefault();
         alert(message);
         return;
     }
 });
 </script>
+
 
 </body>
 </html>

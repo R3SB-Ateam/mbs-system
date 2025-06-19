@@ -139,6 +139,8 @@ body {
   text-decoration: none;
   transition: background-color 0.2s ease-in-out;
   color: white;
+  border: none; 
+  cursor: pointer; 
 }
 
 .btn:hover {
@@ -169,6 +171,15 @@ body {
 
 .btn-cancel:hover {
   background-color: #dc2626;
+}
+
+.btn-primary {
+  background-color: #10b981; /* 緑色 */
+  color: #ffffff;
+}
+
+.btn-primary:hover {
+  background-color: #059669; /* ホバー時、少し濃い緑色に */
 }
 
 .btn-container {

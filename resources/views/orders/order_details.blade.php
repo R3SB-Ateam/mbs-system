@@ -19,7 +19,6 @@
             <p><span class="text-label">顧客ID:</span> {{ $order->customer_id }}</p>
 
             <div class="grid-row">
-                
                 <p class="order-date-inline"><span class="text-label">注文日:</span> {{ $order->order_date }}</p>
             </div>
             <p><span class="text-label">顧客名:</span> {{ $order->customer_name }}</p>

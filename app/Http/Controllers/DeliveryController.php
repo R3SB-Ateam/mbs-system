@@ -15,81 +15,87 @@ class DeliveryController extends Controller
 {
 
     public function store(Request $request)
-{
-    $request->validate([
-        'customer_id' => 'required|exists:customers,customer_id',
-        'delivery_date' => 'required|date',
-        'order_detail_ids' => 'required|array',
-        'order_detail_ids.*' => 'required|exists:order_details,order_detail_id',
-        'delivery_quantities' => 'required|array',
-        'delivery_quantities.*' => 'required|integer|min:0',
-    ],
-    [
-        'delivery_quantities.*.min' => '納品数量は1以上で入力してください。',
-        'delivery_quantities.*.required' => '納品数量は必須です。',
-        'delivery_quantities.*.integer' => '納品数量は数値で入力してください。',
-    ]);
-
-
-    DB::beginTransaction();
-
-    try {
-        $delivery = Deliveries::create([
-            'customer_id' => $request->customer_id,
-            'delivery_date' => $request->delivery_date,
-            'remarks' => $request->remarks,
+    {
+        $request->validate([
+            'customer_id' => 'required|exists:customers,customer_id',
+            'delivery_date' => 'required|date',
+            'order_detail_ids' => 'required|array',
+            'order_detail_ids.*' => 'required|exists:order_details,order_detail_id',
+            'delivery_quantities' => 'required|array',
+            'delivery_quantities.*' => 'required|integer|min:1',
+            'unit_prices' => 'required|array',
+            'unit_prices.*' => 'required|numeric|min:0',
+        ],
+        [
+            'delivery_quantities.*.min' => '納品数量は1以上で入力してください。',
+            'delivery_quantities.*.required' => '納品数量は必須です。',
+            'delivery_quantities.*.integer' => '納品数量は数値で入力してください。',
         ]);
 
-        $orderDetailIds = $request->order_detail_ids;
-        $deliveryQuantities = $request->delivery_quantities;
+        DB::beginTransaction();
 
-        foreach ($orderDetailIds as $index => $orderDetailId) {
-            $deliveryQty = (int) $deliveryQuantities[$index];
-
-            $orderDetail = DB::table('order_details')->where('order_detail_id', $orderDetailId)->first();
-
-            if (!$orderDetail || $orderDetail->cancell_flag == 1) {
-                continue;
-            }
-
-            // 既納品数を取得（null 対策）
-            $currentDeliveredQty = (int) ($orderDetail->delivery_quantity ?? 0);
-            $newDeliveredQty = $currentDeliveredQty + $deliveryQty;
-
-            // 上限チェック（必要に応じて）
-            if ($newDeliveredQty > $orderDetail->quantity) {
-                throw new \Exception("納品数量が注文数を超えています（商品ID: {$orderDetailId}）");
-            }
-
-            // order_details テーブルを更新（納品数量を加算）
-            DB::table('order_details')
-                ->where('order_detail_id', $orderDetailId)
-                ->update(['delivery_quantity' => $newDeliveredQty]);
-
-            // delivery_details に登録
-            DeliveryDetails::create([
-                'delivery_id' => $delivery->delivery_id,
-                'order_id' => $orderDetail->order_id,
-                'order_detail_id' => $orderDetailId,
-                'product_name' => $orderDetail->product_name,
-                'unit_price' => $orderDetail->unit_price,
-                'delivery_quantity' => $deliveryQty,
-                'remarks' => $orderDetail->remarks,
-                'return_flag' => 0,
+        try {
+            // 納品データの作成
+            $delivery = Deliveries::create([
+                'customer_id' => $request->customer_id,
+                'delivery_date' => $request->delivery_date,
+                'remarks' => $request->remarks,
             ]);
+
+            $orderDetailIds = $request->order_detail_ids;
+            $deliveryQuantities = $request->delivery_quantities;
+            $unitPrices = $request->unit_prices;
+
+            foreach ($orderDetailIds as $index => $orderDetailId) {
+                $deliveryQty = (int) $deliveryQuantities[$index];
+                $unitPrice = (float) $unitPrices[$index]; // ← フォームからの単価を使用
+
+                // 注文明細を取得
+                $orderDetail = DB::table('order_details')->where('order_detail_id', $orderDetailId)->first();
+
+                if (!$orderDetail || $orderDetail->cancell_flag == 1) {
+                    continue;
+                }
+
+                $currentDeliveredQty = (int) ($orderDetail->delivery_quantity ?? 0);
+                $newDeliveredQty = $currentDeliveredQty + $deliveryQty;
+
+                if ($newDeliveredQty > $orderDetail->quantity) {
+                    throw new \Exception("納品数量が注文数を超えています（商品ID: {$orderDetailId}）");
+                }
+
+                // 注文明細テーブルを更新
+                DB::table('order_details')
+                    ->where('order_detail_id', $orderDetailId)
+                    ->update(['delivery_quantity' => $newDeliveredQty]);
+
+                // 納品詳細の登録
+                DeliveryDetails::create([
+                    'delivery_id' => $delivery->delivery_id,
+                    'order_id' => $orderDetail->order_id,
+                    'order_detail_id' => $orderDetailId,
+                    'product_name' => $orderDetail->product_name,
+                    'unit_price' => $unitPrice, // ← ユーザーが入力した単価
+                    'delivery_quantity' => $deliveryQty,
+                    'remarks' => $orderDetail->remarks,
+                    'return_flag' => 0,
+                ]);
+            }
+
+            DB::commit();
+
+            return redirect()->route('deliveries.details', ['delivery_id' => $delivery->delivery_id])
+                            ->with('success', '納品を登録しました。');
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            \Log::error('納品登録エラー: ' . $e->getMessage());
+
+            return redirect()->route('orders.index')
+                            ->withErrors('納品登録時にエラーが発生しました。' . $e->getMessage());
         }
-
-        DB::commit();
-        return redirect()->route('deliveries.details', ['delivery_id' => $delivery->delivery_id])
-                        ->with('success', '納品を登録しました。');
-
-
-    } catch (\Exception $e) {
-        DB::rollBack();
-        \Log::error('納品登録エラー: ' . $e->getMessage());
-        return redirect()->route('orders.index')->withErrors('納品登録時にエラーが発生しました。');
     }
-}
+
 
     
     
@@ -136,10 +142,15 @@ class DeliveryController extends Controller
             $item->undelivered_quantity = $item->quantity - ($item->delivery_quantity ?? 0);
         });
 
+        // 顧客名を取得（Customersテーブルから）
+        $customer = DB::table('customers')->where('customer_id', $customer_id)->first();
+        $customer_name = $customer ? $customer->name : '';
+
         return view('orders.new_delivery', [
             'orderIds' => $orderIds,
             'orderDetails' => $orderDetails,
             'customer_id' => $customer_id,
+            'customer_name' => $customer_name,
         ]);
     }
 

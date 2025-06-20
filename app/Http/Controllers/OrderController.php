@@ -86,26 +86,27 @@ class OrderController extends Controller
         }
 
 
-    public function order_store(Request $request){
+        public function order_store(Request $request){
 
 
-        // バリデーション
-        $validated = $request->validate([
-        'customer_id' => 'required|integer',
-        'product_name.*' => 'required|string',
-        'unit_price.*' => 'required|numeric|min:0',
-        'quantity.*' => 'required|integer|min:1',
-        'remarks' => 'nullable|string',
-    ]);
-
-    DB::beginTransaction();
-
-    try {
-        $order = Orders::create([
-            'customer_id' => $request->customer_id,
-            'order_date' => now(),
-            'remarks' => $request->remarks,
+            // バリデーション
+            $validated = $request->validate([
+            'customer_id' => 'required|integer',
+            'product_name.*' => 'required|string',
+            'unit_price.*' => 'required|numeric|min:0',
+            'quantity.*' => 'required|integer|min:1',
+            'product_note.*' => 'nullable|string',
+            'remarks' => 'nullable|string',
         ]);
+
+        DB::beginTransaction();
+
+        try {
+            $order = Orders::create([
+                'customer_id' => $request->customer_id,
+                'order_date' => now(),
+                'remarks' => $request->remarks,
+            ]);
 
         foreach ($request->product_name as $i => $name) {
             $order->details()->create([
@@ -113,7 +114,7 @@ class OrderController extends Controller
                 'unit_price' => $request->unit_price[$i],
                 'quantity' => $request->quantity[$i],
                 'delivery_quantity' => 0,
-                'remarks' => null,
+                'remarks' => $request->product_note[$i] ?? null,
                 'cancell_flag' => 0,
             ]);
         }

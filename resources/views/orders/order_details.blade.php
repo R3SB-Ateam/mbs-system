@@ -7,6 +7,22 @@
     <link href="{{ asset('css/page/order_datails.css') }}" rel="stylesheet">
 </head>
 <body>
+
+    @if (session('update_success'))
+        <div id="success-alert" class="alert alert-success" style="background-color: #e6ffe6; padding: 10px; border: 1px solid #66cc66;">
+            {{ session('update_success') }}
+        </div>
+
+        <script>
+            setTimeout(() => {
+                const alert = document.getElementById('success-alert');
+                if (alert) alert.remove();
+            }, 3000); // 3秒後に非表示
+        </script>
+    @endif
+
+
+
     <div class="container">
         <h1 class="page-title">
             注文明細 <span class="sub-title">(注文ID: {{ $order->order_id }})</span>
@@ -90,7 +106,12 @@
                class="btn btn-cancel">
                 キャンセル
             </a>
+            <button class="btn btn-primary js-print-btn"
+                    data-print-url="{{ route('orders.print_page', ['order' => $order->order_id]) }}">
+                注文書印刷
+            </button>
         </div>
     </div>
+    <script src="{{ asset('js/print.js') }}" defer></script>
 </body>
 </html>

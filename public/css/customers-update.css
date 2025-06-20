@@ -111,6 +111,26 @@ button:disabled {
     transform: none;
 }
 
+.button-link {
+    text-decoration: none;
+    padding: 10px 20px;
+    margin-right: 10px;
+    border-radius: 4px;
+    color: white;
+    font-size: 14px;
+    transition: all 0.2s ease-in-out;
+}
+
+.button-link.gray {
+    background-color: #6b7280;
+}
+
+.button-link.gray:hover {
+    background-color: #4b5563;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
 /* メッセージ */
 .message {
     margin-top: 20px;
@@ -204,6 +224,12 @@ button:disabled {
     position: absolute;
     left: 0;
     font-weight: bold;
+}
+
+.back-to-dashboard {
+    display: inline-block; /* marginを有効にするため */
+    margin-bottom: 15px; /* ボタンとメインコンテナの間に余白を作る */
+    font-weight: 500;
 }
 
 /* レスポンシブ */

@@ -329,6 +329,15 @@ class DeliveryController extends Controller
         }
     }
 
+    public function showPrintPage(\App\Models\Deliveries $delivery)
+    {
+        // 納品に紐づく顧客と納品明細データを読み込む
+        $delivery->load(['customer', 'deliveryDetails']);
+
+        // 納品書用のビューを返す
+        return view('deliveries.print', compact('delivery'));
+    }
+
 
 
 

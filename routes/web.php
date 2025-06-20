@@ -24,8 +24,15 @@ Route::get('/orders/{order_id}/details/search', [OrderController::class, 'search
 
 // 注文修正ページ（GET）
 Route::get('/orders/{order_id}/edit', [OrderController::class, 'orderEdit'])->name('orders.order_edit');
-// 注文修正の保存処理（POST）
-Route::post('/orders/{order_id}/update', [OrderController::class, 'update'])->name('orders.update');
+// 修正前（POSTになってる場合）
+Route::post('/orders/{order}/update', [OrderController::class, 'orderUpdate'])->name('orders.update');
+
+// ✅ 修正後（PUTに対応させる）
+Route::put('/orders/{order}/update', [OrderController::class, 'orderUpdate'])->name('orders.update');
+
+
+//　注文書印刷
+Route::get('/orders/{order}/print-page', [OrderController::class, 'showPrintPage'])->name('orders.print_page');
 
 // キャンセルページ
 Route::get('/order_details/{order_id}/cancel', [OrderController::class, 'showCancelForm'])->name('orders.cancel');
@@ -40,6 +47,9 @@ Route::get('/deliveries', [DeliveryController::class, 'index'])->name('deliverie
 
 // 納品詳細ページ
 Route::get('/deliveries/{delivery_id}', [DeliveryController::class, 'show'])->name('deliveries.details');
+
+// 納品書印刷
+Route::get('/deliveries/{delivery}/print-page', [DeliveryController::class, 'showPrintPage'])->name('deliveries.print_page');
 
 // 返品ページ
 Route::get('/deliveries/{delivery_id}/return', [DeliveryController::class, 'showReturnForm'])->name('deliveries.return_form');

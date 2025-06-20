@@ -81,7 +81,7 @@
         {{-- ここにボタンを移動しました --}}
         <div class="c-button-group">
             <a href="{{ route('dashboard') }}" class="c-button c-button--gray">
-                戻る
+                ダッシュボードへ戻る
             </a>
         </div>
 

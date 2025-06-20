@@ -33,17 +33,22 @@
                             <th class="c-table__th">注文明細ID</th>
                             <th class="c-table__th">商品名</th>
                             <th class="c-table__th">数量</th>
+                            <th class="c-table__th">単価</th>
                             <th class="c-table__th">備考</th>
                             <th class="c-table__th">返品状況</th>
                         </tr>
                     </thead>
                     <tbody>
+                        @php
+                            $totalAmount = 0;
+                        @endphp
                         @foreach ($deliveryDetails as $detail)
                             <tr class="c-table__row">
                                 <td class="c-table__td">{{ $detail->order_id }}</td>
                                 <td class="c-table__td">{{ $detail->order_detail_id }}</td>
                                 <td class="c-table__td">{{ $detail->product_name }}</td>
                                 <td class="c-table__td">{{ $detail->delivery_quantity }}</td>
+                                <td class="c-table__td">{{ number_format($detail->unit_price) }}円</td> {{-- 単価列を追加 --}}
                                 <td class="c-table__td">{{ $detail->remarks }}</td>
                                 <td class="c-table__td">
                                     <span class="c-status-badge {{ $detail->return_flag ? 'c-status-badge--returned' : 'c-status-badge--not-returned' }}">
@@ -51,7 +56,15 @@
                                     </span>
                                 </td>
                             </tr>
+                            @php
+                                $totalAmount += $detail->delivery_quantity * $detail->unit_price;
+                            @endphp
                         @endforeach
+                        {{-- 合計金額欄を追加 --}}
+                        <tr class="c-table__row c-table__row--total">
+                            <td class="c-table__td" colspan="4"><strong>合計金額</strong></td>
+                            <td class="c-table__td" colspan="3"><strong>{{ number_format($totalAmount) }}円</strong></td>
+                        </tr>
                     </tbody>
                 </table>
             </div>

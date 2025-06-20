@@ -86,7 +86,7 @@ class OrderController extends Controller
         }
 
 
-    public function order_store(Request $request){
+        public function order_store(Request $request){
 
 
         // バリデーション
@@ -106,7 +106,17 @@ class OrderController extends Controller
             'customer_id' => $request->customer_id,
             'order_date' => now(),
             'remarks' => $request->remarks,
+          
         ]);
+
+        DB::beginTransaction();
+
+        try {
+            $order = Orders::create([
+                'customer_id' => $request->customer_id,
+                'order_date' => now(),
+                'remarks' => $request->remarks,
+            ]);
 
         foreach ($request->product_name as $i => $name) {
             $order->details()->create([
@@ -114,7 +124,7 @@ class OrderController extends Controller
                 'unit_price' => $request->unit_price[$i],
                 'quantity' => $request->quantity[$i],
                 'delivery_quantity' => 0,
-                'remarks' => $request->product_note[$i],
+                'remarks' => $request->product_note[$i] ?? null,
                 'cancell_flag' => 0,
             ]);
         }

@@ -108,6 +108,14 @@ body {
     vertical-align: middle;
 }
 
+.table-header-cell,
+.table-cell,
+.table-cell-center {
+    border-left: none;
+    border-right: none;
+}
+
+
 /* ===============================
    入力フィールド
    =============================== */

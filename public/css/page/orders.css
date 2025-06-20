@@ -61,58 +61,69 @@ h1 {
 }
 
 
-/* ナビボタン */
-.nav-buttons {
+/* ボタン */
+.btn {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    border-radius: 0.375rem;
+    font-weight: 500;
+    font-size: 1rem; 
     text-align: center;
-    margin-bottom: 0;
-    flex-shrink: 0;
-}
-
-.button-link {
     text-decoration: none;
-    padding: 10px 20px;
-    margin-right: 10px;
-    border-radius: 4px;
     color: white;
-    font-size: 14px;
+    border: none;
+    cursor: pointer;
     transition: all 0.2s ease-in-out;
 }
 
-.button-link.blue {
-    background-color: #3b82f6;
-}
-
-.button-link.blue:hover {
-    background-color: #2563eb;
-    transform: translateY(-1px);
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-}
-
-.button-link.gray {
+/* 元のボタン色設定 */
+.btn-back {
     background-color: #6b7280;
 }
-
-.button-link.gray:hover {
-    background-color: #4b5563;
-    transform: translateY(-1px);
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+.btn-blue {
+    background-color: #3b82f6;
 }
-
-/* 納品登録ボタン */
-.submit-button {
-    padding: 10px 20px;
+.btn-primary {
     background-color: #10b981;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
 }
 
-.submit-button:hover {
-    background-color: #059669;
-    transform: translateY(-1px);
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+.btn-back:hover {
+    background-color: #4b5563; /* 元の色より少し暗め */
 }
+
+.btn-blue:hover {
+    background-color: #2563eb; /* 元の色より少し暗め */
+}
+
+.btn-primary:hover {
+    background-color: #0f766e; /* 元の色より少し暗め */
+}
+
+/* 共通ホバー効果（色は変更しない） */
+.btn:hover,
+.button-link:hover,
+.submit-button:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+                0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+/* ボタン配置用コンテナ */
+.btn-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 1rem;
+    flex-wrap: wrap;
+}
+
+.btn-container > div {
+    display: flex;
+    gap: 0.75rem;
+    justify-content: center; /* ← これを追加 */
+    flex-grow: 1; /* 左側の「ダッシュボードに戻る」と左右バランスをとるため */
+}
+
 
 /* 検索フォーム */
 .search-form {
@@ -247,22 +258,26 @@ thead {
         white-space: nowrap;
     }
 
-    .nav-buttons {
-        display: flex;
+    .btn-container {
         flex-direction: column;
-        gap: 10px;
         align-items: stretch;
-        width: 100%;
+        gap: 12px; /* ← これでボタン同士に間隔を作る */
+        margin-top: 1.5rem;
     }
 
-    .button-link,
-    .submit-button {
-        margin-right: 0;
-        margin-bottom: 10px;
+    .btn-container > div {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        gap: 12px; /* 新規注文登録・納品登録の間隔も追加 */
+    }
+
+    .btn {
         text-align: center;
     }
 
-    .submit-button {
+    /* 不要なボタンへのmargin-bottomは削除してOK */
+    .btn-primary {
         margin-bottom: 0;
     }
 }

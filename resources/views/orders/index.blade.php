@@ -95,10 +95,10 @@
                 </tbody>
             </table>
             </div>
-            <div class="nav-buttons">
-                <a href="{{ route('dashboard', ['store_id' => request('store_id', '')]) }}" class="button-link gray">ダッシュボードに戻る</a>
-                <a href="{{ route('orders.new_order') }}" class="button-link blue">新規注文登録</a>
-            <button type="submit" class="submit-button">納品登録</button>
+            <div class="btn-container">
+                <a href="{{ route('dashboard', ['store_id' => request('store_id', '')]) }}" class="btn btn-back"> ← ダッシュボードに戻る </a>
+                <a href="{{ route('orders.new_order') }}" class="btn btn-blue">新規注文登録</a>
+                <button type="submit" class="btn btn-primary">納品登録</button>
             </div>
         </form>
     </div>

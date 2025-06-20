@@ -18,6 +18,8 @@
                 <table class="data-table">
                     <thead class="table-header">
                         <tr>
+                            <th class="table-header-cell">顧客ID</th>
+                            <th class="table-header-cell">注文明細ID</th>
                             <th class="table-header-cell">商品名</th>
                             <th class="table-header-cell">数量</th>
                             <th class="table-header-cell">キャンセル数</th>
@@ -27,6 +29,8 @@
                     <tbody>
                         @foreach ($orderDetails as $detail)
                         <tr class="table-row">
+                            <td class="table-cell">{{ $order->customer_id }}</td>
+                            <td class="table-cell">{{ $detail->order_detail_id }}</td>
                             <td class="table-cell">{{ $detail->product_name }}</td>
                             <td class="table-cell-center">{{ number_format($detail->cancellable_quantity) }}</td>
                             <td class="table-cell-center">

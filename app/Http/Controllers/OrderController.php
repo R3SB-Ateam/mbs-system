@@ -83,30 +83,18 @@ class OrderController extends Controller
 
         // ビューへ顧客データを渡す
         return view('orders.new_order', ['customers' => $customers]);
-        }
+    }
 
 
-        public function order_store(Request $request){
-
-
+    public function order_store(Request $request){
         // バリデーション
         $validated = $request->validate([
-        'customer_id' => 'required|integer',
-        'product_name.*' => 'required|string',
-        'unit_price.*' => 'required|numeric|min:0',
-        'quantity.*' => 'required|integer|min:1',
-        'product_note.*' => 'nullable|string|max:255',
-        'remarks' => 'nullable|string',
-    ]);
-
-    DB::beginTransaction();
-
-    try {
-        $order = Orders::create([
-            'customer_id' => $request->customer_id,
-            'order_date' => now(),
-            'remarks' => $request->remarks,
-          
+            'customer_id' => 'required|integer',
+            'product_name.*' => 'required|string',
+            'unit_price.*' => 'required|numeric|min:0',
+            'quantity.*' => 'required|integer|min:1',
+            'product_note.*' => 'nullable|string|max:255',
+            'remarks' => 'nullable|string',
         ]);
 
         DB::beginTransaction();
@@ -118,28 +106,27 @@ class OrderController extends Controller
                 'remarks' => $request->remarks,
             ]);
 
-        foreach ($request->product_name as $i => $name) {
-            $order->details()->create([
-                'product_name' => $name,
-                'unit_price' => $request->unit_price[$i],
-                'quantity' => $request->quantity[$i],
-                'delivery_quantity' => 0,
-                'remarks' => $request->product_note[$i] ?? null,
-                'cancell_flag' => 0,
-            ]);
-        }
+            foreach ($request->product_name as $i => $name) {
+                $order->details()->create([
+                    'product_name' => $name,
+                    'unit_price' => $request->unit_price[$i],
+                    'quantity' => $request->quantity[$i],
+                    'delivery_quantity' => 0,
+                    'remarks' => $request->product_note[$i] ?? null,
+                    'cancell_flag' => 0,
+                ]);
+            }
 
-        DB::commit();
-        return redirect()->route('orders.order_details', ['order_id' => $order->order_id])
-                         ->with('success', '注文が登録されました');
+            DB::commit();
+            return redirect()->route('orders.order_details', ['order_id' => $order->order_id])
+                ->with('success', '注文が登録されました');
+
         } catch (\Exception $e) {
             DB::rollBack();
             Log::error('注文登録エラー: ' . $e->getMessage());
             return redirect()->back()->withErrors(['error' => '注文の登録中にエラーが発生しました'])->withInput();
         }
-    
     }
-
 
     public function orderDetails($order_id)
     {

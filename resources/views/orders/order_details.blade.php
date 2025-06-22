@@ -97,7 +97,7 @@
         <!-- ボタン -->
         <div class="btn-container">
             <a href="{{ route('orders.index') }}" class="btn btn-back">
-                ← 注文一覧に戻る
+                注文一覧に戻る
             </a>
             <a href="{{ route('orders.order_edit', ['order_id' => $order->order_id]) }}" class="btn btn-edit">
                 修正する

@@ -42,8 +42,8 @@ class CustomerController extends Controller
         )
         ->selectRaw('COALESCE(SUM(dd.unit_price * dd.delivery_quantity), 0) as sales_per_detail')
         ->selectRaw(
-            'COALESCE(SUM(GREATEST(0, DATEDIFF(d.delivery_date, o.order_date) - 1) * dd.delivery_quantity), 0) + ' .
-            '(GREATEST(0, DATEDIFF(?, o.order_date) - 1) * (od.quantity - COALESCE(SUM(dd.delivery_quantity), 0))) as weighted_days_per_detail',
+            'COALESCE(SUM(GREATEST(0, DATEDIFF(d.delivery_date, o.order_date)) * dd.delivery_quantity), 0) + ' .
+            '(GREATEST(0, DATEDIFF(?, o.order_date)) * (od.quantity - COALESCE(SUM(dd.delivery_quantity), 0))) as weighted_days_per_detail',
             [$today]
         )
         ->groupBy('od.order_detail_id', 'o.customer_id', 'o.order_date', 'od.quantity');

@@ -5,8 +5,7 @@ body {
     padding: 0;
 }
 
-html,
-body {
+html, body {
     height: 100%;
     margin: 0;
     padding: 0;
@@ -52,14 +51,40 @@ h1 {
     border-radius: 5px;
 }
 
-#toast-message,
-.error-message {
+#toast-message, .error-message {
     opacity: 1;
     transition: opacity 0.5s ease-out;
     font-size: 14px;
     line-height: 1.5;
 }
 
+/* 納品状況スタイル */
+.status-delivered {
+    color: #065f46; /* 緑 */
+    background-color: #d1fae5;
+    padding: 4px 8px;
+    border-radius: 10px;
+    font-weight: 150;
+    display: inline-block;
+}
+
+.status-pending {
+    color: #92400e; /* オレンジ */
+    background-color: #fef3c7;
+    padding: 4px 8px;
+    border-radius: 10px;
+    font-weight: 150;
+    display: inline-block;
+}
+
+.status-unknown {
+    color: #1e40af; /* 青 */
+    background-color: #dbeafe;
+    padding: 4px 8px;
+    border-radius: 10px;
+    font-weight: 150;
+    display: inline-block;
+}
 
 /* ナビボタン */
 .nav-buttons {
@@ -124,8 +149,7 @@ h1 {
     width: 175px;
 }
 
-.search-form select,
-.search-form input[type="text"] {
+.search-form select, .search-form input[type="text"] {
     padding: 6px 8px;
     border: 1px solid #ccc;
     border-radius: 4px;
@@ -149,12 +173,9 @@ h1 {
 .table-wrapper {
     flex: 1;
     max-height: calc(100vh - 220px);
-    /* 表示領域の高さを調整 */
     overflow-y: auto;
     min-height: 0;
-    /* 縦スクロールを有効化 */
     border: 1px solid #ddd;
-    /* お好みで枠線 */
     background-color: white;
     margin-bottom: 20px;
     -webkit-overflow-scrolling: touch;
@@ -162,7 +183,6 @@ h1 {
 
 .table-wrapper thead th {
     padding: 10px;
-    /* 既存に合わせて調整 */
     line-height: 1.4;
     position: sticky;
     top: 0;
@@ -178,9 +198,7 @@ table {
     border: 1px solid #ddd;
     margin-bottom: 20px;
     border-collapse: separate;
-    /* collapse から変更 */
     border-spacing: 0;
-    /* collapse っぽく見せるため */
     display: table;
     table-layout: auto;
 }
@@ -190,8 +208,7 @@ td:last-child {
     white-space: normal;
 }
 
-th,
-td {
+th, td {
     padding: 10px;
     border-bottom: 1px solid #ddd;
     text-align: left;

@@ -84,7 +84,15 @@
                                     {{ $order->delivery_status_text === '納品済み' ? 'disabled' : '' }}>
                             </td>
                             <td><a href="{{ route('orders.order_details', ['order_id' => $order->order_id]) }}" class="table-link">{{ number_format($order->order_id) }}</a></td>
-                            <td>{{ $order->delivery_status_text }}</td>
+                            <td>
+                                <span class="{{ 
+                                    $order->delivery_status_text === '納品済み' ? 'status-delivered' : (
+                                        $order->delivery_status_text === '未納品' ? 'status-pending' : 'status-unknown'
+                                    )
+                                }}">
+                                    {{ $order->delivery_status_text }}
+                                </span>
+                            </td>
                             <td>{{ $order->customer_id }}</td>
                             <td>{{ $order->customer->name ?? '不明'}}</td>
                             <td>{{ $order->order_date }}</td>

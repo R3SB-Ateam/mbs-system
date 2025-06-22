@@ -8,7 +8,7 @@
 </head>
 <body>
     <div class="page-container">
-        <h1 class="page-title">キャンセル対象一覧（注文ID: {{ $order->order_id }}）</h1>
+        <h1 class="page-title">キャンセル対象一覧 <span class="sub-title">（注文ID: {{ $order->order_id }}）</span></h1>
 
         <form action="{{ route('orders.processCancel') }}" method="POST" class="form-container">
             @csrf

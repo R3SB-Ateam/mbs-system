@@ -15,7 +15,7 @@
         <!-- 戻るボタン -->
         <div class="mb-6">
             <a href="{{ route('dashboard', ['store_id' => request('store_id', '')]) }}" class="inline-block px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700">
-                ← ダッシュボードに戻る
+                ダッシュボードに戻る
             </a>
         </div>
 

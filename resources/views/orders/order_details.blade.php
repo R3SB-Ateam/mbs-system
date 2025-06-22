@@ -45,12 +45,12 @@
 
         <!-- 注文明細情報 -->
         <div class="order-details">
-            <h2 class="section-title-detail">注文商品の詳細</h2>
+            <h2 class="section-title-detail">注文商品の明細</h2>
             <div class="table-container">
                 <div class="table-wrapper">
                     <table class="table">
                         <colgroup>
-                            <col style="width: 15%;">  <!-- 注文詳細ID -->
+                            <col style="width: 15%;">  <!-- 注文明細ID -->
                             <col style="width: 15%;">  <!-- 商品名 -->
                             <col style="width: 10%;">  <!-- 単価 -->
                             <col style="width: 10%;">  <!-- 数量 -->
@@ -60,7 +60,7 @@
                         
                         <thead class="table-head">
                             <tr>
-                                <th>注文詳細ID</th>
+                                <th>注明細ID</th>
                                 <th>商品名</th>
                                 <th>単価</th>
                                 <th>数量</th>
@@ -97,7 +97,7 @@
         <!-- ボタン -->
         <div class="btn-container">
             <a href="{{ route('orders.index') }}" class="btn btn-back">
-                ← 注文一覧に戻る
+                注文一覧に戻る
             </a>
             <a href="{{ route('orders.order_edit', ['order_id' => $order->order_id]) }}" class="btn btn-edit">
                 修正する

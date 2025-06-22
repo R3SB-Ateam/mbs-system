@@ -232,7 +232,7 @@ body {
 /* ボタンのグループ化 */
 .c-button-group {
     margin-bottom: 1.5rem; /* mb-6 */
-    text-align: right; /* レイアウトに合わせて調整 */
+    text-align: left; /* レイアウトに合わせて調整 */
 }
 
 /* レスポンシブ対応 */

@@ -8,8 +8,6 @@
     <link rel="stylesheet" href="{{ asset('css/customers-update.css') }}?v=123">
 </head>
 <body>
-    
-    <a href="{{ route('dashboard', ['store_id' => request('store_id', '')]) }}" class="button-link gray back-to-dashboard">ダッシュボードに戻る</a>
 
     <div class="container">
         <h1>顧客情報を更新</h1>
@@ -64,6 +62,10 @@
                 アップロードして更新
             </button>
         </form>
+
+        <a href="{{ route('dashboard', ['store_id' => request('store_id', '')]) }}" class="button-link gray back-to-dashboard">
+            ダッシュボードに戻る
+        </a>
     </div>
 
     <script>

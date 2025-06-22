@@ -51,6 +51,7 @@ class OrderController extends Controller
                     ELSE '不明'
                 END"));
             }])
+            ->orderBy('order_id', 'desc') 
             ->get()
             ->each(function ($order) {
                 $order->total_amount = $order->details->sum(function ($detail) {

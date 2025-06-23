@@ -15,13 +15,13 @@ html, body {
 .container {
     display: flex;
     flex-direction: column;
-    height: 100vh;
+    height: calc(100vh - 4rem); /* paddingの分を引く */
+    padding: 2rem 1.5rem;
     box-sizing: border-box;
     overflow-x: visible !important;
     width: 60%;
     margin-left: auto;
     margin-right: auto;
-    padding: 2rem 1.5rem;
 }
 
 /* 見出し */
@@ -184,7 +184,7 @@ h1 {
     min-height: 0;
     border: 1px solid #ddd;
     background-color: white;
-    margin-bottom: 20px;
+    margin-bottom: 0;
     -webkit-overflow-scrolling: touch;
 }
 
@@ -242,6 +242,7 @@ thead {
     .container {
         padding: 8px;
         height: auto;
+        width: 100%;
     }
 
     .search-form {

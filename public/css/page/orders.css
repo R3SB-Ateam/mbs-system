@@ -88,7 +88,10 @@ h1 {
 
 /* ナビボタン */
 .nav-buttons {
-    text-align: center;
+    display: flex;
+    justify-content: flex-start;
+    gap: 30px;
+    flex-wrap: wrap;
     margin-bottom: 0;
     flex-shrink: 0;
 }

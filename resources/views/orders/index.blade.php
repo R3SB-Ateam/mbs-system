@@ -27,7 +27,11 @@
 
     <div class="container">
         <h1>注文一覧</h1>
-
+        <div class="nav-buttons">
+            <a href="{{ route('dashboard', ['store_id' => request('store_id', '')]) }}" class="button-link gray">ダッシュボードに戻る</a>
+            <a href="{{ route('orders.new_order') }}" class="button-link blue">新規注文登録</a>
+            <button type="submit" class="submit-button">納品登録</button>
+        </div>
         <form method="GET" action="{{ route('orders.index') }}" class="search-form">
             <label for="store_id">店舗を選択:</label>
             <select name="store_id" id="store_id">
@@ -84,7 +88,15 @@
                                     {{ $order->delivery_status_text === '納品済み' ? 'disabled' : '' }}>
                             </td>
                             <td><a href="{{ route('orders.order_details', ['order_id' => $order->order_id]) }}" class="table-link">{{ number_format($order->order_id) }}</a></td>
-                            <td>{{ $order->delivery_status_text }}</td>
+                            <td>
+                                <span class="{{ 
+                                    $order->delivery_status_text === '納品済み' ? 'status-delivered' : (
+                                        $order->delivery_status_text === '未納品' ? 'status-pending' : 'status-unknown'
+                                    )
+                                }}">
+                                    {{ $order->delivery_status_text }}
+                                </span>
+                            </td>
                             <td>{{ $order->customer_id }}</td>
                             <td>{{ $order->customer->name ?? '不明'}}</td>
                             <td>{{ $order->order_date }}</td>
@@ -94,11 +106,6 @@
                     @endforeach
                 </tbody>
             </table>
-            </div>
-            <div class="btn-container">
-                <a href="{{ route('dashboard', ['store_id' => request('store_id', '')]) }}" class="btn btn-back"> ← ダッシュボードに戻る </a>
-                <a href="{{ route('orders.new_order') }}" class="btn btn-blue">新規注文登録</a>
-                <button type="submit" class="btn btn-primary">納品登録</button>
             </div>
         </form>
     </div>

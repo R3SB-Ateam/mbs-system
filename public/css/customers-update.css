@@ -230,6 +230,7 @@ button:disabled {
     display: inline-block; /* marginを有効にするため */
     margin-bottom: 15px; /* ボタンとメインコンテナの間に余白を作る */
     font-weight: 500;
+    margin-top: 15px;
 }
 
 /* レスポンシブ */

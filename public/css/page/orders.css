@@ -3,6 +3,7 @@ body {
     background-color: #f9fafb;
     margin: 0;
     padding: 0;
+    
 }
 
 html, body {
@@ -15,9 +16,12 @@ html, body {
     display: flex;
     flex-direction: column;
     height: 100vh;
-    padding: 16px;
     box-sizing: border-box;
     overflow-x: visible !important;
+    width: 60%;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 2rem 1.5rem;
 }
 
 /* 見出し */

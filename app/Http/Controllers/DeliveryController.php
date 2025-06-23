@@ -220,6 +220,45 @@ class DeliveryController extends Controller
         return view('deliveries.delivery_details', compact('delivery', 'deliveryDetails'));
     }
 
+    public function edit($delivery_id)
+    {
+        // 納品情報取得
+        $delivery = Deliveries::findOrFail($delivery_id);
+
+        // 納品情報に紐づく注文ID・顧客名などを取得（customerテーブルは直接使わない）
+        $orderInfo = DB::table('delivery_details')
+            ->join('order_details', 'delivery_details.order_detail_id', '=', 'order_details.order_detail_id')
+            ->join('orders', 'order_details.order_id', '=', 'orders.order_id')
+            ->where('delivery_details.delivery_id', $delivery_id)
+            ->select(
+                'orders.order_id',
+                'orders.customer_id',
+                'orders.customer_name'
+            )
+            ->first();
+
+        // 納品明細と紐づく注文明細から商品情報などを取得（Productは使わない）
+        $delivery_details = DB::table('delivery_details')
+            ->join('order_details', 'delivery_details.order_detail_id', '=', 'order_details.order_detail_id')
+            ->where('delivery_details.delivery_id', $delivery_id)
+            ->select(
+                'delivery_details.delivery_detail_id',
+                'delivery_details.delivery_id',
+                'delivery_details.order_detail_id',
+                'delivery_details.delivery_quantity',
+                'order_details.product_name',
+                'order_details.unit_price',
+                'order_details.quantity'
+            )
+            ->get();
+
+        return view('deliveries.edit', [
+            'delivery' => $delivery,
+            'orderInfo' => $orderInfo,
+            'delivery_details' => $delivery_details,
+        ]);
+    }
+
     // 返品フォーム表示
     public function showReturnForm($delivery_id)
     {

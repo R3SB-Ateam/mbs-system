@@ -74,6 +74,9 @@
             <a href="{{ route('deliveries.index') }}" class="c-button c-button--gray">
                 戻る
             </a>
+            <a href="{{ route('deliveries.edit', ['delivery_id' => $delivery->delivery_id]) }}" class="btn btn-primary">
+                納品修正
+            </a>
             <a href="{{ route('deliveries.return_form', ['delivery_id' => $delivery->delivery_id]) }}"
                class="c-button c-button--red">
                 返品

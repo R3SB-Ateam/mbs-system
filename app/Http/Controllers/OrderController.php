@@ -140,16 +140,13 @@ class OrderController extends Controller
 
         // 注文詳細を取得（必要なすべてのカラムを明示的に指定）
         $orderDetails = DB::table('order_details')
-            ->leftJoin('delivery_details', 'order_details.order_detail_id', '=', 'delivery_details.order_detail_id')
-            ->leftJoin('deliveries', 'delivery_details.delivery_id', '=', 'deliveries.delivery_id')
-            ->select(
-                'order_details.*',
-                'delivery_details.delivery_detail_id',
-                'deliveries.delivery_date',
-                'delivery_details.remarks as delivery_remarks'
-            )
-            ->where('order_details.order_id', $order_id)
-            ->get();
+        ->where('order_details.order_id', $order_id)
+        ->get();
+
+        if (!$order) {
+        // 注文が見つからない場合のエラーハンドリング
+        abort(404, '指定された注文は見つかりません。');
+        }
 
         return view('orders.order_details', compact('order', 'orderDetails'));
     }

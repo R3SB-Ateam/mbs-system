@@ -4,26 +4,26 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>顧客一覧</title>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.1.2/dist/tailwind.min.css" rel="stylesheet">
+    <link href="{{ asset('css/page/customer.css') }}" rel="stylesheet">
 </head>
-<body class="bg-gray-100 text-gray-800">
-    <div class="max-w-6xl mx-auto px-6 py-8">
+<body>
+    <div class="container">
 
         <!-- タイトル -->
-        <h1 class="text-2xl font-bold mb-6 border-b pb-2">顧客一覧</h1>
+        <h1 class="title">顧客一覧</h1>
 
-        <!-- 戻るボタン -->
-        <div class="mb-6">
-            <a href="{{ route('dashboard', ['store_id' => request('store_id', '')]) }}" class="inline-block px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700">
+        <!-- ナビボタン -->
+        <div class="button-wrapper">
+            <a href="{{ route('dashboard', ['store_id' => request('store_id', '')]) }}" class="btn-back">
                 ダッシュボードに戻る
             </a>
         </div>
 
         <!-- フィルター -->
-        <form id="filter-form" method="GET" action="{{ route('customers.index') }}" class="mb-6 flex flex-col md:flex-row md:items-center gap-4">
+        <form id="filter-form" method="GET" action="{{ route('customers.index') }}" class="filter-form">
             <div>
-                <label for="store_id" class="block mb-1 text-sm font-medium">店舗を選択:</label>
-                <select name="store_id" id="store_id" class="border border-gray-300 rounded px-3 py-2 w-48">
+                <label for="store_id">店舗を選択:</label><br>
+                <select name="store_id" id="store_id">
                     <option value="">全店舗</option>
                     @foreach ($stores as $store)
                         <option value="{{ $store->store_id }}" {{ $selectedStoreId == $store->store_id ? 'selected' : '' }}>
@@ -32,63 +32,54 @@
                     @endforeach
                 </select>
             </div>
-
-            <div class="self-end md:self-auto">
-                <button type="submit" class="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600">
-                    絞り込み
-                </button>
+            <div>
+                <button type="submit">絞り込み</button>
             </div>
         </form>
 
         <!-- 顧客テーブル -->
-        <div class="overflow-x-auto bg-white shadow-md rounded-lg">
-            <table id="customer-table" class="min-w-full text-sm text-left">
-                <thead class="bg-gray-200 text-gray-700">
+        <div class="table-container">
+            <table id="customer-table">
+                <thead>
                     <tr>
-                        <th class="px-4 py-3 border-b">
-                            <div class="flex items-center gap-1">
-                                顧客ID
-                                <select id="sort-customer-id" class="text-xs border border-gray-300 rounded px-1 py-0.5">
-                                    <option value="">ー</option>
-                                    <option value="asc">▲</option>
-                                    <option value="desc">▼</option>
-                                </select>
-                            </div>
+                        <th>
+                            顧客ID
+                            <select id="sort-customer-id" class="sort-select">
+                                <option value="">ー</option>
+                                <option value="asc">▲</option>
+                                <option value="desc">▼</option>
+                            </select>
                         </th>
-                        <th class="px-4 py-3 border-b">顧客名</th>
-                        <th class="px-4 py-3 border-b">登録日</th>
-                        <th class="px-4 py-3 border-b">電話番号</th>
-                        <th class="px-4 py-3 border-b">
-                            <div class="flex items-center gap-1">
-                                売上
-                                <select id="sort-total-sales" class="text-xs border border-gray-300 rounded px-1 py-0.5">
-                                    <option value="">ー</option>
-                                    <option value="asc">▲</option>
-                                    <option value="desc">▼</option>
-                                </select>
-                            </div>
+                        <th>顧客名</th>
+                        <th>登録日</th>
+                        <th>電話番号</th>
+                        <th>
+                            売上
+                            <select id="sort-total-sales" class="sort-select">
+                                <option value="">ー</option>
+                                <option value="asc">▲</option>
+                                <option value="desc">▼</option>
+                            </select>
                         </th>
-                        <th class="px-4 py-3 border-b">
-                            <div class="flex items-center gap-1">
-                                平均RT(日)
-                                <select id="sort-average-rt" class="text-xs border border-gray-300 rounded px-1 py-0.5">
-                                    <option value="">ー</option>
-                                    <option value="asc">▲</option>
-                                    <option value="desc">▼</option>
-                                </select>
-                            </div>
+                        <th>
+                            平均RT(日)
+                            <select id="sort-average-rt" class="sort-select">
+                                <option value="">ー</option>
+                                <option value="asc">▲</option>
+                                <option value="desc">▼</option>
+                            </select>
                         </th>
                     </tr>
                 </thead>
-                <tbody id="customer-tbody" class="bg-white divide-y divide-gray-200">
+                <tbody id="customer-tbody">
                     @foreach ($customers as $customer)
-                        <tr class="hover:bg-gray-50">
-                            <td class="px-4 py-3" data-customer-id="{{ $customer->customer_id }}">{{ $customer->customer_id }}</td>
-                            <td class="px-4 py-3">{{ $customer->name }}</td>
-                            <td class="px-4 py-3">{{ $customer->registration_date }}</td>
-                            <td class="px-4 py-3">{{ $customer->phone_number }}</td>
-                            <td class="px-4 py-3" data-total-sales="{{ $customer->total_sales }}">{{ number_format($customer->total_sales) }}円</td>
-                            <td class="px-4 py-3" data-average-rt="{{ $customer->average_rt ?? 0 }}">
+                        <tr>
+                            <td data-customer-id="{{ $customer->customer_id }}">{{ $customer->customer_id }}</td>
+                            <td>{{ $customer->name }}</td>
+                            <td>{{ $customer->registration_date }}</td>
+                            <td>{{ $customer->phone_number }}</td>
+                            <td data-total-sales="{{ $customer->total_sales }}">{{ number_format($customer->total_sales) }}円</td>
+                            <td data-average-rt="{{ $customer->average_rt ?? 0 }}">
                                 {{ $customer->average_rt !== null ? $customer->average_rt . '日' : '-' }}
                             </td>
                         </tr>
@@ -96,10 +87,9 @@
                 </tbody>
             </table>
         </div>
-
     </div>
 
-    <!-- ソートJS -->
+    <!-- ソートスクリプト -->
     <script>
         const getCellValue = (tr, dataAttr) => parseFloat(tr.querySelector(`[${dataAttr}]`)?.getAttribute(dataAttr)) || 0;
 

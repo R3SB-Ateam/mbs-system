@@ -37,6 +37,28 @@ class Orders extends Model
     {
         return $this->hasMany(OrderDetails::class, 'order_id', 'order_id');
     }
+
+
+    public function getDeliveryStatusAttribute()
+    {
+        if (!$this->relationLoaded('details')) {
+            $this->load('details');
+        }
+
+        $validDetails = $this->details->where('cancell_flag', 0);
+
+        if ($validDetails->isEmpty()) {
+            return '不明';
+        }
+
+        $allDelivered = $validDetails->every(function ($detail) {
+            $delivered = $detail->delivery_quantity ?? 0;
+            return $delivered >= $detail->quantity;
+        });
+
+        return $allDelivered ? '納品済み' : '未納品';
+    }
+
     
 }
 

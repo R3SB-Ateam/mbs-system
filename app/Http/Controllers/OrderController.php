@@ -44,19 +44,14 @@ class OrderController extends Controller
                         });
                 });
             })
-            ->withCount(['details as delivery_status_text' => function ($query) {
-                $query->select(DB::raw("CASE
-                    WHEN MIN(quantity - COALESCE(delivery_quantity, 0)) = 0 THEN '納品済み'
-                    WHEN MIN(quantity - COALESCE(delivery_quantity, 0)) > 0 THEN '未納品'
-                    ELSE '不明'
-                END"));
-            }])
             ->orderBy('order_id', 'desc') 
             ->get()
             ->each(function ($order) {
-                $order->total_amount = $order->details->sum(function ($detail) {
-                    return $detail->unit_price * $detail->quantity;
-                });
+                $order->total_amount = $order->details
+                    ->where('cancell_flag', 0)
+                    ->sum(function ($detail) {
+                        return $detail->unit_price * $detail->quantity;
+                    });
             });
 
          return view('orders.index', compact('orders', 'stores', 'selectedStoreId', 'keyword'));

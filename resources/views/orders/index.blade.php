@@ -79,32 +79,37 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($orders as $order)
-                        <tr>
-                            <td><input 
-                                    type="checkbox" 
-                                    name="order_ids[]" 
-                                    value="{{ $order->order_id }}"
-                                    {{ $order->delivery_status_text === '納品済み' ? 'disabled' : '' }}>
-                            </td>
-                            <td><a href="{{ route('orders.order_details', ['order_id' => $order->order_id]) }}" class="table-link">{{ number_format($order->order_id) }}</a></td>
-                            <td>
-                                <span class="{{ 
-                                    $order->delivery_status_text === '納品済み' ? 'status-delivered' : (
-                                        $order->delivery_status_text === '未納品' ? 'status-pending' : 'status-unknown'
-                                    )
-                                }}">
-                                    {{ $order->delivery_status_text }}
-                                </span>
-                            </td>
-                            <td>{{ $order->customer_id }}</td>
-                            <td>{{ $order->customer->name ?? '不明'}}</td>
-                            <td>{{ $order->order_date }}</td>
-                            <td>{{ number_format($order->total_amount) }}</td> <!-- 注文金額 -->
-                            <td>{{ $order->remarks }}</td>
-                        </tr>
-                    @endforeach
-                </tbody>
+                @foreach ($orders as $order)
+                    <tr>
+                        <td>
+                            <input 
+                                type="checkbox" 
+                                name="order_ids[]" 
+                                value="{{ $order->order_id }}"
+                                {{ $order->delivery_status === '納品済み' ? 'disabled' : '' }}>
+                        </td>
+                        <td>
+                            <a href="{{ route('orders.order_details', ['order_id' => $order->order_id]) }}" class="table-link">
+                                {{ number_format($order->order_id) }}
+                            </a>
+                        </td>
+                        <td>
+                            <span class="{{ 
+                                $order->delivery_status === '納品済み' ? 'status-delivered' : (
+                                    $order->delivery_status === '未納品' ? 'status-pending' : 'status-unknown'
+                                )
+                            }}">
+                                {{ $order->delivery_status }}
+                            </span>
+                        </td>
+                        <td>{{ $order->customer_id }}</td>
+                        <td>{{ $order->customer->name ?? '不明' }}</td>
+                        <td>{{ $order->order_date }}</td>
+                        <td>{{ number_format($order->total_amount) }}</td>
+                        <td>{{ $order->remarks }}</td>
+                    </tr>
+                @endforeach
+            </tbody>
             </table>
             </div>
         </form>

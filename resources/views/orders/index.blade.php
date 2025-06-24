@@ -44,7 +44,7 @@
             </select>
 
             <input type="text" name="keyword" placeholder="注文ID、顧客名、備考で検索" value="{{ $keyword ?? '' }}" class="keyword-text">
-            <button type="submit" class="filter-button">絞り込み</button>
+            <button type="submit" class="filter-button">検索</button>
         </form>
 
         

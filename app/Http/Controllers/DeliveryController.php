@@ -22,7 +22,7 @@ class DeliveryController extends Controller
             'order_detail_ids' => 'required|array',
             'order_detail_ids.*' => 'required|exists:order_details,order_detail_id',
             'delivery_quantities' => 'required|array',
-            'delivery_quantities.*' => 'required|integer|min:1',
+            'delivery_quantities.*' => 'required|integer|min:0',
             'unit_prices' => 'required|array',
             'unit_prices.*' => 'required|numeric|min:0',
         ],
@@ -48,6 +48,12 @@ class DeliveryController extends Controller
 
             foreach ($orderDetailIds as $index => $orderDetailId) {
                 $deliveryQty = (int) $deliveryQuantities[$index];
+
+                // 納品数量が0ならスキップ
+                if ($deliveryQty === 0) {
+                    continue;
+                }
+
                 $unitPrice = (float) $unitPrices[$index]; // ← フォームからの単価を使用
 
                 // 注文明細を取得

@@ -30,7 +30,7 @@
         <div class="nav-buttons">
             <a href="{{ route('dashboard', ['store_id' => request('store_id', '')]) }}" class="button-link gray">ダッシュボードに戻る</a>
             <a href="{{ route('orders.new_order') }}" class="button-link blue">新規注文登録</a>
-            <button type="submit" class="submit-button">納品登録</button>
+            <button type="submit" class="submit-button" form="delivery-form">納品登録</button>
         </div>
         <form method="GET" action="{{ route('orders.index') }}" class="search-form">
             <label for="store_id">店舗を選択:</label>
@@ -48,7 +48,7 @@
         </form>
 
         
-        <form method="POST" action="{{ route('orders.delivery_prepare') }}">
+        <form method="POST" action="{{ route('orders.delivery_prepare') }}" id="delivery-form">
         <div class="table-wrapper">
             @csrf
             <table>

@@ -58,7 +58,7 @@ class OrderController extends Controller
                 });
             });
 
-         return view('orders.index', compact('orders', 'stores', 'selectedStoreId', 'keyword'));
+            return view('orders.index', compact('orders', 'stores', 'selectedStoreId', 'keyword'));
     }
 
     public function searchOrderDetails(Request $request, $order_id)
@@ -76,7 +76,6 @@ class OrderController extends Controller
     }
 
 
-
     public function newOrder(){
         // 顧客一覧を取得（customersテーブル）
         $customers = DB::table('customers')->get();
@@ -86,30 +85,20 @@ class OrderController extends Controller
         }
 
 
-        public function order_store(Request $request){
+    public function order_store(Request $request){
 
 
         // バリデーション
         $validated = $request->validate([
-        'customer_id' => 'required|integer',
-        'product_name.*' => 'required|string',
-        'unit_price.*' => 'required|numeric|min:0',
-        'quantity.*' => 'required|integer|min:1',
-        'product_note.*' => 'nullable|string|max:255',
-        'remarks' => 'nullable|string',
-    ]);
-
-    DB::beginTransaction();
-
-    try {
-        $order = Orders::create([
-            'customer_id' => $request->customer_id,
-            'order_date' => now(),
-            'remarks' => $request->remarks,
-          
+            'customer_id' => 'required|integer',
+            'product_name.*' => 'required|string',
+            'unit_price.*' => 'required|numeric|min:0',
+            'quantity.*' => 'required|integer|min:1',
+            'product_note.*' => 'nullable|string|max:255',
+            'remarks' => 'nullable|string',
         ]);
 
-        DB::beginTransaction();
+        DB::beginTransaction(); // ここでトランザクションを開始
 
         try {
             $order = Orders::create([
@@ -118,28 +107,26 @@ class OrderController extends Controller
                 'remarks' => $request->remarks,
             ]);
 
-        foreach ($request->product_name as $i => $name) {
-            $order->details()->create([
-                'product_name' => $name,
-                'unit_price' => $request->unit_price[$i],
-                'quantity' => $request->quantity[$i],
-                'delivery_quantity' => 0,
-                'remarks' => $request->product_note[$i] ?? null,
-                'cancell_flag' => 0,
-            ]);
-        }
+            foreach ($request->product_name as $i => $name) {
+                $order->details()->create([
+                    'product_name' => $name,
+                    'unit_price' => $request->unit_price[$i],
+                    'quantity' => $request->quantity[$i],
+                    'delivery_quantity' => 0,
+                    'remarks' => $request->product_note[$i] ?? null,
+                    'cancell_flag' => 0,
+                ]);
+            }
 
-        DB::commit();
-        return redirect()->route('orders.order_details', ['order_id' => $order->order_id])
-                         ->with('success', '注文が登録されました');
+            DB::commit();
+            return redirect()->route('orders.order_details', ['order_id' => $order->order_id])
+                             ->with('success', '注文が登録されました');
         } catch (\Exception $e) {
             DB::rollBack();
             Log::error('注文登録エラー: ' . $e->getMessage());
             return redirect()->back()->withErrors(['error' => '注文の登録中にエラーが発生しました'])->withInput();
         }
-    
-    }
-
+    } // <<<<<<<<<<<<< order_store メソッドの閉じ括弧はここだけ
 
     public function orderDetails($order_id)
     {
@@ -194,9 +181,6 @@ class OrderController extends Controller
 
         return view('orders.cancel', compact('order', 'orderDetails'));
     }
-
-
-
 
 
     public function processCancel(Request $request)
@@ -333,7 +317,7 @@ class OrderController extends Controller
         }
 
         return redirect()->route('orders.order_details', ['order_id' => $order_id])
-                 ->with('update_success', '注文内容を更新しました。');
+                             ->with('update_success', '注文内容を更新しました。');
 
     }
 

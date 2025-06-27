@@ -4,64 +4,95 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>顧客一覧</title>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.1.2/dist/tailwind.min.css" rel="stylesheet">
+    {{-- カスタムCSSファイルを読み込む --}}
+    <link href="{{ asset('css/page/customers.css') }}" rel="stylesheet">
 </head>
-<body class="bg-gray-100 text-gray-800">
-    <div class="max-w-6xl mx-auto px-6 py-8">
+<body class="c-body">
+    <div class="l-container">
 
-        <!-- タイトル -->
-        <h1 class="text-2xl font-bold mb-6 border-b pb-2">顧客一覧</h1>
+        <h1 class="c-heading-primary">顧客一覧</h1>
 
-        <!-- 戻るボタン -->
-        <div class="mb-6">
-            <a href="{{ route('dashboard', ['store_id' => request('store_id', '')]) }}" class="inline-block px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700">
+        {{-- ダッシュボードに戻るボタンをh1の直下に配置 --}}
+        <div class="p-button-back-wrap">
+            <a href="{{ route('dashboard', ['store_id' => request('store_id', '')]) }}" class="c-button c-button--gray">
                 ← ダッシュボードに戻る
             </a>
         </div>
 
-        <!-- フィルター -->
-        <form method="GET" action="{{ route('customers.index') }}" class="mb-6 flex flex-col md:flex-row md:items-center gap-4">
+        {{-- フィルタフォームとソート用ドロップダウンを統合し、Flexboxで整形 --}}
+        <form method="GET" action="{{ route('customers.index') }}" class="p-filter-form" id="customer-filter-form">
             <div>
-                <label for="store_id" class="block mb-1 text-sm font-medium">店舗を選択:</label>
-                <select name="store_id" id="store_id" class="border border-gray-300 rounded px-3 py-2 w-48">
-                    <option value="">全店舗</option>
+                <label for="store_id" class="c-form-label">店舗を選択:</label>
+                <select name="store_id" id="store_id" class="c-form-select">
+                    <option value="" {{ $selectedStoreId == '' ? 'selected' : '' }}>全店舗</option>
                     @foreach ($stores as $store)
                         <option value="{{ $store->store_id }}" {{ $selectedStoreId == $store->store_id ? 'selected' : '' }}>
-                            {{ $store->store_name }}
+                            {{ $store->store_id }} : {{ $store->store_name }}
                         </option>
                     @endforeach
                 </select>
             </div>
 
-            <div class="self-end md:self-auto">
-                <button type="submit" class="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600">
-                    絞り込み
-                </button>
+            <div class="p-search-input-wrap">
+                <label for="keyword" class="c-form-label">キーワード検索:</label>
+                <input type="text" name="keyword" id="keyword" class="c-form-input" placeholder="顧客名、電話番号などで検索" value="{{ $keyword ?? '' }}">
+            </div>
+
+            <div class="p-sort-controls">
+                <label for="sort_by">ソート:</label>
+                <select name="sort_by" id="sort_by" class="c-form-select">
+                    {{-- Controllerから渡される selectedSortValue を使用して選択状態を制御 --}}
+                    <option value="" {{ ($selectedSortValue ?? '') === '' ? 'selected' : '' }}>ソートなし (顧客ID昇順)</option>
+                    <option value="total_sales_asc" {{ ($selectedSortValue ?? '') === 'total_sales_asc' ? 'selected' : '' }}>売上 昇順</option>
+                    <option value="total_sales_desc" {{ ($selectedSortValue ?? '') === 'total_sales_desc' ? 'selected' : '' }}>売上 降順</option>
+                    <option value="average_rt_asc" {{ ($selectedSortValue ?? '') === 'average_rt_asc' ? 'selected' : '' }}>平均RT 昇順</option>
+                    <option value="average_rt_desc" {{ ($selectedSortValue ?? '') === 'average_rt_desc' ? 'selected' : '' }}>平均RT 降順</option>
+                    
+                    {{-- 複合ソートの選択肢 --}}
+                    <option value="sales_main_rt_sub_asc" {{ ($selectedSortValue ?? '') === 'sales_main_rt_sub_asc' ? 'selected' : '' }}>売上 昇順 (メイン) + 平均RT 昇順 (サブ)</option>
+                    <option value="sales_main_rt_sub_desc" {{ ($selectedSortValue ?? '') === 'sales_main_rt_sub_desc' ? 'selected' : '' }}>売上 降順 (メイン) + 平均RT 昇順 (サブ)</option>
+                    <option value="rt_main_sales_sub_asc" {{ ($selectedSortValue ?? '') === 'rt_main_sales_sub_asc' ? 'selected' : '' }}>平均RT 昇順 (メイン) + 売上 昇順 (サブ)</option>
+                    <option value="rt_main_sales_sub_desc" {{ ($selectedSortValue ?? '') === 'rt_main_sales_sub_desc' ? 'selected' : '' }}>平均RT 降順 (メイン) + 売上 昇順 (サブ)</option>
+                </select>
+            </div>
+
+            {{-- ボタンアクション用のコンテナ（絞り込みボタンのみ） --}}
+            <div class="p-form-actions">
+                <div class="p-filter-button-wrap">
+                    <button type="submit" class="c-button c-button--green">
+                        絞り込み
+                    </button>
+                </div>
             </div>
         </form>
 
-        <!-- 顧客テーブル -->
-        <div class="overflow-x-auto bg-white shadow-md rounded-lg">
-            <table class="min-w-full text-sm text-left">
-                <thead class="bg-gray-200 text-gray-700">
+        <div class="c-table-wrap">
+            <table class="c-table">
+                <thead class="c-table__head">
                     <tr>
-                        <th class="px-4 py-3 border-b">顧客ID</th>
-                        <th class="px-4 py-3 border-b">顧客名</th>
-                        <th class="px-4 py-3 border-b">登録日</th>
-                        <th class="px-4 py-3 border-b">電話番号</th>
-                        <th class="px-4 py-3 border-b">売上</th>
-                        <th class="px-4 py-3 border-b">平均RT(日)</th>
+                        <th class="c-table__th">顧客ID</th>
+                        <th class="c-table__th">顧客名</th>
+                        <th class="c-table__th">担当者名</th>
+                        <th class="c-table__th">電話番号</th>
+                        <th class="c-table__th">住所</th>
+                        <th class="c-table__th">配達条件等</th>
+                        <th class="c-table__th">登録日</th>
+                        <th class="c-table__th">売上</th>
+                        <th class="c-table__th">平均RT(日)</th>
                     </tr>
                 </thead>
-                <tbody class="bg-white divide-y divide-gray-200">
+                <tbody class="c-table__body">
                     @foreach ($customers as $customer)
-                        <tr class="hover:bg-gray-50">
-                            <td class="px-4 py-3">{{ $customer->customer_id }}</td>
-                            <td class="px-4 py-3">{{ $customer->name }}</td>
-                            <td class="px-4 py-3">{{ $customer->registration_date }}</td>
-                            <td class="px-4 py-3">{{ $customer->phone_number }}</td>
-                            <td class="px-4 py-3">{{ number_format($customer->total_sales) }}円</td>
-                            <td class="px-4 py-3">
+                        <tr class="c-table__row c-table__row--hover">
+                            <td class="c-table__td">{{ $customer->customer_id }}</td>
+                            <td class="c-table__td">{{ $customer->name }}</td>
+                            <td class="c-table__td">{{ $customer->staff_name ?? '-' }}</td>
+                            <td class="c-table__td">{{ $customer->phone_number }}</td>
+                            <td class="c-table__td">{{ $customer->address ?? '-' }}</td>
+                            <td class="c-table__td">{{ $customer->delivery_location ?? '-' }}</td>
+                            <td class="c-table__td">{{ $customer->registration_date }}</td>
+                            <td class="c-table__td">{{ number_format($customer->total_sales) }}円</td>
+                            <td class="c-table__td">
                                 {{ $customer->average_rt !== null ? $customer->average_rt . '日' : '-' }}
                             </td>
                         </tr>
@@ -71,5 +102,28 @@
         </div>
 
     </div>
+
+    {{-- JavaScriptをボディの最後に追記 --}}
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const sortSelect = document.getElementById('sort_by');
+            const storeSelect = document.getElementById('store_id');
+            const filterForm = document.getElementById('customer-filter-form');
+
+            // 要素が存在するかチェックしてからイベントリスナーを追加
+            if (sortSelect && filterForm) { 
+                sortSelect.addEventListener('change', function() {
+                    filterForm.submit();
+                });
+            }
+
+            // 店舗選択のプルダウンにchangeイベントリスナーを追加
+            if (storeSelect && filterForm) {
+                storeSelect.addEventListener('change', function() {
+                    filterForm.submit();
+                });
+            }
+        });
+    </script>
 </body>
 </html>

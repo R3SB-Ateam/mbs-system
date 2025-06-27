@@ -43,31 +43,22 @@
                 <thead>
                     <tr>
                         <th>
-                            顧客ID
-                            <select id="sort-customer-id" class="sort-select">
-                                <option value="">ー</option>
-                                <option value="asc">▲</option>
-                                <option value="desc">▼</option>
-                            </select>
+                        <button type="button" class="sort-button" data-key="customer_id">
+                            顧客ID <span class="arrow" data-key="customer_id">▲</span>
+                        </button>
                         </th>
                         <th>顧客名</th>
                         <th>登録日</th>
                         <th>電話番号</th>
                         <th>
-                            売上
-                            <select id="sort-total-sales" class="sort-select">
-                                <option value="">ー</option>
-                                <option value="asc">▲</option>
-                                <option value="desc">▼</option>
-                            </select>
+                        <button type="button" class="sort-button" data-key="total_sales">
+                            売上 <span class="arrow" data-key="total_sales">ー</span>
+                        </button>
                         </th>
                         <th>
-                            平均RT(日)
-                            <select id="sort-average-rt" class="sort-select">
-                                <option value="">ー</option>
-                                <option value="asc">▲</option>
-                                <option value="desc">▼</option>
-                            </select>
+                        <button type="button" class="sort-button" data-key="average_rt">
+                            平均RT(日) <span class="arrow" data-key="average_rt">ー</span>
+                        </button>
                         </th>
                     </tr>
                 </thead>
@@ -91,43 +82,77 @@
 
     <!-- ソートスクリプト -->
     <script>
-        const getCellValue = (tr, dataAttr) => parseFloat(tr.querySelector(`[${dataAttr}]`)?.getAttribute(dataAttr)) || 0;
+        const getCellValue = (tr, dataAttr) =>
+        parseFloat(tr.querySelector(`[${dataAttr}]`)?.getAttribute(dataAttr)) || 0;
 
-        const sortTable = () => {
-            const tbody = document.getElementById("customer-tbody");
-            const rows = Array.from(tbody.querySelectorAll("tr"));
-
-            const sortOrder = [
-                { key: 'customer_id', order: document.getElementById('sort-customer-id').value },
-                { key: 'total_sales', order: document.getElementById('sort-total-sales').value },
-                { key: 'average_rt', order: document.getElementById('sort-average-rt').value },
-            ].filter(s => s.order);
-
-            rows.sort((a, b) => {
-                for (const { key, order } of sortOrder) {
-                    const attr = {
-                        customer_id: 'data-customer-id',
-                        total_sales: 'data-total-sales',
-                        average_rt: 'data-average-rt',
-                    }[key];
-                    const aVal = getCellValue(a, attr);
-                    const bVal = getCellValue(b, attr);
-
-                    if (aVal !== bVal) {
-                        return order === 'asc' ? aVal - bVal : bVal - aVal;
-                    }
-                }
-                return 0;
-            });
-
-            rows.forEach(row => tbody.appendChild(row));
+        // ソート状態（昇順/降順 or 未選択）を管理
+        const sortStates = {
+        average_rt: '',
+        total_sales: '',
+        customer_id: ''
         };
 
-        ['sort-customer-id', 'sort-total-sales', 'sort-average-rt'].forEach(id => {
-            document.getElementById(id).addEventListener('change', sortTable);
+        // 固定優先順位（変えない）
+        const sortPriority = ['average_rt', 'total_sales', 'customer_id'];
+
+        const getCellValue = (tr, dataAttr) =>
+        parseFloat(tr.querySelector(`[${dataAttr}]`)?.getAttribute(dataAttr)) || 0;
+
+        const sortTable = () => {
+        const tbody = document.getElementById("customer-tbody");
+        const rows = Array.from(tbody.querySelectorAll("tr"));
+
+        rows.sort((a, b) => {
+            for (const key of sortPriority) {
+            const order = sortStates[key];
+            if (!order) continue;
+
+            const attrMap = {
+                average_rt: 'data-average-rt',
+                total_sales: 'data-total-sales',
+                customer_id: 'data-customer-id'
+            };
+
+            const attr = attrMap[key];
+            const aVal = getCellValue(a, attr);
+            const bVal = getCellValue(b, attr);
+
+            if (aVal !== bVal) {
+                return order === 'asc' ? aVal - bVal : bVal - aVal;
+            }
+            }
+            return 0;
         });
 
-        document.getElementById('sort-customer-id').value = 'asc';
+        rows.forEach(row => tbody.appendChild(row));
+        updateArrows();
+        };
+
+        const updateArrows = () => {
+        document.querySelectorAll('.arrow').forEach(el => {
+            const key = el.getAttribute('data-key');
+            const order = sortStates[key];
+            el.textContent = order === 'asc' ? '▲' :
+                            order === 'desc' ? '▼' : 'ー';
+        });
+        };
+
+        document.querySelectorAll('.sort-button').forEach(button => {
+        button.addEventListener('click', () => {
+            const key = button.getAttribute('data-key');
+
+            // 昇順 → 降順 → 未選択 の順で切り替え
+            sortStates[key] = sortStates[key] === ''
+            ? 'asc'
+            : sortStates[key] === 'asc'
+            ? 'desc'
+            : '';
+
+            sortTable();
+        });
+        });
+
+        // 初期状態（必要ならここで初期値設定可能）
         sortTable();
     </script>
 </body>

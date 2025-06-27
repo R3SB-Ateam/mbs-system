@@ -3,6 +3,7 @@ body {
     background-color: #f9fafb;
     margin: 0;
     padding: 0;
+    
 }
 
 html, body {
@@ -14,10 +15,12 @@ html, body {
 .container {
     display: flex;
     flex-direction: column;
-    height: 100vh;
-    padding: 16px;
+    height: calc(100vh - 4rem); /* paddingの分を引く */
+    padding: 0;
     box-sizing: border-box;
     overflow-x: visible !important;
+    margin-left: 40px;
+    margin-right: 40px;
 }
 
 /* 見出し */
@@ -90,9 +93,9 @@ h1 {
 .nav-buttons {
     display: flex;
     justify-content: flex-start;
-    gap: 30px;
+    gap: 10px;
     flex-wrap: wrap;
-    margin-bottom: 0;
+    margin-bottom: 24px;
     flex-shrink: 0;
 }
 
@@ -145,7 +148,7 @@ h1 {
 /* 検索フォーム */
 .search-form {
     margin-bottom: 20px;
-    text-align: right;
+    text-align: left;
 }
 
 .keyword-text {
@@ -179,8 +182,9 @@ h1 {
     overflow-y: auto;
     min-height: 0;
     border: 1px solid #ddd;
+    border-radius: 4px;
     background-color: white;
-    margin-bottom: 20px;
+    margin-bottom: 0;
     -webkit-overflow-scrolling: touch;
 }
 
@@ -198,10 +202,10 @@ table {
     width: 100%;
     border-collapse: collapse;
     background: white;
-    border: 1px solid #ddd;
     margin-bottom: 20px;
     border-collapse: separate;
     border-spacing: 0;
+    border-radius: 4px;
     display: table;
     table-layout: auto;
 }
@@ -231,13 +235,11 @@ thead {
 }
 
 @media screen and (max-width: 768px) {
-    html, body {
-        overflow-x: auto;
-    }
 
     .container {
         padding: 8px;
         height: auto;
+        width: 100%;
     }
 
     .search-form {

@@ -50,6 +50,8 @@ Route::get('/deliveries/{delivery_id}', [DeliveryController::class, 'show'])->na
 
 //納品修正ページ
 Route::get('/deliveries/{delivery_id}/edit', [DeliveryController::class, 'edit'])->name('deliveries.edit');
+Route::put('deliveries/{delivery}', [DeliveryController::class, 'update'])->name('deliveries.update');
+
 
 // 納品書印刷
 Route::get('/deliveries/{delivery}/print-page', [DeliveryController::class, 'showPrintPage'])->name('deliveries.print_page');

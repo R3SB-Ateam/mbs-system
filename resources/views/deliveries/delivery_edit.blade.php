@@ -33,16 +33,18 @@
             <div class="table-container">
                 <table class="table">
                     <colgroup>
-                        <col style="width: 5%;">
-                        <col style="width: 25%;">
-                        <col style="width: 15%;">
-                        <col style="width: 15%;">
-                        <col style="width: 15%;">
-                        <col style="width: 25%;">
+                        <col style="width: 15%;"> <!-- 注文ID -->
+                        <col style="width: 15%;"> <!-- 注文明細ID -->
+                        <col style="width: 25%;"> <!-- 商品名 -->
+                        <col style="width: 15%;"> <!-- 単価 -->
+                        <col style="width: 15%;"> <!-- 注文数 -->
+                        <col style="width: 15%;"> <!-- 納品数 -->
+                        <col style="width: 25%;"> <!-- 備考 -->
                     </colgroup>
                     <thead>
                         <tr>
-                            <th>明細ID</th>
+                            <th>注文ID</th> <!-- 追加 -->
+                            <th>注文明細ID</th> <!-- 追加 -->
                             <th>商品名</th>
                             <th>単価</th>
                             <th>注文数</th>
@@ -53,28 +55,33 @@
                     <tbody>
                         @foreach ($deliveryDetails as $index => $detail)
                             <tr>
+                                {{-- delivery_detail_id はhiddenで保持だけする --}}
+                                <input type="hidden" name="details[{{ $index }}][delivery_detail_id]" value="{{ $detail->delivery_detail_id }}">
+                                
+                                <td>{{ $detail->order_id }}</td>
                                 <td>
-                                    <input type="hidden" name="details[{{ $index }}][delivery_detail_id]" value="{{ $detail->delivery_detail_id }}">
-                                    <input type="hidden" name="details[{{ $index }}][order_quantity]" value="{{ $detail->order_quantity }}">
-                                    {{ $detail->delivery_detail_id }}
+                                    <input type="hidden" name="details[{{ $index }}][order_detail_id]" value="{{ $detail->order_detail_id }}">
+                                    {{ $detail->order_detail_id }}
                                 </td>
                                 <td>{{ $detail->product_name }}</td>
                                 <td>{{ number_format($detail->unit_price) }}</td>
                                 <td>{{ $detail->order_quantity }}</td>
                                 <td>
                                     <input type="number" name="details[{{ $index }}][delivery_quantity]"
-                                           value="{{ old("details.$index.delivery_quantity", $detail->delivery_quantity) }}"
-                                           class="form-input" step="1" min="0" max="{{ $detail->order_quantity }}">
+                                        value="{{ old("details.$index.delivery_quantity", $detail->delivery_quantity) }}"
+                                        class="form-input" step="1" min="0" max="{{ $detail->order_quantity }}">
                                 </td>
                                 <td>
                                     <input type="text" name="details[{{ $index }}][remarks]"
-                                           value="{{ old("details.$index.remarks", $detail->remarks) }}"
-                                           class="form-input">
+                                        value="{{ old("details.$index.remarks", $detail->remarks) }}"
+                                        class="form-input">
                                 </td>
                             </tr>
                         @endforeach
                     </tbody>
                 </table>
+
+
             </div>
         </div>
 

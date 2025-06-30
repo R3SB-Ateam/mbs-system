@@ -20,7 +20,7 @@
                     <strong>顧客ID:</strong> {{ $delivery->customer_id }}<br>
                     <strong>顧客名:</strong> {{ $delivery->customer_name }}
                 </div>
-                <div><strong>注文日:</strong> {{ $delivery->order_date }}</div>
+                <div><strong>注文日:</strong> {{ $order_date }}</div>
                 <div class="remarks-row">
                     <strong>備考:</strong>
                     <textarea name="remarks" rows="2" class="form-control">{{ old('remarks', $delivery->remarks) }}</textarea>
@@ -33,13 +33,13 @@
             <div class="table-container">
                 <table class="table">
                     <colgroup>
-                        <col style="width: 15%;"> <!-- 注文ID -->
-                        <col style="width: 15%;"> <!-- 注文明細ID -->
-                        <col style="width: 25%;"> <!-- 商品名 -->
-                        <col style="width: 15%;"> <!-- 単価 -->
-                        <col style="width: 15%;"> <!-- 注文数 -->
-                        <col style="width: 15%;"> <!-- 納品数 -->
-                        <col style="width: 25%;"> <!-- 備考 -->
+                        <col style="width: 10%;"> <!-- 注文ID -->
+                        <col style="width: 12%;"> <!-- 注文明細ID -->
+                        <col style="width: 18%;"> <!-- 商品名 -->
+                        <col style="width: 10%;"> <!-- 単価 -->
+                        <col style="width: 10%;"> <!-- 注文数 -->
+                        <col style="width: 10%;"> <!-- 納品数 -->
+                        <col style="width: 30%;"> <!-- 備考 -->
                     </colgroup>
                     <thead>
                         <tr>

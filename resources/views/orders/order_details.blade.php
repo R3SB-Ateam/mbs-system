@@ -32,8 +32,7 @@
         <div class="order-summary">
             <h2 class="box-title">注文情報</h2>
             <div class="info-grid">
-            <p><span class="text-label">顧客ID:</span> {{ $order->customer_id }}</p>
-
+                <p><span class="text-label">顧客ID:</span> {{ $order->customer_id }}</p>
             <div class="grid-row">
                 <p class="order-date-inline"><span class="text-label">注文日:</span> {{ $order->order_date }}</p>
             </div>

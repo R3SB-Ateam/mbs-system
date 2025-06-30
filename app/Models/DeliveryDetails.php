@@ -31,4 +31,12 @@ class DeliveryDetails extends Model
     {
         return $this->belongsTo(Deliverys::class, 'delivery_id');
     }
+
+    // app/Models/DeliveryDetail.php
+
+    public function orderDetail()
+    {
+        return $this->belongsTo(OrderDetails::class, 'order_detail_id', 'order_detail_id');
+    }
+
 }

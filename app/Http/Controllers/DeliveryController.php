@@ -9,7 +9,7 @@ use App\Models\Orders;
 use App\Models\OrderDetails;
 use App\Models\Deliveries;
 use App\Models\DeliveryDetails;
-
+use App\Models\Customers;
 
 class DeliveryController extends Controller
 {
@@ -22,7 +22,7 @@ class DeliveryController extends Controller
             'order_detail_ids' => 'required|array',
             'order_detail_ids.*' => 'required|exists:order_details,order_detail_id',
             'delivery_quantities' => 'required|array',
-            'delivery_quantities.*' => 'required|integer|min:0',
+            'delivery_quantities.*' => 'required|integer|min:1',
             'unit_prices' => 'required|array',
             'unit_prices.*' => 'required|numeric|min:0',
         ],
@@ -48,12 +48,6 @@ class DeliveryController extends Controller
 
             foreach ($orderDetailIds as $index => $orderDetailId) {
                 $deliveryQty = (int) $deliveryQuantities[$index];
-
-                // 納品数量が0ならスキップ
-                if ($deliveryQty === 0) {
-                    continue;
-                }
-
                 $unitPrice = (float) $unitPrices[$index]; // ← フォームからの単価を使用
 
                 // 注文明細を取得
@@ -225,6 +219,95 @@ class DeliveryController extends Controller
 
         return view('deliveries.delivery_details', compact('delivery', 'deliveryDetails'));
     }
+
+    public function edit($delivery_id)
+    {
+        // deliveriesにcustomersをjoinし顧客名を取得
+        $delivery = DB::table('deliveries')
+            ->join('customers', 'deliveries.customer_id', '=', 'customers.customer_id')
+            ->select('deliveries.*', 'customers.name as customer_name')
+            ->where('deliveries.delivery_id', $delivery_id)
+            ->first();
+
+        if (!$delivery) {
+            abort(404, '納品情報が見つかりません');
+        }
+
+        // 納品明細の中で最初に見つかる注文IDを取得
+        $firstOrderId = DeliveryDetails::join('order_details', 'delivery_details.order_detail_id', '=', 'order_details.order_detail_id')
+            ->where('delivery_details.delivery_id', $delivery_id)
+            ->value('order_details.order_id');
+
+        $orderDate = null;
+        if ($firstOrderId) {
+            $order = DB::table('orders')->where('order_id', $firstOrderId)->select('order_date')->first();
+            $orderDate = $order->order_date ?? null;
+        }
+
+        // 納品明細取得
+        $deliveryDetails = DeliveryDetails::join('order_details', 'delivery_details.order_detail_id', '=', 'order_details.order_detail_id')
+            ->where('delivery_details.delivery_id', $delivery_id)
+            ->select(
+                'delivery_details.delivery_detail_id',
+                'delivery_details.delivery_id',
+                'delivery_details.order_detail_id',
+                'order_details.order_id',
+                'delivery_details.delivery_quantity',
+                'order_details.product_name',
+                'order_details.unit_price',
+                'order_details.quantity as order_quantity'
+            )
+            ->get();
+
+        return view('deliveries.delivery_edit', [
+            'delivery' => $delivery,
+            'deliveryDetails' => $deliveryDetails,
+            'order_date' => $orderDate,
+        ]);
+    }
+
+
+
+    public function update(Request $request, $delivery_id)
+    {
+        $validated = $request->validate([
+            'remarks' => 'nullable|string',
+            'details' => 'required|array',
+            'details.*.delivery_detail_id' => 'required|integer|exists:delivery_details,delivery_detail_id',
+            'details.*.delivery_quantity' => 'required|integer|min:0',
+            'details.*.remarks' => 'nullable|string',
+        ]);
+
+        DB::beginTransaction();
+
+        try {
+            // 納品情報更新
+            $delivery = Deliveries::findOrFail($delivery_id);
+            $delivery->remarks = $validated['remarks'] ?? null;
+            $delivery->save();
+
+            // 納品明細更新
+            foreach ($validated['details'] as $detail) {
+                $deliveryDetail = DeliveryDetails::findOrFail($detail['delivery_detail_id']);
+                $deliveryDetail->delivery_quantity = $detail['delivery_quantity'];
+                $deliveryDetail->remarks = $detail['remarks'] ?? null;
+                $deliveryDetail->save();
+            }
+
+            DB::commit();
+
+            return redirect()->route('deliveries.details', ['delivery_id' => $delivery_id])
+                            ->with('success', '納品情報を更新しました。');
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            \Log::error('納品更新エラー: ' . $e->getMessage());
+
+            return redirect()->route('deliveries.edit', ['delivery_id' => $delivery_id])
+                            ->withErrors('納品情報の更新に失敗しました。' . $e->getMessage());
+        }
+    }
+
 
     // 返品フォーム表示
     public function showReturnForm($delivery_id)

@@ -36,8 +36,8 @@
             <h2 class="c-heading-secondary">納品情報</h2>
             <div class="p-delivery-info-grid">
                 <p><strong>顧客ID:</strong> {{ $delivery->customer_id }}</p>
-                <p><strong>顧客名:</strong> {{ $delivery->customer_name }}</p>
                 <p><strong>納品日:</strong> {{ $delivery->delivery_date }}</p>
+                <p><strong>顧客名:</strong> {{ $delivery->customer_name }}</p>
                 <p class="p-delivery-info-remarks"><strong>備考:</strong> {{ $delivery->remarks }}</p>
             </div>
         </div>
@@ -92,6 +92,9 @@
         <div class="c-action-buttons-wrap">
             <a href="{{ route('deliveries.index') }}" class="c-button c-button--gray">
                 戻る
+            </a>
+            <a href="{{ route('deliveries.edit', ['delivery_id' => $delivery->delivery_id]) }}" class="btn btn-primary">
+                納品修正
             </a>
             <a href="{{ route('deliveries.return_form', ['delivery_id' => $delivery->delivery_id]) }}"
                class="c-button c-button--red">

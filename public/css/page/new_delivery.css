@@ -164,6 +164,13 @@ body {
     vertical-align: middle;
 }
 
+.table-cell-header,
+.table-cell,
+.table-cell-center {
+    border-left: none;
+    border-right: none;
+}
+
 /* ===============================
    入力フィールド（特殊）
    =============================== */

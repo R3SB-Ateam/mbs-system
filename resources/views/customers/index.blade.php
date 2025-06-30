@@ -25,6 +25,7 @@
                 <label for="store_id" class="c-form-label">店舗を選択:</label>
                 <select name="store_id" id="store_id" class="c-form-select">
                     <option value="" {{ $selectedStoreId == '' ? 'selected' : '' }}>全店舗</option>
+
                     @foreach ($stores as $store)
                         <option value="{{ $store->store_id }}" {{ $selectedStoreId == $store->store_id ? 'selected' : '' }}>
                             {{ $store->store_id }} : {{ $store->store_name }}
@@ -100,7 +101,6 @@
                 </tbody>
             </table>
         </div>
-
     </div>
 
     {{-- JavaScriptをボディの最後に追記 --}}

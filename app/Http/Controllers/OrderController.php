@@ -44,18 +44,14 @@ class OrderController extends Controller
                         });
                 });
             })
-            ->withCount(['details as delivery_status_text' => function ($query) {
-                $query->select(DB::raw("CASE
-                    WHEN MIN(quantity - COALESCE(delivery_quantity, 0)) = 0 THEN '納品済み'
-                    WHEN MIN(quantity - COALESCE(delivery_quantity, 0)) > 0 THEN '未納品'
-                    ELSE '不明'
-                END"));
-            }])
+            ->orderBy('order_id', 'desc') 
             ->get()
             ->each(function ($order) {
-                $order->total_amount = $order->details->sum(function ($detail) {
-                    return $detail->unit_price * $detail->quantity;
-                });
+                $order->total_amount = $order->details
+                    ->where('cancell_flag', 0)
+                    ->sum(function ($detail) {
+                        return $detail->unit_price * $detail->quantity;
+                    });
             });
 
             return view('orders.index', compact('orders', 'stores', 'selectedStoreId', 'keyword'));
@@ -82,12 +78,10 @@ class OrderController extends Controller
 
         // ビューへ顧客データを渡す
         return view('orders.new_order', ['customers' => $customers]);
-        }
+    }
 
 
     public function order_store(Request $request){
-
-
         // バリデーション
         $validated = $request->validate([
             'customer_id' => 'required|integer',
@@ -139,16 +133,13 @@ class OrderController extends Controller
 
         // 注文詳細を取得（必要なすべてのカラムを明示的に指定）
         $orderDetails = DB::table('order_details')
-            ->leftJoin('delivery_details', 'order_details.order_detail_id', '=', 'delivery_details.order_detail_id')
-            ->leftJoin('deliveries', 'delivery_details.delivery_id', '=', 'deliveries.delivery_id')
-            ->select(
-                'order_details.*',
-                'delivery_details.delivery_detail_id',
-                'deliveries.delivery_date',
-                'delivery_details.remarks as delivery_remarks'
-            )
-            ->where('order_details.order_id', $order_id)
-            ->get();
+        ->where('order_details.order_id', $order_id)
+        ->get();
+
+        if (!$order) {
+        // 注文が見つからない場合のエラーハンドリング
+        abort(404, '指定された注文は見つかりません。');
+        }
 
         return view('orders.order_details', compact('order', 'orderDetails'));
     }

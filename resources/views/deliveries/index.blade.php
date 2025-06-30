@@ -4,10 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>納品一覧</title>
-    {{-- すべてのCSSを統合したファイルを参照 --}}
     <link href="{{ asset('css/page/delivery.css') }}" rel="stylesheet">
 </head>
-<body class="c-body">
+<body>
     <div class="l-container-wide">
 
         @if ($errors->any())
@@ -20,9 +19,18 @@
             </div>
         @endif
 
+        <!-- 見出し -->
         <h1 class="c-heading-primary">納品一覧</h1>
+
+        <!-- ナビボタン -->
+        <div class="c-button-group">
+            <a href="{{ route('dashboard', ['store_id' => request('store_id', '')]) }}" class="c-button c-button--gray">
+                ダッシュボードに戻る
+            </a>
+        </div>
+
+        <!-- 検索フォーム -->
         <form method="GET" action="{{ route('deliveries.index') }}" class="p-filter-form">
-            <div>
                 <label for="store_id" class="c-form-label">店舗を選択:</label>
                 <select name="store_id" id="store_id" class="c-form-select">
                     <option value="">全店舗</option>
@@ -32,22 +40,12 @@
                         </option>
                     @endforeach
                 </select>
-            </div>
-
-            <div class="p-filter-keyword-wrap">
-                <label for="keyword" class="c-form-label">キーワード検索:</label>
                 <input type="text" name="keyword" id="keyword" placeholder="納品ID、顧客名、備考で検索"
-                    value="{{ $keyword ?? '' }}"
-                    class="c-form-input">
-            </div>
-
-            <div class="p-filter-button-wrap">
-                <button type="submit" class="c-button c-button--green">
-                    検索
-                </button>
-            </div>
+                    value="{{ $keyword ?? '' }}" class="keyword-text">
+                <button type="submit" class="c-button c-button--green">検索</button>
         </form>
 
+        <!-- 納品テーブル -->
         <div class="c-table-wrap">
             <table class="c-table">
                 <thead class="c-table__head c-table__head--list">
@@ -65,7 +63,7 @@
                             <td class="c-table__td">
                                 <a href="{{ route('deliveries.details', ['delivery_id' => $delivery->delivery_id]) }}"
                                    class="c-link-primary">
-                                    {{ $delivery->delivery_id }}
+                                    {{ number_format($delivery->delivery_id) }}
                                 </a>
                             </td>
                             <td class="c-table__td">{{ $delivery->customer_id }}</td>
@@ -76,13 +74,6 @@
                     @endforeach
                 </tbody>
             </table>
-        </div>
-
-        {{-- ここにボタンを移動しました --}}
-        <div class="c-button-group">
-            <a href="{{ route('dashboard') }}" class="c-button c-button--gray">
-                戻る
-            </a>
         </div>
 
     </div>

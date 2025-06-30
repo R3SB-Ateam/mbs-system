@@ -9,8 +9,8 @@ use Carbon\Carbon;
 class CustomerController extends Controller
 {
     public function index(Request $request)
-    {
-        $stores = DB::table('stores')->get();
+{
+    $stores = DB::table('stores')->get();
 
         // フィルタリング、検索条件をセッションから取得、またはリクエストから設定
         $storeId = $request->input('store_id');

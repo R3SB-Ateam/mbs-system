@@ -65,7 +65,7 @@
                                 <td class="table-cell">
                                     <input type="hidden" name="order_ids[]" value="{{ $orderDetail->order_id }}">
                                     <input type="hidden" name="order_detail_ids[]" value="{{ $orderDetail->order_detail_id }}">
-                                    <input type="number" name="delivery_quantities[]" value="0" min="1" max="{{ $orderDetail->quantity }}" required class="quantity-input">
+                                    <input type="number" name="delivery_quantities[]" value="0" min="0" max="{{ $orderDetail->quantity }}" required class="quantity-input">
                                 </td>
                             </tr>
                         @endforeach

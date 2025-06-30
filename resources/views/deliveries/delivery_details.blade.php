@@ -8,6 +8,25 @@
     <link href="{{ asset('css/page/delivery_details.css') }}" rel="stylesheet">
 </head>
 <body class="c-body">
+    
+    @if (session('success'))
+            <div id="success-toast" class="c-toast">
+                {{ session('success') }}
+            </div>
+
+            <script>
+                // 3秒後にトーストをゆっくり消す
+                setTimeout(() => {
+                    const toast = document.getElementById('success-toast');
+                    if (toast) {
+                        toast.style.opacity = '0';
+                        // アニメーションが終わったら要素をDOMから削除
+                        setTimeout(() => toast.remove(), 600);
+                    }
+                }, 3000);
+            </script>
+        @endif
+
     <div class="l-container">
         <h1 class="c-heading-primary">
             納品明細 <span class="c-text-id">(納品ID: {{ $delivery->delivery_id }})</span>

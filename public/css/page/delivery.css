@@ -6,8 +6,7 @@ body {
     padding: 0;
 }
 
-html,
-body {
+html, body {
     height: 100%;
     margin: 0;
     padding: 0;
@@ -16,13 +15,13 @@ body {
 .l-container-wide {
     display: flex;
     flex-direction: column;
-    min-height: 100vh; /* ビューポートいっぱいに広げる */
-    padding: 16px;
+    height: calc(100vh - 4rem);
+    padding: 0 40px;
     box-sizing: border-box;
-    overflow-x: hidden; /* X軸のオーバーフローを非表示 */
+    overflow-x: visible !important;
+    margin: 0 ;
 }
 
-/* コンポーネントスタイル */
 /* 見出し */
 .c-heading-primary {
     font-size: 1.5rem;
@@ -39,7 +38,7 @@ body {
     border: 1px solid #fca5a5;
     padding: 10px 20px;
     border-radius: 5px;
-    margin-bottom: 1.5rem; /* Laravelのエラーメッセージ表示にも対応 */
+    margin-bottom: 1.5rem;
 }
 
 .c-error-list {
@@ -54,39 +53,86 @@ body {
     line-height: 1.5;
 }
 
-/* フォーム要素 */
-.c-form-label {
-    display: block;
-    font-weight: 500;
-    margin-bottom: 0.5rem;
+/* ボタン共通 */
+.c-button-group {
+    display: flex;
+    justify-content: flex-start;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 24px;
 }
 
-.c-form-select,
-.c-form-input {
-    padding: 0.5rem 0.75rem;
+.c-button {
+    display: inline-block;
+    padding: 10px 20px;
+    border-radius: 4px;
+    color: white;
+    font-size: 14px;
+    text-decoration: none;
+    transition: all 0.2s ease-in-out;
+    cursor: pointer;
+    border: none;
+}
+
+.c-button--gray {
+    background-color: #6b7280;
+}
+.c-button--gray:hover {
+    background-color: #4b5563;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+                0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.c-button--green {
+    padding: 6px 12px;
+    background-color: #3b82f6;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+.c-button--green:hover {
+    background-color: #2563eb;
+}
+
+/* 検索フォーム */
+.p-filter-form {
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+.keyword-text {
+    width: 175px;
+    padding: 6px 8px;
     border: 1px solid #ccc;
-    border-radius: 0.25rem;
-    width: 100%; /* 親要素に合わせる */
-    box-sizing: border-box;
-    font-size: 1rem;
+    border-radius: 4px;
+    margin-right: 10px;
 }
 
-.c-form-select:focus,
-.c-form-input:focus {
+.c-form-select{
+    padding: 6px 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-right: 10px;
+}
+
+.c-form-select:focus{
     outline: none;
-    border-color: #3b82f6; /* フォーカス時の色 */
-    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.5); /* フォーカス時のシャドウ */
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.5);
 }
-
 
 /* テーブル */
 .c-table-wrap {
     flex: 1;
-    overflow-x: auto; /* 横スクロールを有効化 */
+    max-height: calc(100vh - 220px);
+    overflow-y: auto;
     min-height: 0;
     border: 1px solid #ddd;
+    border-radius: 4px;
     background-color: white;
-    margin-bottom: 1.5rem;
+    margin-bottom: 0;
     -webkit-overflow-scrolling: touch;
 }
 
@@ -95,37 +141,33 @@ body {
     border-collapse: collapse;
     background: white;
     border-spacing: 0;
-    min-width: 600px; /* 小画面でテーブルが小さくなりすぎないように */
-}
-
-.c-table__head {
-    background-color: #f3f4f6;
+    min-width: 600px;
+    table-layout: auto;
 }
 
 .c-table__head--list .c-table__th {
     padding: 10px;
-    line-height: 1.4;
     position: sticky;
     top: 0;
     background-color: #f3f4f6;
-    z-index: 10;
     border-bottom: 2px solid #ddd;
+    z-index: 10;
     text-align: left;
 }
 
-.c-table__body .c-table__td {
+.c-table__td {
     padding: 10px;
     border-bottom: 1px solid #ddd;
     text-align: left;
 }
 
-.c-table__row--hover:hover {
-    background-color: #f3f4f6; /* ホバー時の背景色 */
-}
-
 .c-table__td:last-child {
     word-break: break-word;
     white-space: normal;
+}
+
+.c-table__row--hover:hover {
+    background-color: #f3f4f6;
 }
 
 .c-link-primary {
@@ -137,126 +179,45 @@ body {
     text-decoration: underline;
 }
 
-/* ページ固有のスタイル */
-/* フィルターフォームのレイアウト */
-.p-filter-form {
-    margin-bottom: 1.5rem; /* mb-6 */
-    display: flex; /* flex */
-    flex-direction: column; /* flex-col */
-    gap: 1rem; /* gap-4 */
-}
-
-/* 中画面以上でのフィルターフォームのレイアウト */
-@media (min-width: 768px) { /* md: */
-    .p-filter-form {
-        flex-direction: row; /* md:flex-row */
-        align-items: flex-end; /* フォーム要素が揃うように調整 */
-    }
-}
-
-/* フィルターのキーワード入力欄ラッパー */
-.p-filter-keyword-wrap {
-    flex: 1; /* flex-1 */
-}
-
-/* フィルターボタンの配置調整 */
-.p-filter-button-wrap {
-    align-self: flex-end; /* self-end */
-}
-
-/* 中画面以上でのフィルターボタンの配置調整 */
-@media (min-width: 768px) { /* md: */
-    .p-filter-button-wrap {
-        align-self: auto; /* md:self-auto */
-    }
-}
-
-
-/* コンポーネント: ボタン */
-/* アクションボタンのラッパー */
-.c-action-buttons-wrap {
-    margin-bottom: 1.5rem; /* mb-6 */
-    display: flex; /* flex */
-    flex-wrap: wrap; /* flex-wrap */
-    gap: 1rem; /* gap-4 */
-}
-
-/* 基本ボタンのスタイル */
-.c-button {
-    display: inline-block; /* inline-block */
-    padding: 0.5rem 1rem; /* px-4 py-2 */
-    color: #ffffff; /* text-white */
-    border-radius: 0.25rem; /* rounded */
-    text-decoration: none; /* 下線を非表示 */
-    transition: all 0.2s ease-in-out; /* ホバー効果 */
-    cursor: pointer; /* カーソルをポインターに */
-    border: none; /* デフォルトのボーダーを削除 */
-}
-
-/* グレー色のボタン */
-.c-button--gray {
-    background-color: #4b5563; /* bg-gray-600 */
-}
-
-/* グレーボタンのホバー時の色 */
-.c-button--gray:hover {
-    background-color: #374151; /* hover:bg-gray-700 */
-    transform: translateY(-1px);
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-}
-
-/* 赤色のボタン */
-.c-button--red {
-    background-color: #ef4444; /* bg-red-500 */
-}
-
-/* 赤ボタンのホバー時の色 */
-.c-button--red:hover {
-    background-color: #dc2626; /* hover:bg-red-600 */
-    transform: translateY(-1px);
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-}
-
-/* 緑色のボタン */
-.c-button--green {
-    background-color: #10b981; /* bg-green-500 */
-}
-
-/* 緑ボタンのホバー時の色 */
-.c-button--green:hover {
-    background-color: #059669; /* hover:bg-green-600 */
-    transform: translateY(-1px);
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-}
-
-/* ボタンのグループ化 */
-.c-button-group {
-    margin-bottom: 1.5rem; /* mb-6 */
-    text-align: right; /* レイアウトに合わせて調整 */
-}
-
 /* レスポンシブ対応 */
 @media screen and (max-width: 768px) {
+    
+    html, body {
+        overflow-x: auto;
+    }
+
     .l-container-wide {
         padding: 8px;
-        min-height: auto; /* 小画面では高さの制約を解除 */
+    }
+
+    .p-filter-form {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .c-form-select,
+    .keyword-text {
+        width: 100%;
+    }
+
+    .keyword-text {
+        margin-right: 100px;
+    }
+
+
+    .c-button {
+        width: 100%;
+        margin-bottom: 10px;
+        text-align: center;
     }
 
     .c-table-wrap {
-        margin-bottom: 1rem; /* 小画面でのマージン調整 */
+        overflow-x: auto;
+        display: block;
     }
 
-    .c-button-group {
-        text-align: left; /* 小画面では左寄せに */
-    }
-
-    .c-button {
-        width: 100%; /* ボタンを横幅いっぱいに */
-        box-sizing: border-box;
-        margin-bottom: 0.5rem; /* ボタン間のスペース */
-    }
-
-    .c-button:last-child {
-        margin-bottom: 0;
+    .c-table {
+        white-space: nowrap;
     }
 }

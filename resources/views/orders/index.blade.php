@@ -27,7 +27,11 @@
 
     <div class="container">
         <h1>注文一覧</h1>
-
+        <div class="nav-buttons">
+            <a href="{{ route('dashboard', ['store_id' => request('store_id', '')]) }}" class="button-link gray">ダッシュボードに戻る</a>
+            <a href="{{ route('orders.new_order') }}" class="button-link blue">新規注文登録</a>
+            <button type="submit" class="submit-button" form="delivery-form">納品登録</button>
+        </div>
         <form method="GET" action="{{ route('orders.index') }}" class="search-form">
             <label for="store_id">店舗を選択:</label>
             <select name="store_id" id="store_id">
@@ -40,11 +44,11 @@
             </select>
 
             <input type="text" name="keyword" placeholder="注文ID、顧客名、備考で検索" value="{{ $keyword ?? '' }}" class="keyword-text">
-            <button type="submit" class="filter-button">絞り込み</button>
+            <button type="submit" class="filter-button">検索</button>
         </form>
 
         
-        <form method="POST" action="{{ route('orders.delivery_prepare') }}">
+        <form method="POST" action="{{ route('orders.delivery_prepare') }}" id="delivery-form">
         <div class="table-wrapper">
             @csrf
             <table>
@@ -75,30 +79,38 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($orders as $order)
-                        <tr>
-                            <td><input 
-                                    type="checkbox" 
-                                    name="order_ids[]" 
-                                    value="{{ $order->order_id }}"
-                                    {{ $order->delivery_status_text === '納品済み' ? 'disabled' : '' }}>
-                            </td>
-                            <td><a href="{{ route('orders.order_details', ['order_id' => $order->order_id]) }}" class="table-link">{{ number_format($order->order_id) }}</a></td>
-                            <td>{{ $order->delivery_status_text }}</td>
-                            <td>{{ $order->customer_id }}</td>
-                            <td>{{ $order->customer->name ?? '不明'}}</td>
-                            <td>{{ $order->order_date }}</td>
-                            <td>{{ number_format($order->total_amount) }}</td> <!-- 注文金額 -->
-                            <td>{{ $order->remarks }}</td>
-                        </tr>
-                    @endforeach
-                </tbody>
+                @foreach ($orders as $order)
+                    <tr>
+                        <td>
+                            <input 
+                                type="checkbox" 
+                                name="order_ids[]" 
+                                value="{{ $order->order_id }}"
+                                {{ $order->delivery_status === '納品済み' ? 'disabled' : '' }}>
+                        </td>
+                        <td>
+                            <a href="{{ route('orders.order_details', ['order_id' => $order->order_id]) }}" class="table-link">
+                                {{ number_format($order->order_id) }}
+                            </a>
+                        </td>
+                        <td>
+                            <span class="{{ 
+                                $order->delivery_status === '納品済み' ? 'status-delivered' : (
+                                    $order->delivery_status === '未納品' ? 'status-pending' : 'status-unknown'
+                                )
+                            }}">
+                                {{ $order->delivery_status }}
+                            </span>
+                        </td>
+                        <td>{{ $order->customer_id }}</td>
+                        <td>{{ $order->customer->name ?? '不明' }}</td>
+                        <td>{{ $order->order_date }}</td>
+                        <td>{{ number_format($order->total_amount) }}</td>
+                        <td>{{ $order->remarks }}</td>
+                    </tr>
+                @endforeach
+            </tbody>
             </table>
-            </div>
-            <div class="nav-buttons">
-                <a href="{{ route('dashboard', ['store_id' => request('store_id', '')]) }}" class="button-link gray">ダッシュボードに戻る</a>
-                <a href="{{ route('orders.new_order') }}" class="button-link blue">新規注文登録</a>
-            <button type="submit" class="submit-button">納品登録</button>
             </div>
         </form>
     </div>

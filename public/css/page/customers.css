@@ -1,0 +1,228 @@
+/* ベーススタイル */
+.c-body {
+    font-family: sans-serif; /* デフォルトフォント */
+    background-color: #f9fafb; /* bg-gray-50 */
+    margin: 0;
+    padding: 0;
+    height: 100%; /* html, bodyの高さ */
+}
+
+.l-container {
+    max-width: 72rem; /* max-w-6xl (1152px) */
+    margin-left: auto;
+    margin-right: auto;
+    padding: 2rem 1.5rem; /* py-8 px-6 */
+    background-color: white; /* コンテナ背景色 */
+    border-radius: 0.5rem; /* rounded-lg */
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); /* shadow-md */
+}
+
+/* タイトル */
+.c-heading-primary {
+    font-size: 1.5rem; /* text-2xl */
+    font-weight: 700; /* font-bold */
+    margin-bottom: 1.5rem; /* mb-6 */
+    border-bottom: 1px solid #e5e7eb; /* border-b (border-gray-200) */
+    padding-bottom: 0.5rem; /* pb-2 */
+    color: #2d3748; /* text-gray-800 */
+    text-align: center; /* 中央揃えを維持 */
+}
+
+/* 戻るボタンのラッパー */
+.p-button-back-wrap {
+    margin-top: 1rem; /* 調整 */
+    margin-bottom: 1.5rem; /* mb-6 */
+    text-align: left; /* 左寄せを維持 */
+    /* ★ max-widthを削除し、固定幅に変更 ★ */
+    width: 200px; 
+    box-sizing: border-box;
+}
+
+/* フォームとフィルター */
+.p-filter-form {
+    display: flex;
+    flex-direction: column; /* デフォルトは縦並び */
+    gap: 1rem; /* gap-4 (16px) */
+    margin-bottom: 1.5rem; /* mb-6 */
+}
+@media (min-width: 768px) { /* md breakpoint */
+    .p-filter-form {
+        flex-direction: row; /* 横並び */
+        align-items: flex-start; /* 上揃えを維持 */
+        flex-wrap: wrap; /* 折り返しを維持 */
+    }
+    .p-filter-form > div {
+        /* md以降で3列レイアウトを維持しつつ調整 */
+        flex: 1 1 calc(33.33% - 1.33rem); /* (gap / 3) = 16px / 3 = 5.33px, so 20px / 3 approx */
+        min-width: 250px; /* 最小幅を維持 */
+    }
+}
+
+/* フォームラベル */
+.c-form-label {
+    display: block;
+    margin-bottom: 0.25rem; /* mb-1 (4px) */
+    font-size: 0.875rem; /* text-sm (14px) */
+    font-weight: 500; /* font-medium */
+    color: #4a5568; /* text-gray-700 */
+}
+
+/* フォーム選択と入力フィールドの共通スタイル */
+.c-form-select,
+.c-form-input {
+    border: 1px solid #cbd5e0; /* border-gray-300 */
+    border-radius: 0.25rem; /* rounded (4px) */
+    padding: 0.5rem 0.75rem; /* py-2 px-3 (8px 12px) */
+    width: 100%; /* 親要素の幅いっぱいに広がる */
+    height: 40px; /* 高さを固定して揃える */
+    box-sizing: border-box;
+    font-size: 1rem; /* font-sizeを統一 */
+}
+
+/* ソートコントロール */
+.p-sort-controls {
+    display: flex;
+    flex-direction: column; /* ラベルとセレクトボックスを縦に並べる */
+    align-items: flex-start; /* 左寄せ */
+    gap: 0.5rem; /* 8px */
+}
+.p-sort-controls label {
+    white-space: nowrap; /* ラベルが改行されないように */
+}
+
+/* ボタンアクションコンテナ */
+.p-form-actions {
+    display: flex;
+    flex-wrap: wrap; /* ボタンも折り返す */
+    gap: 1rem; /* gap-4 (16px) */
+    width: 100%; /* フォームの全幅を占める */
+    margin-top: 1rem; /* 上の入力要素との隙間 */
+    justify-content: flex-start; /* ボタンを左寄せに */
+    align-items: center; /* 垂直方向中央揃えを維持 */
+}
+
+/* 各ボタンラッパー */
+.p-form-actions .p-filter-button-wrap {
+    /* ★ flex-basisとmax-widthを削除し、固定幅に変更 ★ */
+    width: 200px;
+    flex-grow: 0; /* 伸びない */
+    flex-shrink: 0; /* 縮まない */
+    text-align: left; /* 左寄せを維持 */
+    box-sizing: border-box;
+}
+
+/* ボタンの共通スタイル */
+.c-button {
+    display: flex; /* Flexboxを適用してテキストを中央揃えにする */
+    align-items: center; /* 垂直方向中央揃え */
+    justify-content: center; /* 水平方向中央揃え */
+    
+    width: 100%; /* 親コンテナの幅に合わせる */
+    padding: 0.5rem 1rem; /* px-4 py-2 (8px 16px) */
+    border-radius: 0.25rem; /* rounded (4px) */
+    color: white; /* 文字色を白に */
+    text-decoration: none; /* 下線を削除 */
+    transition: background-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease; /* ホバー効果 */
+    white-space: nowrap;
+    height: 40px; /* 高さを固定して揃える */
+    box-sizing: border-box;
+    min-width: 150px; /* ボタンの最小幅 */
+    cursor: pointer; /* カーソルをポインターに */
+}
+
+.c-button--gray {
+    background-color: #6b7280; /* bg-gray-500 */
+    border: 1px solid #6b7280; /* ボーダーを追加 */
+}
+.c-button--gray:hover {
+    background-color: #4b5563; /* hover:bg-gray-600 */
+    transform: translateY(-1px); /* ホバーで少し浮く */
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); /* 影 */
+}
+
+.c-button--green {
+    background-color: #48bb78; /* bg-green-500 */
+    border: 1px solid #48bb78; /* ボーダーを追加 */
+}
+.c-button--green:hover {
+    background-color: #38a169; /* hover:bg-green-600 */
+    transform: translateY(-1px); /* ホバーで少し浮く */
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); /* 影 */
+}
+
+/* テーブル */
+.c-table-wrap {
+    overflow-x: auto; /* 横スクロールを許可 */
+    overflow-y: hidden; /* 縦スクロールはテーブル内で制御するため隠す */
+    background-color: white;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); /* shadow-md */
+    border-radius: 0.5rem; /* rounded-lg */
+    margin-top: 2rem; /* mt-8 */
+}
+
+.c-table {
+    width: 100%;
+    border-collapse: collapse; /* ボーダーを結合 */
+    min-width: 800px; /* テーブルが小さくなりすぎないように */
+    font-size: 0.875rem; /* text-sm (14px) */
+    text-align: left;
+    /* border-collapse: separate; border-spacing: 0; は、theadのstickyとborder-bottomが競合するため削除 */
+}
+
+.c-table__head {
+    background-color: #edf2f7; /* bg-gray-100 (薄いグレー) */
+    color: #4a5568; /* text-gray-700 */
+}
+
+.c-table__th {
+    padding: 0.75rem 1rem; /* px-4 py-3 (12px 16px) */
+    border-bottom: 1px solid #e2e8f0; /* border-b (border-gray-200) */
+    font-weight: 700; /* font-bold */
+    white-space: nowrap; /* テキストの折り返しを防ぐ */
+}
+
+.c-table__body {
+    background-color: white;
+}
+
+.c-table__row--hover:hover {
+    background-color: #f7fafc; /* hover:bg-gray-50 */
+}
+
+.c-table__td {
+    padding: 0.75rem 1rem; /* px-4 py-3 (12px 16px) */
+    border-bottom: 1px solid #edf2f7; /* divide-gray-200の代わり */
+    word-break: break-word; /* 長い単語を改行 */
+    white-space: normal; /* 折り返しを許可 */
+}
+
+/* レスポンシブ調整 */
+@media (max-width: 767px) { /* mdブレークポイントより小さい画面 */
+    .l-container {
+        padding: 1rem; /* px-4 py-4 */
+    }
+    .p-filter-form > div {
+        flex-basis: 100%; /* 1列レイアウト */
+        min-width: unset; /* 最小幅をリセット */
+    }
+    .p-form-actions {
+        flex-direction: column; /* ボタンを縦に並べる */
+        gap: 0.5rem; /* ボタン間の隙間を調整 */
+    }
+    .p-form-actions .p-filter-button-wrap {
+        flex-basis: 100%; /* ボタンを全幅にする */
+        max-width: 100%;
+    }
+    .p-button-back-wrap { /* 戻るボタンも全幅にする */
+        max-width: 100%;
+    }
+    .c-table-wrap {
+        overflow-x: auto; /* テーブルの横スクロールを常に許可 */
+    }
+    .c-table {
+        min-width: 600px; /* 小さい画面でもテーブルの最小幅を確保 */
+    }
+}
+
+/* その他の既存のスタイル（必要に応じて残すか調整） */
+/* ここには、ユーザーが以前提供したCSSスニペットのうち、顧客一覧に直接関係しないものは含めていません。 */

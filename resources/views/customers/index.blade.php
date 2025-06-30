@@ -43,22 +43,25 @@
                 <thead>
                     <tr>
                         <th>
-                        <button type="button" class="sort-button" data-key="customer_id">
-                            顧客ID <span class="arrow" data-key="customer_id">▲</span>
-                        </button>
+                            顧客ID 
+                            <button type="button" class="sort-button" data-key="customer_id">
+                                <span class="arrow" data-key="customer_id">▲</span>
+                            </button>
                         </th>
                         <th>顧客名</th>
                         <th>登録日</th>
                         <th>電話番号</th>
                         <th>
-                        <button type="button" class="sort-button" data-key="total_sales">
-                            売上 <span class="arrow" data-key="total_sales">ー</span>
-                        </button>
+                            売上 
+                            <button type="button" class="sort-button" data-key="total_sales">
+                                <span class="arrow" data-key="total_sales">ー</span>
+                            </button>
                         </th>
                         <th>
-                        <button type="button" class="sort-button" data-key="average_rt">
-                            平均RT(日) <span class="arrow" data-key="average_rt">ー</span>
-                        </button>
+                            平均RT(日) 
+                            <button type="button" class="sort-button" data-key="average_rt">
+                                <span class="arrow" data-key="average_rt">ー</span>
+                            </button>
                         </th>
                     </tr>
                 </thead>
@@ -82,77 +85,61 @@
 
     <!-- ソートスクリプト -->
     <script>
-        const getCellValue = (tr, dataAttr) =>
-        parseFloat(tr.querySelector(`[${dataAttr}]`)?.getAttribute(dataAttr)) || 0;
-
-        // ソート状態（昇順/降順 or 未選択）を管理
-        const sortStates = {
-        average_rt: '',
-        total_sales: '',
-        customer_id: ''
+        let sortState = {
+            average_rt: 'asc',
+            total_sales: 'asc',
+            customer_id: 'asc',
         };
 
-        // 固定優先順位（変えない）
-        const sortPriority = ['average_rt', 'total_sales', 'customer_id'];
-
         const getCellValue = (tr, dataAttr) =>
-        parseFloat(tr.querySelector(`[${dataAttr}]`)?.getAttribute(dataAttr)) || 0;
+            parseFloat(tr.querySelector(`[${dataAttr}]`)?.getAttribute(dataAttr)) || 0;
 
         const sortTable = () => {
-        const tbody = document.getElementById("customer-tbody");
-        const rows = Array.from(tbody.querySelectorAll("tr"));
+            const tbody = document.getElementById("customer-tbody");
+            const rows = Array.from(tbody.querySelectorAll("tr"));
 
-        rows.sort((a, b) => {
-            for (const key of sortPriority) {
-            const order = sortStates[key];
-            if (!order) continue;
+            const sortOrder = [
+                { key: 'average_rt', order: sortState.average_rt },
+                { key: 'total_sales', order: sortState.total_sales },
+                { key: 'customer_id', order: sortState.customer_id },
+            ];
 
-            const attrMap = {
-                average_rt: 'data-average-rt',
-                total_sales: 'data-total-sales',
-                customer_id: 'data-customer-id'
-            };
+            rows.sort((a, b) => {
+                for (const { key, order } of sortOrder) {
+                    const attr = {
+                        customer_id: 'data-customer-id',
+                        total_sales: 'data-total-sales',
+                        average_rt: 'data-average-rt',
+                    }[key];
+                    const aVal = getCellValue(a, attr);
+                    const bVal = getCellValue(b, attr);
 
-            const attr = attrMap[key];
-            const aVal = getCellValue(a, attr);
-            const bVal = getCellValue(b, attr);
+                    if (aVal !== bVal) {
+                        return order === 'asc' ? aVal - bVal : bVal - aVal;
+                    }
+                }
+                return 0;
+            });
 
-            if (aVal !== bVal) {
-                return order === 'asc' ? aVal - bVal : bVal - aVal;
-            }
-            }
-            return 0;
-        });
-
-        rows.forEach(row => tbody.appendChild(row));
-        updateArrows();
-        };
-
-        const updateArrows = () => {
-        document.querySelectorAll('.arrow').forEach(el => {
-            const key = el.getAttribute('data-key');
-            const order = sortStates[key];
-            el.textContent = order === 'asc' ? '▲' :
-                            order === 'desc' ? '▼' : 'ー';
-        });
+            rows.forEach(row => tbody.appendChild(row));
         };
 
         document.querySelectorAll('.sort-button').forEach(button => {
-        button.addEventListener('click', () => {
-            const key = button.getAttribute('data-key');
+            button.addEventListener('click', () => {
+                const key = button.getAttribute('data-key');
+                sortState[key] = sortState[key] === 'asc' ? 'desc' : 'asc';
 
-            // 昇順 → 降順 → 未選択 の順で切り替え
-            sortStates[key] = sortStates[key] === ''
-            ? 'asc'
-            : sortStates[key] === 'asc'
-            ? 'desc'
-            : '';
+                // アイコン表示を更新（オプション）
+                document.querySelectorAll('.arrow').forEach(arrow => {
+                    const arrowKey = arrow.getAttribute('data-key');
+                    arrow.textContent = sortState[arrowKey] === 'asc' ? '▲' : '▼';
+                });
 
-            sortTable();
+                sortTable();
+            });
         });
-        });
 
-        // 初期状態（必要ならここで初期値設定可能）
+        // 初期ソート実行
         sortTable();
     </script>
 </body>

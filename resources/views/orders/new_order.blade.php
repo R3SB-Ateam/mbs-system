@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>新規注文登録</title>
 
-    <link href="{{ asset('css/page/new_order.css') }}" rel="stylesheet">
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+    <link href="{{ asset('css/page/new_order.css') }}" rel="stylesheet">
 
     <!-- jQueryとjQuery UI -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -33,7 +33,7 @@
                         }
                     });
                 },
-                minLength: 2,
+                minLength: 1,
                 select: function(event, ui) {
                     $('#customer_search').val(ui.item.value);      // 「名前」だけ入力欄にセット
                     $('#customer_id').val(ui.item.customer_id);    // hiddenにIDをセット

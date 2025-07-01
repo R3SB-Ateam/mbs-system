@@ -216,20 +216,37 @@ class CustomerController extends Controller
     {
         $term = $request->input('term');
 
-        $customers = DB::table('customers')
-        ->where(function($query) use ($term) {
-            $query->where('name', 'like', "%{$term}%")
-                ->orWhere('customer_id', 'like', "%{$term}%");
-        })
-        ->limit(10)
-        ->get();
+        if (empty($term)) {
+            return response()->json([]);
+        }
 
-        // オートコンプリートが期待する形で返す
+        // 全角数字を半角に変換（例：１→1）
+        $termNormalized = mb_convert_kana($term, 'n', 'UTF-8');
+
+        // 数字のみかどうかチェック
+        if (preg_match('/^\d+$/', $termNormalized)) {
+            // 数字のみならIDの部分一致検索
+            $customers = DB::table('customers')
+                ->where('customer_id', 'like', "{$termNormalized}%")
+                ->limit(10)
+                ->get();
+        } else {
+            // 全角・半角スペースを統一して除去
+            $termNoSpace = mb_convert_kana($term, 's');
+            $termNoSpace = preg_replace('/\s+/u', '', $termNoSpace);
+
+            $customers = DB::table('customers')
+                ->whereRaw('REPLACE(REPLACE(name, " ", ""), "　", "") LIKE ?', ["%{$termNoSpace}%"])
+                ->limit(10)
+                ->get();
+        }
+
+
         $result = $customers->map(function ($customer) {
             return [
-                'label' => "{$customer->name} (ID: {$customer->customer_id})", // 表示用
-                'value' => $customer->name,  // 入力欄に入れる値は「名前だけ」
-                'customer_id' => $customer->customer_id,  // 顧客IDも返す
+                'label' => "{$customer->name} (ID: {$customer->customer_id})",
+                'value' => $customer->name,
+                'customer_id' => $customer->customer_id,
             ];
         });
 

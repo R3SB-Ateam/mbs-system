@@ -26,7 +26,8 @@
                         url: '{{ route("customers.search") }}',
                         dataType: 'json',
                         data: {
-                            term: request.term
+                            term: request.term,
+                            store_id: $('#store_id').val(),
                         },
                         success: function(data) {
                             response(data);
@@ -73,6 +74,7 @@
             <div class="form-group">
                 <label for="customer_search" class="form-label">顧客検索:</label>
                 <input type="text" id="customer_search" placeholder="名前かIDで検索" class="form-input" autocomplete="off" required>
+                <input type="hidden" id="store_id" name="store_id" value="{{ request('store_id', '') }}">
                 <input type="hidden" id="customer_id" name="customer_id" value="">
             </div>
 

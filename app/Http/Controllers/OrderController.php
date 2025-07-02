@@ -72,12 +72,17 @@ class OrderController extends Controller
     }
 
 
-    public function newOrder(){
+    public function newOrder(Request $request){
         // 顧客一覧を取得（customersテーブル）
-        $customers = DB::table('customers')->get();
+        $storeId = $request->input('store_id');
 
-        // ビューへ顧客データを渡す
-        return view('orders.new_order', ['customers' => $customers]);
+        $query = DB::table('customers');
+        if ($storeId) {
+            $query->where('store_id', $storeId);
+        }
+        $customers = $query->get();
+
+        return view('orders.new_order', compact('customers', 'storeId'));
     }
 
 

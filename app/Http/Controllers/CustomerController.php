@@ -215,6 +215,7 @@ class CustomerController extends Controller
     public function searchCustomers(Request $request)
     {
         $term = $request->input('term');
+        $storeId = $request->input('store_id');
 
         if (empty($term)) {
             return response()->json([]);
@@ -223,24 +224,27 @@ class CustomerController extends Controller
         // 全角数字を半角に変換（例：１→1）
         $termNormalized = mb_convert_kana($term, 'n', 'UTF-8');
 
+        $query = DB::table('customers');
+
+        if (!empty($storeId)) {
+            $query->where('store_id', $storeId);
+        }
+
         // 数字のみかどうかチェック
         if (preg_match('/^\d+$/', $termNormalized)) {
-            // 数字のみならIDの部分一致検索
-            $customers = DB::table('customers')
-                ->where('customer_id', 'like', "{$termNormalized}%")
-                ->limit(10)
-                ->get();
+            // 顧客IDの部分一致検索
+            $query->where('customer_id', 'like', "{$termNormalized}%");
         } else {
             // 全角・半角スペースを統一して除去
             $termNoSpace = mb_convert_kana($term, 's');
             $termNoSpace = preg_replace('/\s+/u', '', $termNoSpace);
 
-            $customers = DB::table('customers')
-                ->whereRaw('REPLACE(REPLACE(name, " ", ""), "　", "") LIKE ?', ["%{$termNoSpace}%"])
-                ->limit(10)
-                ->get();
+            // 名前のスペース除去検索
+            $query->whereRaw('REPLACE(REPLACE(name, " ", ""), "　", "") LIKE ?', ["%{$termNoSpace}%"]);
         }
 
+        // 実行
+        $customers = $query->limit(10)->get();
 
         $result = $customers->map(function ($customer) {
             return [

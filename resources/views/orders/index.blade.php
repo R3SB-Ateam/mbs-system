@@ -29,7 +29,7 @@
         <h1>注文一覧</h1>
         <div class="nav-buttons">
             <a href="{{ route('dashboard', ['store_id' => request('store_id', '')]) }}" class="button-link gray">ダッシュボードに戻る</a>
-            <a href="{{ route('orders.new_order') }}" class="button-link blue">新規注文登録</a>
+            <a href="{{ route('orders.new_order', ['store_id' => $selectedStoreId]) }}" class="button-link blue">新規注文登録</a>
             <button type="submit" class="submit-button" form="delivery-form">納品登録</button>
         </div>
         <form method="GET" action="{{ route('orders.index') }}" class="search-form">

@@ -39,9 +39,11 @@
                 <input type="text" name="keyword" id="keyword" class="c-form-input" placeholder="顧客名、電話番号などで検索" value="{{ $keyword ?? '' }}">
             </div>
 
-            <div class="p-sort-controls">
-                <label for="sort_by">ソート:</label>
-                <select name="sort_by" id="sort_by" class="c-form-select">
+            {{-- ★ここが変更点です★ --}}
+            {{-- p-sort-controls を div で囲み、label と select に適切なクラスを適用 --}}
+            <div>
+                <label for="sort_by" class="c-form-label">ソート:</label>
+                <select name="sort_by" id="sort_by" class="c-form-select p-sort-controls-select"> {{-- p-sort-controls-select クラスを追加 --}}
                     {{-- Controllerから渡される selectedSortValue を使用して選択状態を制御 --}}
                     <option value="" {{ ($selectedSortValue ?? '') === '' ? 'selected' : '' }}>ソートなし (顧客ID昇順)</option>
                     <option value="total_sales_asc" {{ ($selectedSortValue ?? '') === 'total_sales_asc' ? 'selected' : '' }}>売上 昇順</option>

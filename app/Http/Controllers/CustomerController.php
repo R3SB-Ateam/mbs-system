@@ -9,43 +9,35 @@ use Carbon\Carbon;
 class CustomerController extends Controller
 {
     public function index(Request $request)
-{
-    $stores = DB::table('stores')->get();
+    {
+        $stores = DB::table('stores')->get();
 
         // フィルタリング、検索条件をセッションから取得、またはリクエストから設定
         $storeId = $request->input('store_id');
         $keyword = $request->input('keyword'); // リクエストから直接取得
 
-        // ★ store_idのセッションハンドリングを改善 ★
-        // リクエストにstore_idが明示的に存在する場合（空文字列含む）、その値をセッションに保存
-        if ($request->has('store_id')) { 
+        // store_idのセッションハンドリングを改善
+        if ($request->has('store_id')) {
             session(['customers_filter.store_id' => $storeId]);
-        } 
-        // リクエストにstore_idがなく、セッションにcustomers_filter.store_idがある場合は、セッションから取得
-        elseif (session()->has('customers_filter.store_id')) {
+        } elseif (session()->has('customers_filter.store_id')) {
             $storeId = session('customers_filter.store_id');
-        } 
-        // どちらにもない場合は、デフォルトで空文字列（全店舗）を設定
-        else {
+        } else {
             $storeId = '';
         }
 
-        // --- キーワード検索の修正箇所 ---
-        if ($request->has('keyword')) { // リクエストにキーワードが存在する場合（空文字列も含む）
-            session(['customers_filter.keyword' => $keyword]); // その値をセッションに保存（空なら空を保存）
-        } else { // リクエストにキーワードが存在しない場合（初回アクセス時など）
-            $keyword = session('customers_filter.keyword'); // セッションから取得
+        // キーワード検索の修正箇所
+        if ($request->has('keyword')) {
+            session(['customers_filter.keyword' => $keyword]);
+        } else {
+            $keyword = session('customers_filter.keyword');
         }
-        // セッションに値がない場合のデフォルト値 (念のため)
         if (!isset($keyword)) {
             $keyword = '';
         }
-        // --- キーワード検索の修正箇所ここまで ---
-
 
         // --- ソート条件の処理を開始 ---
-        $requestedSortBy   = $request->input('sort_by'); 
-        $sortOrders        = []; 
+        $requestedSortBy   = $request->input('sort_by');
+        $sortOrders        = [];
         $sessionSortOrders = session('customers_filter.sort_orders');
 
         if ($request->has('sort_by')) {
@@ -74,8 +66,8 @@ class CustomerController extends Controller
                 case 'rt_main_sales_sub_desc':
                     $sortOrders = ['average_rt' => 'desc', 'total_sales' => 'asc'];
                     break;
-                case '': 
-                    $sortOrders = ['customer_id' => 'asc']; 
+                case '': // ソートなし (顧客ID昇順)
+                    $sortOrders = ['customer_id' => 'asc'];
                     break;
                 default:
                     $sortOrders = ['customer_id' => 'asc'];
@@ -94,9 +86,8 @@ class CustomerController extends Controller
         // ドロップダウンのselected状態を制御するための値を決定
         $selectedSortValue = ''; // デフォルトは「ソートなし」に対応する空文字列
 
-        // Bladeの<option>タグのvalue属性と厳密に一致するように判定ロジックを修正
         if ($sortOrders === ['customer_id' => 'asc']) {
-            $selectedSortValue = ''; // 「ソートなし (顧客ID昇順)」
+            $selectedSortValue = '';
         } elseif ($sortOrders === ['total_sales' => 'asc']) {
             $selectedSortValue = 'total_sales_asc';
         } elseif ($sortOrders === ['total_sales' => 'desc']) {
@@ -114,9 +105,7 @@ class CustomerController extends Controller
         } elseif ($sortOrders === ['average_rt' => 'desc', 'total_sales' => 'asc']) {
             $selectedSortValue = 'rt_main_sales_sub_desc';
         }
-        // それ以外の不明なソート条件の場合は、デフォルトの空文字列のまま（「ソートなし」が選択される）
 
-        
         $today = Carbon::now()->toDateString();
 
         // 注文明細ごとの集計サブクエリ
@@ -124,7 +113,7 @@ class CustomerController extends Controller
             ->join('orders as o', 'od.order_id', '=', 'o.order_id')
             ->leftJoin('delivery_details as dd', function ($join) {
                 $join->on('od.order_detail_id', '=', 'dd.order_detail_id')
-                     ->where('dd.return_flag', '=', 0); 
+                     ->where('dd.return_flag', '=', 0);
             })
             ->leftJoin('deliveries as d', 'dd.delivery_id', '=', 'd.delivery_id')
             ->where('od.cancell_flag', 0)
@@ -146,7 +135,6 @@ class CustomerController extends Controller
                 $join->on('customers.customer_id', '=', 'summary.customer_id');
             })
             ->when($storeId, function ($query, $storeId) {
-                // storeIdが空文字列でない場合にwhere句を適用
                 return $query->where('customers.store_id', $storeId);
             })
             ->when($keyword, function ($query, $keyword) {
@@ -180,14 +168,20 @@ class CustomerController extends Controller
                 'customers.staff'
             );
 
+        // ★ ここから追加/修正: ソートが「ソートなし」ではない場合にのみフィルタリングを適用 ★
+        if ($selectedSortValue !== '') { // selectedSortValue が空文字列（ソートなし）ではない場合
+            $customersQuery->having('total_sales', '>', 0);
+        }
+        // ★ ここまで追加/修正 ★
+
         // ソートロジックを動的に適用
         foreach ($sortOrders as $column => $order) {
             if ($column === 'total_sales') {
                 $customersQuery->orderByRaw('total_sales ' . ($order === 'desc' ? 'DESC' : 'ASC'));
             } elseif ($column === 'average_rt') {
-                $customersQuery->orderByRaw(
-                    'COALESCE(SUM(summary.weighted_days_per_detail), 0) / NULLIF(COALESCE(SUM(summary.total_order_quantity), 0), 0) ' . ($order === 'desc' ? 'DESC' : 'ASC')
-                );
+                // average_rtは最終的にPHPで計算されるため、ここではDBレベルのソートは行わない。
+                // ただし、DBレベルでソートする必要がある場合は、SQLでの計算式をorderByRawに含める。
+                // 現在のロジックでは、PHPで計算後にコレクションをソートする。
             } elseif ($column === 'customer_id') {
                 $customersQuery->orderBy('customers.customer_id', $order);
             }
@@ -195,13 +189,37 @@ class CustomerController extends Controller
 
         $customers = $customersQuery->get()
             ->map(function ($customer) {
+                // average_rtの計算
                 $customer->average_rt = ($customer->total_quantity > 0)
                     ? round($customer->total_weighted_days / $customer->total_quantity, 2)
                     : null;
                 unset($customer->total_weighted_days, $customer->total_quantity);
                 return $customer;
             });
-        
+
+        // ★ ここから追加/修正: ソートが「ソートなし」ではない場合にのみPHPでのフィルタリングを適用 ★
+        if ($selectedSortValue !== '') { // selectedSortValue が空文字列（ソートなし）ではない場合
+            $customers = $customers->filter(function ($customer) {
+                // average_rtがnullでないこと、かつ文字列のハイフンでないことを確認
+                return $customer->average_rt !== null && $customer->average_rt !== '-';
+            });
+        }
+        // ★ ここまで追加/修正 ★
+
+        // PHPで計算されたaverage_rtに基づいてソートを適用
+        if (isset($sortOrders['average_rt'])) {
+            $customers = $customers->sortBy(function ($customer) {
+                return $customer->average_rt;
+            }, SORT_NUMERIC, $sortOrders['average_rt'] === 'desc');
+        } elseif (isset($sortOrders['total_sales']) && isset($sortOrders['average_rt'])) {
+             $customers = $customers->sortBy(function ($customer) {
+                 return $customer->total_sales;
+             }, SORT_NUMERIC, $sortOrders['total_sales'] === 'desc')
+             ->sortBy(function ($customer) {
+                 return $customer->average_rt;
+             }, SORT_NUMERIC, $sortOrders['average_rt'] === 'desc');
+        }
+
         return view('customers.index', [
             'customers'         => $customers,
             'stores'            => $stores,

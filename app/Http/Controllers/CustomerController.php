@@ -211,49 +211,4 @@ class CustomerController extends Controller
                 'selectedSortValue' => $selectedSortValue,
             ]);
     }
-
-    public function searchCustomers(Request $request)
-    {
-        $term = $request->input('term');
-        $storeId = $request->input('store_id');
-
-        if (empty($term)) {
-            return response()->json([]);
-        }
-
-        // 全角数字を半角に変換（例：１→1）
-        $termNormalized = mb_convert_kana($term, 'n', 'UTF-8');
-
-        $query = DB::table('customers');
-
-        if (!empty($storeId)) {
-            $query->where('store_id', $storeId);
-        }
-
-        // 数字のみかどうかチェック
-        if (preg_match('/^\d+$/', $termNormalized)) {
-            // 顧客IDの部分一致検索
-            $query->where('customer_id', 'like', "{$termNormalized}%");
-        } else {
-            // 全角・半角スペースを統一して除去
-            $termNoSpace = mb_convert_kana($term, 's');
-            $termNoSpace = preg_replace('/\s+/u', '', $termNoSpace);
-
-            // 名前のスペース除去検索
-            $query->whereRaw('REPLACE(REPLACE(name, " ", ""), "　", "") LIKE ?', ["%{$termNoSpace}%"]);
-        }
-
-        // 実行
-        $customers = $query->limit(10)->get();
-
-        $result = $customers->map(function ($customer) {
-            return [
-                'label' => "{$customer->name} (ID: {$customer->customer_id})",
-                'value' => $customer->name,
-                'customer_id' => $customer->customer_id,
-            ];
-        });
-
-        return response()->json($result);
-    }
 }

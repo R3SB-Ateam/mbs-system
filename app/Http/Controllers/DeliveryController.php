@@ -255,7 +255,8 @@ class DeliveryController extends Controller
                 'delivery_details.delivery_quantity',
                 'order_details.product_name',
                 'order_details.unit_price',
-                'order_details.quantity as order_quantity'
+                'order_details.quantity as order_quantity',
+                'delivery_details.remarks'
             )
             ->get();
 
@@ -297,7 +298,7 @@ class DeliveryController extends Controller
             DB::commit();
 
             return redirect()->route('deliveries.details', ['delivery_id' => $delivery_id])
-                            ->with('success', '納品情報を更新しました。');
+                            ->with('update_success', '納品情報を更新しました。');
 
         } catch (\Exception $e) {
             DB::rollBack();

@@ -9,23 +9,18 @@
 </head>
 <body class="c-body">
     
-    @if (session('success'))
-            <div id="success-toast" class="c-toast">
-                {{ session('success') }}
-            </div>
+    @if (session('update_success'))
+        <div id="success-alert" class="alert alert-success" style="background-color: #e6ffe6; padding: 10px; border: 1px solid #66cc66;">
+            {{ session('update_success') }}
+        </div>
 
-            <script>
-                // 3秒後にトーストをゆっくり消す
-                setTimeout(() => {
-                    const toast = document.getElementById('success-toast');
-                    if (toast) {
-                        toast.style.opacity = '0';
-                        // アニメーションが終わったら要素をDOMから削除
-                        setTimeout(() => toast.remove(), 600);
-                    }
-                }, 3000);
-            </script>
-        @endif
+        <script>
+            setTimeout(() => {
+                const alert = document.getElementById('success-alert');
+                if (alert) alert.remove();
+            }, 3000); // 3秒後に非表示
+        </script>
+    @endif
 
     <div class="l-container">
         <h1 class="c-heading-primary">
@@ -93,7 +88,7 @@
             <a href="{{ route('deliveries.index') }}" class="c-button c-button--gray">
                 戻る
             </a>
-            <a href="{{ route('deliveries.edit', ['delivery_id' => $delivery->delivery_id]) }}" class="btn btn-primary">
+            <a href="{{ route('deliveries.edit', ['delivery_id' => $delivery->delivery_id]) }}" class="c-button c-button--blue">
                 納品修正
             </a>
             <a href="{{ route('deliveries.return_form', ['delivery_id' => $delivery->delivery_id]) }}"

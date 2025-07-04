@@ -33,6 +33,7 @@
             <div class="table-container">
                 <table class="table">
                     <colgroup>
+                        <col style="width: 12%;"> <!-- 納品明細ID（新しく追加） -->
                         <col style="width: 10%;"> <!-- 注文ID -->
                         <col style="width: 12%;"> <!-- 注文明細ID -->
                         <col style="width: 18%;"> <!-- 商品名 -->
@@ -43,8 +44,9 @@
                     </colgroup>
                     <thead>
                         <tr>
-                            <th>注文ID</th> <!-- 追加 -->
-                            <th>注文明細ID</th> <!-- 追加 -->
+                            <th>納品明細ID</th> <!-- 追加 -->
+                            <th>注文ID</th>
+                            <th>注文明細ID</th>
                             <th>商品名</th>
                             <th>単価</th>
                             <th>注文数</th>
@@ -54,29 +56,31 @@
                     </thead>
                     <tbody>
                         @foreach ($deliveryDetails as $index => $detail)
-                            <tr>
-                                {{-- delivery_detail_id はhiddenで保持だけする --}}
-                                <input type="hidden" name="details[{{ $index }}][delivery_detail_id]" value="{{ $detail->delivery_detail_id }}">
-                                
-                                <td>{{ $detail->order_id }}</td>
-                                <td>
-                                    <input type="hidden" name="details[{{ $index }}][order_detail_id]" value="{{ $detail->order_detail_id }}">
-                                    {{ $detail->order_detail_id }}
-                                </td>
-                                <td>{{ $detail->product_name }}</td>
-                                <td>{{ number_format($detail->unit_price) }}</td>
-                                <td>{{ $detail->order_quantity }}</td>
-                                <td>
-                                    <input type="number" name="details[{{ $index }}][delivery_quantity]"
-                                        value="{{ old("details.$index.delivery_quantity", $detail->delivery_quantity) }}"
-                                        class="form-input" step="1" min="0" max="{{ $detail->order_quantity }}">
-                                </td>
-                                <td>
-                                    <input type="text" name="details[{{ $index }}][remarks]"
-                                        value="{{ old("details.$index.remarks", $detail->remarks) }}"
-                                        class="form-input">
-                                </td>
-                            </tr>
+                        <tr>
+                            {{-- delivery_detail_id はhiddenで保持 --}}
+                            <input type="hidden" name="details[{{ $index }}][delivery_detail_id]" value="{{ $detail->delivery_detail_id }}">
+
+                            <td>{{ $detail->delivery_detail_id }}</td> <!-- ここを先頭に追加 -->
+
+                            <td>{{ $detail->order_id }}</td>
+                            <td>
+                                <input type="hidden" name="details[{{ $index }}][order_detail_id]" value="{{ $detail->order_detail_id }}">
+                                {{ $detail->order_detail_id }}
+                            </td>
+                            <td>{{ $detail->product_name }}</td>
+                            <td>{{ number_format($detail->unit_price) }}</td>
+                            <td>{{ $detail->order_quantity }}</td>
+                            <td>
+                                <input type="number" name="details[{{ $index }}][delivery_quantity]"
+                                    value="{{ old("details.$index.delivery_quantity", $detail->delivery_quantity) }}"
+                                    class="form-input" step="1" min="0" max="{{ $detail->order_quantity }}">
+                            </td>
+                            <td>
+                                <input type="text" name="details[{{ $index }}][remarks]"
+                                    value="{{ old("details.$index.remarks", $detail->remarks) }}"
+                                    class="form-input">
+                            </td>
+                        </tr>
                         @endforeach
                     </tbody>
                 </table>
@@ -122,6 +126,17 @@ document.querySelector('form').addEventListener('submit', function(e) {
         alert(message);
     }
 });
+</script>
+
+<script>
+    setTimeout(() => {
+        const alert = document.querySelector('.custom-alert');
+        if (alert) {
+            alert.style.transition = 'opacity 0.5s';
+            alert.style.opacity = '0';
+            setTimeout(() => alert.remove(), 500);
+        }
+    }, 3000); // 3秒で消える
 </script>
 </body>
 </html>

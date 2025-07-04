@@ -33,8 +33,7 @@
     margin-top: 1rem; /* 調整 */
     margin-bottom: 1.5rem; /* mb-6 */
     text-align: left; /* 左寄せを維持 */
-    /* ★ max-widthを削除し、固定幅に変更 ★ */
-    width: 200px; 
+    width: 200px;
     box-sizing: border-box;
 }
 
@@ -79,16 +78,16 @@
     font-size: 1rem; /* font-sizeを統一 */
 }
 
-/* ソートコントロール */
-.p-sort-controls {
-    display: flex;
-    flex-direction: column; /* ラベルとセレクトボックスを縦に並べる */
-    align-items: flex-start; /* 左寄せ */
-    gap: 0.5rem; /* 8px */
-}
-.p-sort-controls label {
-    white-space: nowrap; /* ラベルが改行されないように */
-}
+/* ソートコントロールの個別調整（HTML構造変更に伴いシンプル化） */
+/* p-sort-controls は div のクラスではなくなりましたが、
+   もしソート全体を特定のスタイルで囲む必要がある場合は、
+   select 要素に p-sort-controls-select など新しいクラスを付与し、
+   それに対してスタイルを適用します。
+   ここでは、c-form-select のスタイルが適用されるので、特別な調整は不要です。
+*/
+/* HTML修正により、このブロックはほぼ不要になります。
+   もし追加で微調整が必要な場合は、.p-sort-controls-select に対して行います。 */
+
 
 /* ボタンアクションコンテナ */
 .p-form-actions {
@@ -103,7 +102,6 @@
 
 /* 各ボタンラッパー */
 .p-form-actions .p-filter-button-wrap {
-    /* ★ flex-basisとmax-widthを削除し、固定幅に変更 ★ */
     width: 200px;
     flex-grow: 0; /* 伸びない */
     flex-shrink: 0; /* 縮まない */
@@ -116,7 +114,7 @@
     display: flex; /* Flexboxを適用してテキストを中央揃えにする */
     align-items: center; /* 垂直方向中央揃え */
     justify-content: center; /* 水平方向中央揃え */
-    
+
     width: 100%; /* 親コンテナの幅に合わせる */
     padding: 0.5rem 1rem; /* px-4 py-2 (8px 16px) */
     border-radius: 0.25rem; /* rounded (4px) */
@@ -153,11 +151,38 @@
 /* テーブル */
 .c-table-wrap {
     overflow-x: auto; /* 横スクロールを許可 */
-    overflow-y: hidden; /* 縦スクロールはテーブル内で制御するため隠す */
+    overflow-y: auto; /* 縦スクロールをコンテンツが溢れた場合に表示 */
     background-color: white;
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); /* shadow-md */
     border-radius: 0.5rem; /* rounded-lg */
     margin-top: 2rem; /* mt-8 */
+
+    max-height: 500px;
+
+    /* スクロールバーのスタイル（任意：ブラウザによって表示が異なります） */
+    /* WebKit browsers (Chrome, Safari) */
+    &::-webkit-scrollbar { /* SCSS/Sassでネストされたセレクタの場合 */
+        height: 20px; /* 横スクロールバーの高さ */
+        width: 50px; /* 縦スクロールバーの幅 */
+    }
+
+    &::-webkit-scrollbar-track { /* SCSS/Sassでネストされたセレクタの場合 */
+        background: #f1f1f1; /* トラックの背景色 */
+        border-radius: 5px;
+    }
+
+    &::-webkit-scrollbar-thumb { /* SCSS/Sassでネストされたセレクタの場合 */
+        background: #888; /* サムの色 */
+        border-radius: 5px;
+    }
+
+    &::-webkit-scrollbar-thumb:hover { /* SCSS/Sassでネストされたセレクタの場合 */
+        background: #555; /* ホバー時のサムの色 */
+    }
+
+    /* Firefox */
+    scrollbar-width: thin; /* "auto" または "thin" */
+    scrollbar-color: #888 #f1f1f1; /* サムの色 トラックの色 */
 }
 
 .c-table {
@@ -223,6 +248,3 @@
         min-width: 600px; /* 小さい画面でもテーブルの最小幅を確保 */
     }
 }
-
-/* その他の既存のスタイル（必要に応じて残すか調整） */
-/* ここには、ユーザーが以前提供したCSSスニペットのうち、顧客一覧に直接関係しないものは含めていません。 */

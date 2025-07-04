@@ -17,6 +17,8 @@ Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
 // 新規注文登録ページ
 Route::get('/orders/new_order', [OrderController::class, 'newOrder'])->name('orders.new_order');
 Route::post('/orders/store', [OrderController::class, 'order_store'])->name('orders.order_store');
+Route::get('/orders/search', [OrderController::class, 'searchCustomers'])->name('customers.search');
+
 
 // 注文詳細ページ
 Route::get('/order_details/{order_id}', [OrderController::class, 'orderDetails'])->name('orders.order_details');

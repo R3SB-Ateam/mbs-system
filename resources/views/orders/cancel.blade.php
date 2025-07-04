@@ -42,7 +42,7 @@
                             </td>
                             <td class="table-cell">
                                 <input type="text" name="reasons[{{ $detail->order_detail_id }}]" maxlength="255"
-                                       class="input-text">
+                                       class="input-text" required>
                             </td>
                         </tr>
                         @endforeach

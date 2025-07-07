@@ -53,7 +53,7 @@
             <div class="btn">
                 <a href="{{ route('orders.order_details', ['order_id' => $order->order_id]) }}" class="btn btn-back">← 注文詳細へ戻る</a>
                 <button type="submit" class="btn btn-danger">
-                    キャンセル実行
+                    確定
                 </button>
             </div>
         </form>

@@ -60,7 +60,7 @@
                                 <td class="table-cell">{{ $orderDetail->product_name }}</td>
                                 <td class="table-cell">{{ number_format($orderDetail->undelivered_quantity) }}</td>
                                 <td class="table-cell">
-                                    <input type="number" name="unit_prices[]" value="{{ number_format($orderDetail->unit_price) }}" min="0" step="1" required class="unit-price-input">
+                                    <input type="number" name="unit_prices[]" value="{{ intval($orderDetail->unit_price) }}" min="0" step="1" required class="unit-price-input">
                                 </td>
                                 <td class="table-cell">
                                     <input type="hidden" name="order_ids[]" value="{{ $orderDetail->order_id }}">

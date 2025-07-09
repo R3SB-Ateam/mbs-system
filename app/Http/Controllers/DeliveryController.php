@@ -294,6 +294,23 @@ class DeliveryController extends Controller
                 $deliveryDetail->remarks = $detail['remarks'] ?? null;
                 $deliveryDetail->save();
             }
+            foreach ($request->input('details') as $detailData) {
+                $orderDetailId = DB::table('delivery_details')
+                    ->where('delivery_detail_id', $detailData['delivery_detail_id'])
+                    ->value('order_detail_id');
+
+                if ($orderDetailId) {
+                    $totalDelivered = DB::table('delivery_details')
+                        ->where('order_detail_id', $orderDetailId)
+                        ->sum('delivery_quantity');
+
+                    DB::table('order_details')
+                        ->where('order_detail_id', $orderDetailId)
+                        ->update([
+                            'delivery_quantity' => $totalDelivered,
+                        ]);
+                }
+            }
 
             DB::commit();
 

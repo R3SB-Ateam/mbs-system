@@ -73,9 +73,9 @@
             @csrf
             <div class="form-group">
                 <label for="customer_search" class="form-label">顧客検索:</label>
-                <input type="text" id="customer_search" placeholder="名前かIDで検索" class="form-input" autocomplete="off" required>
+                <input type="text" id="customer_search" name="customer_search" placeholder="名前かIDで検索" class="form-input" autocomplete="off" required>
                 <input type="hidden" id="store_id" name="store_id" value="{{ request('store_id', '') }}">
-                <input type="hidden" id="customer_id" name="customer_id" value="">
+                <input type="hidden" id="customer_id" value="">
             </div>
 
             <div id="products-container" class="form-group">

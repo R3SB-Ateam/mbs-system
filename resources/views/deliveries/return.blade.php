@@ -11,10 +11,12 @@
     <div class="l-container-narrow">
         <h1 class="c-heading-secondary">返品 納品ID: {{ $delivery_id }}</h1>
 
-        <form action="{{ route('deliveries.processReturn') }}" method="POST">
+        <form action="{{ route('deliveries.processReturn') }}" method="POST" id="returnForm">
             @csrf
             <input type="hidden" name="delivery_id" value="{{ $delivery_id }}">
 
+            <input type="hidden" name="submission_token" value="{{ session('return_submission_token_' . $delivery_id) }}">
+            
             <div class="c-table-responsive"> {{-- テーブルがはみ出さないようにラッパーを追加 --}}
                 <table class="c-table c-table--bordered">
                     <thead>
@@ -52,17 +54,43 @@
                 <textarea id="overall_return_notes" name="overall_return_notes" rows="5" class="c-form-input c-form-input--full" placeholder="返品に関する全体的な詳細をここに入力してください。"></textarea>
             </div>
 
-            <button type="submit" class="c-button c-button--red c-button--mt4">
-                確定
-            </button>
+           <div class="c-button-group c-button-group--mt4">
+                <a href="{{ route('deliveries.details', ['delivery_id' => $delivery_id]) }}"
+                   class="c-button c-button--gray">
+                    納品明細に戻る
+                </a>
+                <button type="submit" class="c-button c-button--red" id="submitButton">
+                    確定
+                </button>
+            </div>
         </form>
-
-        <div class="c-button-group c-button-group--mt4">
-            <a href="{{ route('deliveries.details', ['delivery_id' => $delivery_id]) }}"
-               class="c-button c-button--gray">
-                戻る
-            </a>
-        </div>
     </div>
+    <script>
+        // DOMContentLoaded イベントが発火したらJavaScriptを実行
+         document.addEventListener('DOMContentLoaded', function() {
+            const returnForm = document.getElementById('returnForm');
+            const submitButton = document.getElementById('submitButton');
+
+            // 初期ロード時にボタンが有効であることを確認し、もし無効であれば有効化する
+            if (submitButton && submitButton.hasAttribute('disabled')) {
+                submitButton.removeAttribute('disabled');
+                // 念のため、初期テキストに戻す
+                submitButton.textContent = '確定';
+            }
+
+            // returnForm が null でないことを確認してから addEventListener を追加
+            if (returnForm) {
+                returnForm.addEventListener('submit', function() {
+                    if (submitButton) {
+                        // フォーム送信時にボタンを無効化し、二重送信を防ぐ
+                        submitButton.setAttribute('disabled', 'disabled');
+                        submitButton.textContent = '処理中...';
+                    }
+                });
+            } else {
+                console.error("Error: Element with ID 'returnForm' not found.");
+            }
+        });
+    </script>
 </body>
 </html>

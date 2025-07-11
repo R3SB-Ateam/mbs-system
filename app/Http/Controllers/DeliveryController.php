@@ -317,107 +317,116 @@ class DeliveryController extends Controller
             ->where('delivery_id', $delivery_id)
             ->get();
 
+        $submissionToken = \Illuminate\Support\Str::random(32);
+        session(['return_submission_token_' . $delivery_id => $submissionToken]);
+
         return view('deliveries.return', compact('delivery_id', 'deliveryDetails'));
     }
 
     // 返品処理実行
     public function processReturn(Request $request)
     {
-        $request->validate([
-            'delivery_id' => 'required|exists:deliveries,delivery_id',
-            'return_quantities' => 'array',
-            'return_quantities.*' => 'nullable|integer|min:0', // HTMLのmin="0"に合わせる
-            'reasons' => 'array',
-            'reasons.*' => 'nullable|string|max:255',
-        ],
-        [
-            'return_quantities.*.min' => '返品数量は0以上で入力してください。', // エラーメッセージも0以上に更新
-            'return_quantities.*.integer' => '返品数量は数値で入力してください。',
-            'reasons.*.max' => '返品理由は255文字以内で入力してください。',
-        ]);
+    // 1. バリデーション
+    $request->validate([
+        'delivery_id' => 'required|exists:deliveries,delivery_id',
+        'submission_token' => 'required|string', // 追加
+        'return_quantities' => 'array',
+        'return_quantities.*' => 'nullable|integer|min:0',
+        'overall_return_notes' => 'nullable|string|max:1000', // 全体的な備考フィールド名に合わせる
+    ],
+    [
+        'return_quantities.*.min' => '返品数量は0以上で入力してください。',
+        'return_quantities.*.integer' => '返品数量は数値で入力してください。',
+        'overall_return_notes.max' => '返品内容は1000文字以内で入力してください。',
+    ]);
 
-        $returnQuantities = $request->input('return_quantities', []);
-        $reasons = $request->input('reasons', []);
-        $delivery_id = $request->delivery_id;
+    $delivery_id = $request->delivery_id;
+    $submittedToken = $request->input('submission_token');
+    $sessionToken = $request->session()->get('return_submission_token_' . $delivery_id); // 納品ID付きのトークンを取得
+    $returnQuantities = $request->input('return_quantities', []);
+    $overallReturnNotes = $request->input('overall_return_notes'); // フィールド名に合わせる
 
-        DB::beginTransaction();
-
-        try {
-            // 実際に返品数量が1以上の商品のみを対象にする
-            // ここで0をフィルタリングすることで、何も入力されなかったケースや0が入力されたケースを除外
-            $targetDeliveryDetailIds = array_keys(array_filter($returnQuantities, fn($qty) => (int)$qty > 0));
-
-            // 返品対象が一つもなければ、エラーを返す
-            if (empty($targetDeliveryDetailIds)) {
-                DB::rollBack();
-                return redirect()->route('deliveries.details', ['delivery_id' => $delivery_id])
-                                ->withErrors('返品する商品が選択されていないか、数量が0です。');
-            }
-
-            // 処理対象の納品詳細を一括で取得
-            $detailsToProcess = DB::table('delivery_details')
-                ->whereIn('delivery_detail_id', $targetDeliveryDetailIds)
-                ->where('delivery_id', $delivery_id)
-                ->where('return_flag', 0) // まだ返品されていないもののみを対象
-                ->get()->keyBy('delivery_detail_id'); // IDをキーにしてアクセスしやすくする
-
-            foreach ($returnQuantities as $deliveryDetailId => $returnQty) {
-                $returnQty = (int)$returnQty;
-
-                // フィルタリング済みだが、念のため個別の0以下のチェック
-                if ($returnQty <= 0) {
-                    continue;
-                }
-
-                $detail = $detailsToProcess->get($deliveryDetailId);
-
-                // 対象の納品詳細が見つからない、または既に返品済みの場合はスキップ
-                if (!$detail || $detail->return_flag == 1) {
-                    continue;
-                }
-
-                $originalDeliveryQty = (int)$detail->delivery_quantity;
-
-                // 返品数量が元の納品数量を超えていないかチェック
-                if ($returnQty > $originalDeliveryQty) {
-                    throw new \Exception("返品数量が納品数量を超えています（商品名: {$detail->product_name}、納品数: {$originalDeliveryQty}）");
-                }
-
-                $remainingDeliveryQty = $originalDeliveryQty - $returnQty;
-
-                // 元の納品詳細レコードの数量を減らす、または削除
-                if ($remainingDeliveryQty <= 0) {
-                    // 数量が0以下になる場合、元のレコードを削除
-                    DB::table('delivery_details')->where('delivery_detail_id', $deliveryDetailId)->delete();
-                } else {
-                    // 数量が残る場合、元のレコードの数量を更新
-                    DB::table('delivery_details')->where('delivery_detail_id', $deliveryDetailId)->update([
-                        'delivery_quantity' => $remainingDeliveryQty,
-                    ]);
-                }
-
-                // 返品された商品を新しい delivery_detail_id で登録
-                DB::table('delivery_details')->insert([
-                    'delivery_id' => $detail->delivery_id,
-                    'order_id' => $detail->order_id,
-                    'order_detail_id' => $detail->order_detail_id, // 元の order_detail_id を保持
-                    'product_name' => $detail->product_name,
-                    'unit_price' => $detail->unit_price,
-                    'delivery_quantity' => $returnQty, // 返品された数量
-                    'return_flag' => 1, // 返品済みとしてマーク
-                    // 元の備考に返品理由を追加
-                    'remarks' => DB::raw("CONCAT(IFNULL('" . addslashes($detail->remarks) . "', ''), '【返品理由】" . ($reasons[$deliveryDetailId] ?? '') . "')"),
-                ]);
-            }
-
-            DB::commit();
-            return redirect()->route('deliveries.details', ['delivery_id' => $delivery_id])->with('success', '返品処理が完了しました。');
-        } catch (\Exception $e) {
-            DB::rollBack();
-            \Log::error('返品処理エラー: ' . $e->getMessage());
-            return redirect()->route('deliveries.details', ['delivery_id' => $delivery_id])->withErrors('返品処理中にエラーが発生しました。' . $e->getMessage());
-        }
+    // 2. ワンタイムトークンの検証
+    if (!$submittedToken || $submittedToken !== $sessionToken) {
+        return redirect()->route('deliveries.details', ['delivery_id' => $delivery_id])
+                         ->withErrors('この返品リクエストはすでに処理されたか、無効です。');
     }
+
+    // トークンをセッションから削除（一度しか使えないようにするため）
+    $request->session()->forget('return_submission_token_' . $delivery_id);
+
+    DB::beginTransaction();
+
+    try {
+        // 実際に返品数量が1以上の商品のみを対象にする
+        $targetDeliveryDetailIds = array_keys(array_filter($returnQuantities, fn($qty) => (int)$qty > 0));
+
+        // 返品対象が一つもなければ、エラーを返す
+        if (empty($targetDeliveryDetailIds)) {
+            DB::rollBack();
+            return redirect()->route('deliveries.details', ['delivery_id' => $delivery_id])
+                             ->withErrors('返品する商品が選択されていないか、数量が0です。');
+        }
+
+        // 3. 処理対象の納品詳細をロックして取得 (悲観的ロック)
+        $detailsToProcess = DeliveryDetails::whereIn('delivery_detail_id', $targetDeliveryDetailIds)
+                                           ->where('delivery_id', $delivery_id)
+                                           ->where('return_flag', 0) // まだ返品されていないもののみを対象
+                                           ->lockForUpdate() // **ここが悲観的ロック**
+                                           ->get()
+                                           ->keyBy('delivery_detail_id');
+
+        foreach ($returnQuantities as $deliveryDetailId => $returnQty) {
+            $returnQty = (int)$returnQty;
+
+            if ($returnQty <= 0) {
+                continue;
+            }
+
+            $detail = $detailsToProcess->get($deliveryDetailId);
+
+            if (!$detail || $detail->return_flag == 1) {
+                // ロックしたにも関わらず見つからない、または既に返品済みの場合はスキップ（念のため）
+                continue;
+            }
+
+            $originalDeliveryQty = (int)$detail->delivery_quantity;
+
+            if ($returnQty > $originalDeliveryQty) {
+                throw new \Exception("返品数量が納品数量を超えています（商品名: {$detail->product_name}、納品数: {$originalDeliveryQty}）");
+            }
+
+            $remainingDeliveryQty = $originalDeliveryQty - $returnQty;
+
+            // 元の納品詳細レコードの数量を減らす、または削除
+            if ($remainingDeliveryQty <= 0) {
+                $detail->delete(); // Eloquentモデルで削除
+            } else {
+                $detail->delivery_quantity = $remainingDeliveryQty;
+                $detail->save(); // Eloquentモデルで更新
+            }
+
+            // 返品された商品を新しい delivery_detail_id で登録
+            DeliveryDetails::create([ // Eloquentモデルで作成
+                'delivery_id' => $detail->delivery_id,
+                'order_id' => $detail->order_id,
+                'order_detail_id' => $detail->order_detail_id,
+                'product_name' => $detail->product_name,
+                'unit_price' => $detail->unit_price,
+                'delivery_quantity' => $returnQty,
+                'return_flag' => 1,
+                'remarks' => ($detail->remarks ? $detail->remarks . "\n" : '') . '【返品理由】' . $overallReturnNotes, // 全体備考を追記
+            ]);
+        }
+
+        DB::commit();
+        return redirect()->route('deliveries.details', ['delivery_id' => $delivery_id])->with('success', '返品処理が完了しました。');
+    } catch (\Exception $e) {
+        DB::rollBack();
+        Log::error('返品処理エラー: ' . $e->getMessage(), ['delivery_id' => $delivery_id, 'trace' => $e->getTraceAsString()]); // エラー時に詳細なログを出力
+        return redirect()->route('deliveries.details', ['delivery_id' => $delivery_id])->withErrors('返品処理中にエラーが発生しました。' . $e->getMessage());
+    }
+}
 
     public function showPrintPage(\App\Models\Deliveries $delivery)
     {
@@ -427,8 +436,4 @@ class DeliveryController extends Controller
         // 納品書用のビューを返す
         return view('deliveries.print', compact('delivery'));
     }
-
-
-
-
 }

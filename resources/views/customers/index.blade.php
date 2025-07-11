@@ -48,14 +48,14 @@
                     <option value="" {{ ($selectedSortValue ?? '') === '' ? 'selected' : '' }}>ソートなし (顧客ID昇順)</option>
                     <option value="total_sales_asc" {{ ($selectedSortValue ?? '') === 'total_sales_asc' ? 'selected' : '' }}>売上 昇順</option>
                     <option value="total_sales_desc" {{ ($selectedSortValue ?? '') === 'total_sales_desc' ? 'selected' : '' }}>売上 降順</option>
-                    <option value="average_rt_asc" {{ ($selectedSortValue ?? '') === 'average_rt_asc' ? 'selected' : '' }}>平均RT 昇順</option>
-                    <option value="average_rt_desc" {{ ($selectedSortValue ?? '') === 'average_rt_desc' ? 'selected' : '' }}>平均RT 降順</option>
+                    <option value="average_rt_asc" {{ ($selectedSortValue ?? '') === 'average_rt_asc' ? 'selected' : '' }}>平均LT 昇順</option>
+                    <option value="average_rt_desc" {{ ($selectedSortValue ?? '') === 'average_rt_desc' ? 'selected' : '' }}>平均LT 降順</option>
                     
                     {{-- 複合ソートの選択肢 --}}
-                    <option value="sales_main_rt_sub_asc" {{ ($selectedSortValue ?? '') === 'sales_main_rt_sub_asc' ? 'selected' : '' }}>売上 昇順 (メイン) + 平均RT 昇順 (サブ)</option>
-                    <option value="sales_main_rt_sub_desc" {{ ($selectedSortValue ?? '') === 'sales_main_rt_sub_desc' ? 'selected' : '' }}>売上 降順 (メイン) + 平均RT 昇順 (サブ)</option>
-                    <option value="rt_main_sales_sub_asc" {{ ($selectedSortValue ?? '') === 'rt_main_sales_sub_asc' ? 'selected' : '' }}>平均RT 昇順 (メイン) + 売上 昇順 (サブ)</option>
-                    <option value="rt_main_sales_sub_desc" {{ ($selectedSortValue ?? '') === 'rt_main_sales_sub_desc' ? 'selected' : '' }}>平均RT 降順 (メイン) + 売上 昇順 (サブ)</option>
+                    <option value="sales_main_rt_sub_asc" {{ ($selectedSortValue ?? '') === 'sales_main_rt_sub_asc' ? 'selected' : '' }}>売上 昇順 (メイン) + 平均LT 昇順 (サブ)</option>
+                    <option value="sales_main_rt_sub_desc" {{ ($selectedSortValue ?? '') === 'sales_main_rt_sub_desc' ? 'selected' : '' }}>売上 降順 (メイン) + 平均LT 昇順 (サブ)</option>
+                    <option value="rt_main_sales_sub_asc" {{ ($selectedSortValue ?? '') === 'rt_main_sales_sub_asc' ? 'selected' : '' }}>平均LT 昇順 (メイン) + 売上 昇順 (サブ)</option>
+                    <option value="rt_main_sales_sub_desc" {{ ($selectedSortValue ?? '') === 'rt_main_sales_sub_desc' ? 'selected' : '' }}>平均LT 降順 (メイン) + 売上 昇順 (サブ)</option>
                 </select>
             </div>
 
@@ -81,7 +81,7 @@
                         <th class="c-table__th">配達条件等</th>
                         <th class="c-table__th">登録日</th>
                         <th class="c-table__th">売上</th>
-                        <th class="c-table__th">平均RT(日)</th>
+                        <th class="c-table__th">平均LT(日)</th>
                     </tr>
                 </thead>
                 <tbody class="c-table__body">

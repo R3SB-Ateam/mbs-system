@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', function () {
         // 送信前の確認ダイアログ
         form.addEventListener('submit', function(e) {
             if (isFormChanged) {
-                const confirmSubmit = confirm('送信してよろしいですか？');
+                const confirmSubmit = confirm('この内容で確定しますか？');
                 if (!confirmSubmit) {
                     e.preventDefault();
                     return;
@@ -28,7 +28,7 @@ document.addEventListener('DOMContentLoaded', function () {
     backButtons.forEach(button => {
         button.addEventListener('click', function (e) {
             if (isFormChanged) {
-                const confirmBack = confirm('作業内容が未保存です。本当に戻ってもよろしいですか？（内容は破棄されます）');
+                const confirmBack = confirm('作業内容が未保存です。本当に戻ってもよろしいですか？（変更内容は破棄されます）');
                 if (!confirmBack) {
                     e.preventDefault();
                 } else {

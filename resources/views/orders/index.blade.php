@@ -103,7 +103,7 @@
                             </span>
                         </td>
                         <td>{{ $order->customer_id }}</td>
-                        <td>{{ $order->customer->name ?? 'キャンセル' }}</td>
+                        <td>{{ $order->customer->name ?? '不明' }}</td>
                         <td>{{ $order->order_date }}</td>
                         <td>{{ number_format($order->total_amount) }}</td>
                         <td>{{ $order->remarks }}</td>

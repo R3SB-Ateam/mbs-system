@@ -48,7 +48,7 @@ class Orders extends Model
         $validDetails = $this->details->where('cancell_flag', 0);
 
         if ($validDetails->isEmpty()) {
-            return '不明';
+            return 'キャンセル';
         }
 
         $allDelivered = $validDetails->every(function ($detail) {

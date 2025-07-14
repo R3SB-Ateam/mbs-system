@@ -240,6 +240,7 @@ thead {
         padding: 8px;
         height: auto;
         width: 100%;
+        margin: 0;
     }
 
     .search-form {

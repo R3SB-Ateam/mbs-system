@@ -58,5 +58,6 @@
             </div>
         </form>
     </div>
+    <script src="{{ asset('js/confirmNavigation.js') }}"></script>
 </body>
 </html>

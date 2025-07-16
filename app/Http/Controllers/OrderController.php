@@ -86,10 +86,11 @@ class OrderController extends Controller
     }
 
 
-    public function order_store(Request $request){
+    public function order_store(Request $request)
+    {
         // バリデーション
         $validated = $request->validate([
-            'customer_id' => 'required|integer',
+            'customer_search' => 'required|string',
             'product_name.*' => 'required|string',
             'unit_price.*' => 'required|numeric|min:0',
             'quantity.*' => 'required|integer|min:1',
@@ -97,11 +98,40 @@ class OrderController extends Controller
             'remarks' => 'nullable|string',
         ]);
 
-        DB::beginTransaction(); // ここでトランザクションを開始
+        // 顧客を特定
+        $customerSearch = $request->input('customer_search');
+        $storeId = $request->input('store_id');
 
+        // 全角英数字・スペースを半角に変換
+        $customerSearch = mb_convert_kana($customerSearch, 'as', 'UTF-8');
+        $customerSearch = trim($customerSearch);
+        $customer = null;
+
+        if (preg_match('/^\d+$/', $customerSearch)) {
+            // 数字ならID検索
+            $customer = DB::table('customers')
+                ->where('customer_id', $customerSearch)
+                ->when($storeId, fn($q) => $q->where('store_id', $storeId))
+                ->first();
+        } else {
+            // 名前検索（スペース除去比較）
+            $termNoSpace = mb_convert_kana($customerSearch, 's');
+            $termNoSpace = preg_replace('/\s+/u', '', $termNoSpace);
+
+            $customer = DB::table('customers')
+                ->when($storeId, fn($q) => $q->where('store_id', $storeId))
+                ->whereRaw('REPLACE(REPLACE(name, " ", ""), "　", "") LIKE ?', [$termNoSpace])
+                ->first();
+        }
+
+        if (!$customer) {
+            return redirect()->back()->withErrors(['customer_search' => '顧客が見つかりません'])->withInput();
+        }
+
+        DB::beginTransaction();
         try {
             $order = Orders::create([
-                'customer_id' => $request->customer_id,
+                'customer_id' => $customer->customer_id,
                 'order_date' => now(),
                 'remarks' => $request->remarks,
             ]);
@@ -119,13 +149,14 @@ class OrderController extends Controller
 
             DB::commit();
             return redirect()->route('orders.order_details', ['order_id' => $order->order_id])
-                             ->with('success', '注文が登録されました');
+                            ->with('success', '注文が登録されました');
         } catch (\Exception $e) {
             DB::rollBack();
             Log::error('注文登録エラー: ' . $e->getMessage());
             return redirect()->back()->withErrors(['error' => '注文の登録中にエラーが発生しました'])->withInput();
         }
-    } // <<<<<<<<<<<<< order_store メソッドの閉じ括弧はここだけ
+    }
+
 
     public function orderDetails($order_id)
     {

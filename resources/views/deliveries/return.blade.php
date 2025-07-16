@@ -65,32 +65,6 @@
             </div>
         </form>
     </div>
-    <script>
-        // DOMContentLoaded イベントが発火したらJavaScriptを実行
-         document.addEventListener('DOMContentLoaded', function() {
-            const returnForm = document.getElementById('returnForm');
-            const submitButton = document.getElementById('submitButton');
-
-            // 初期ロード時にボタンが有効であることを確認し、もし無効であれば有効化する
-            if (submitButton && submitButton.hasAttribute('disabled')) {
-                submitButton.removeAttribute('disabled');
-                // 念のため、初期テキストに戻す
-                submitButton.textContent = '確定';
-            }
-
-            // returnForm が null でないことを確認してから addEventListener を追加
-            if (returnForm) {
-                returnForm.addEventListener('submit', function() {
-                    if (submitButton) {
-                        // フォーム送信時にボタンを無効化し、二重送信を防ぐ
-                        submitButton.setAttribute('disabled', 'disabled');
-                        submitButton.textContent = '処理中...';
-                    }
-                });
-            } else {
-                console.error("Error: Element with ID 'returnForm' not found.");
-            }
-        });
-    </script>
+    <script src="{{ asset('js/confirmNavigation.js') }}"></script>
 </body>
 </html>

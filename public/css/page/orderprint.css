@@ -9,8 +9,8 @@ body {
 }
 
 .container {
-    width: 210mm;
-    height: 297mm;
+    width: 100%;
+    max-width: 180mm;
     padding: 15mm;
     box-sizing: border-box;
 }
@@ -31,7 +31,6 @@ body {
 }
 
 .header-info {
-    position: absolute;
     top: 5px; /* ★位置を調整 */
     right: 0;
     text-align: right;
@@ -82,6 +81,7 @@ body {
 /* 明細テーブル */
 .details-table {
     width: 100%;
+    max-width: 190mm;
     border-collapse: collapse;
 }
 
@@ -127,5 +127,13 @@ body {
 /* 印刷時のみ適用されるスタイル */
 @media print {
     body { margin: 0; }
-    .container { padding: 0; }
+    .container {
+        padding: 0;
+        max-width: 190mm;
+    }
+}
+
+@page {
+    size: A4;
+    margin: 10mm; /* ← プリンターの非印字領域を考慮 */
 }

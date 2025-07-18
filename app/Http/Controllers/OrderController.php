@@ -394,9 +394,10 @@ class OrderController extends Controller
 
         $result = $customers->map(function ($customer) {
             return [
-                'label' => "{$customer->name} (ID: {$customer->customer_id})",
+                'label' => "{$customer->name} (ID: {$customer->customer_id}) \n住所：{$customer->address}",
                 'value' => $customer->name,
                 'customer_id' => $customer->customer_id,
+                'address' => $customer->address ?? '',
             ];
         });
 

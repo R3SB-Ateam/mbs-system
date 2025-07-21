@@ -76,7 +76,7 @@
             <div class="btn">
                 <a href="{{ route('orders.index') }}" class="btn-back">← 注文一覧に戻る</a>
             
-                <button type="submit" class="btn-submit">納品登録</button>
+                <button type="submit" class="btn-submit" >納品登録</button>
                 
             </div>
         </form>

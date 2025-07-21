@@ -22,9 +22,10 @@ class DeliveryController extends Controller
             'order_detail_ids' => 'required|array',
             'order_detail_ids.*' => 'required|exists:order_details,order_detail_id',
             'delivery_quantities' => 'required|array',
-            'delivery_quantities.*' => 'required|integer|min:1',
+            'delivery_quantities.*' => 'required|integer|min:0',
             'unit_prices' => 'required|array',
             'unit_prices.*' => 'required|numeric|min:0',
+            'unit_prices.*' => 'nullable|numeric|min:0',
         ],
         [
             'delivery_quantities.*.min' => '納品数量は1以上で入力してください。',
@@ -49,6 +50,10 @@ class DeliveryController extends Controller
             foreach ($orderDetailIds as $index => $orderDetailId) {
                 $deliveryQty = (int) $deliveryQuantities[$index];
                 $unitPrice = (float) $unitPrices[$index]; // ← フォームからの単価を使用
+
+                if ($deliveryQty <= 0) {
+                    continue; // 次のループへ進む
+                }
 
                 // 注文明細を取得
                 $orderDetail = DB::table('order_details')->where('order_detail_id', $orderDetailId)->first();

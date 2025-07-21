@@ -1,4 +1,4 @@
-window.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', function() {
     // 🔹 トースト＆エラーのフェードアウト
     const toast = document.getElementById('toast-message');
     const error = document.querySelector('.error-message');
@@ -62,13 +62,32 @@ window.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // 🔹 フォーム送信時にlocalStorage削除（納品登録など）
-    const form = document.querySelector('form');
-    if (form) {
-        form.addEventListener('submit', (e) => {
-            e.preventDefault(); // 一旦止めて
-            localStorage.removeItem(storageKey); // チェック状態をクリア
-            form.submit(); // 再送信
+    // --- 納品登録機能 ---
+    const deliveryQuantities = document.querySelectorAll('input[name="delivery_quantities[]"]');
+    const deliveryForm = document.querySelector('form'); // フォーム要素を取得
+
+    // フォーム送信時の処理（localStorageクリアと納品数チェック）
+    if (deliveryForm) {
+        deliveryForm.addEventListener('submit', function(event) {
+            // イベントのデフォルト動作を一旦停止
+            event.preventDefault(); 
+
+            // 納品数チェック
+            let totalDeliveredQuantity = 0;
+            deliveryQuantities.forEach(input => {
+                totalDeliveredQuantity += parseInt(input.value) || 0;
+            });
+
+            if (totalDeliveredQuantity === 0) {
+                // 納品数が0の場合はポップアップを表示し、ここで処理を終了
+                alert('納品登録を行うには、少なくとも1つの商品の納品数を1以上にしてください。');
+                return; 
+            }
+
+            // 納品数が1以上の場合は、localStorageをクリアし、フォームを送信
+            localStorage.removeItem(storageKey);
+            // フォームをプログラム的に再送信
+            this.submit(); 
         });
     }
 });

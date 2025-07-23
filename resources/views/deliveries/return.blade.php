@@ -57,7 +57,7 @@
             <div class="c-button-group c-button-group--mt4">
             <a href="{{ route('deliveries.details', ['delivery_id' => $delivery_id]) }}"
                class="c-button c-button--gray">
-                 納品明細に戻る
+                 戻る
             </a>
             <button type="submit" class="c-button c-button--red c-button--mt4">
                 確定

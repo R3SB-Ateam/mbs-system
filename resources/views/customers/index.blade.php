@@ -63,7 +63,7 @@
             <div class="p-form-actions">
                 <div class="p-filter-button-wrap">
                     <button type="submit" class="c-button c-button--green">
-                        絞り込み
+                        検索
                     </button>
                 </div>
             </div>

@@ -134,6 +134,7 @@ class CustomerController extends Controller
             ->leftJoinSub($orderDetailsSummary, 'summary', function ($join) {
                 $join->on('customers.customer_id', '=', 'summary.customer_id');
             })
+            ->where('customers.deletion_flag', 0) 
             ->when($storeId, function ($query, $storeId) {
                 return $query->where('customers.store_id', $storeId);
             })

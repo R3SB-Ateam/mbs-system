@@ -131,6 +131,7 @@ document.querySelector('form').addEventListener('submit', function(e) {
 });
 </script>
 
+<script src="{{ asset('js/confirmNavigation.js') }}"></script>
 
 </body>
 </html>

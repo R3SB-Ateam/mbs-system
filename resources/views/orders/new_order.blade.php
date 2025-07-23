@@ -50,8 +50,21 @@
                             </div>
                         `)
                         .appendTo(ul);
-                };
+            };
+            // 二重送信防止機能
+            $('#orderForm').on('submit',function(){
+                const $submitButton = $('#submitOrderButton');
+
+                if($submitButton.attr('disabled')){
+                    return false;
+                }
+
+                //フォーム送信時にボタンを無効化
+                $submitButton.attr('disabled','disabled');
+                //ボタンのテキストを更新
+                $submitButton.text('処理中...');
             });
+        });
     </script>
 
     <!-- 商品行の追加/削除 -->
@@ -79,7 +92,7 @@
     <div class="page-container">
         <h1 class="page-title">新規注文登録</h1>
 
-        <form method="POST" action="{{ route('orders.order_store') }}">
+        <form method="POST" action="{{ route('orders.order_store') }}" id="orderForm">
             @csrf
             <div class="form-group">
                 <label for="customer_search" class="form-label">顧客検索:</label>
@@ -106,7 +119,7 @@
 
             <div class="form-actions">
                 <a href="{{ route('orders.index') }}" class="link-back">← 注文一覧へ戻る</a>
-                <button type="submit" class="btn-primary">注文を登録</button>
+                <button type="submit" class="btn-primary" id="submitOrderButton">注文を登録</button>
             </div>
 
             @if ($errors->any())

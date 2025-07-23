@@ -138,5 +138,7 @@ document.querySelector('form').addEventListener('submit', function(e) {
         }
     }, 3000); // 3秒で消える
 </script>
+
+<script src="{{ asset('js/confirmNavigation.js') }}"></script>
 </body>
 </html>

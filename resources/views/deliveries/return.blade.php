@@ -11,10 +11,12 @@
     <div class="l-container-narrow">
         <h1 class="c-heading-secondary">返品 納品ID: {{ $delivery_id }}</h1>
 
-        <form action="{{ route('deliveries.processReturn') }}" method="POST">
+        <form action="{{ route('deliveries.processReturn') }}" method="POST" id="returnForm">
             @csrf
             <input type="hidden" name="delivery_id" value="{{ $delivery_id }}">
 
+            <input type="hidden" name="submission_token" value="{{ session('return_submission_token_' . $delivery_id) }}">
+            
             <div class="c-table-responsive"> {{-- テーブルがはみ出さないようにラッパーを追加 --}}
                 <table class="c-table c-table--bordered">
                     <thead>
@@ -55,14 +57,15 @@
             <div class="c-button-group c-button-group--mt4">
             <a href="{{ route('deliveries.details', ['delivery_id' => $delivery_id]) }}"
                class="c-button c-button--gray">
-                戻る
+                 納品明細に戻る
             </a>
             <button type="submit" class="c-button c-button--red c-button--mt4">
                 確定
             </button>
+
             </div>
         </form>
     </div>
-        <script src="{{ asset('js/confirmNavigation.js') }}"></script>
+    <script src="{{ asset('js/confirmNavigation.js') }}"></script>
 </body>
 </html>

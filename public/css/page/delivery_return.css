@@ -1,10 +1,11 @@
 /* ベーススタイル */
 body {
-    font-family: sans-serif;
+    font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+    background-color: #f9fafb;
     background-color: #f9fafb;
     margin: 0;
     padding: 0;
-    line-height: 1.5; /* 基本的な行の高さを設定 */
+    line-height: 1.6/* 基本的な行の高さを設定 */
 }
 
 html,
@@ -16,7 +17,7 @@ body {
 
 /* レイアウトコンテナ */
 .l-container {
-    max-width: 1200px; /* コンテナの最大幅 */
+    max-width: 56rem; /* コンテナの最大幅 */
     margin-left: auto;
     margin-right: auto;
     padding: 1.5rem; /* コンテナのパディング */
@@ -31,13 +32,13 @@ body {
     display: flex;
     flex-direction: column;
     height: 100vh; /* 注文一覧ページで使用 */
-    padding: 16px;
+    padding: 1.5rem;
     box-sizing: border-box;
     overflow-x: visible !important;
 }
 
 .l-container-narrow {
-    max-width: 800px; /* 狭いコンテナの最大幅 */
+    max-width: 42rem; /* 狭いコンテナの最大幅 */
     margin-left: auto;
     margin-right: auto;
     padding: 1.5rem;
@@ -47,16 +48,18 @@ body {
 /* コンポーネントスタイル */
 /* 見出し */
 .c-heading-primary {
-    font-size: 1.875rem; /* text-3xl */
+    font-size: 1.5rem; /* text-3xl */
     font-weight: 700; /* font-bold */
     margin-bottom: 1.5rem; /* mb-6 */
-    color: #1f2937; /* gray-900 */
+    color: #111827; /* gray-900 */
     border-bottom: 1px solid #e5e7eb; /* border-b border-gray-200 */
     padding-bottom: 0.75rem; /* pb-3 */
+    line-height: 2rem;
+    padding-bottom: 0.75rem;
 }
 
 .c-text-id {
-    font-size: 1.25rem; /* text-xl */
+    font-size: 0.875rem; /* text-xl */
     color: #6b7280; /* gray-500 */
     font-weight: 400; /* font-normal */
     /* 顧客IDと納品IDの表示調整 */
@@ -86,44 +89,48 @@ body {
 
 /* 基本ボタンのスタイル */
 .c-button {
-    display: inline-block; /* inline-block */
-    padding: 0.5rem 1rem; /* px-4 py-2 */
+    /* display: inline-block; inline-block */
     color: #ffffff; /* text-white */
-    border-radius: 0.25rem; /* rounded */
+    border-radius: 0.375rem; /* rounded */
     text-decoration: none; /* 下線を非表示 */
     transition: background-color 0.2s ease-in-out, transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
     cursor: pointer;
     border: none;
     font-size: 1rem;
-    /* 高さ固定 */
-    height: 48px; /* すべての画面サイズで高さを48pxに固定 */
-    display: inline-flex; /* Flexboxを適用し、テキストとアイコンの配置を中央に */
+    height: 40px; /* ボタンの高さを固定 */
+    display: flex; /* Flexboxを適用 */
     align-items: center; /* 垂直方向の中央揃え */
     justify-content: center; /* 水平方向の中央揃え */
-    box-sizing: border-box; /* パディングを含めて幅を計算 */
-    /* width: auto; または最小幅を設定しないことで、コンテンツに応じた幅にする */
+    font-weight: 600;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); /* shadow-sm */
+    width: 64px;
 }
 
 /* グレー色のボタン */
 .c-button--gray {
-    background-color: #4b5563; /* bg-gray-600 */
+    background-color: #6b7280; /* bg-gray-600 */
+    width: 64px; /* ボタンの幅を固定 */
+    height: 40px;
+    margin-top: 1rem;
 }
 
 /* グレーボタンのホバー時の色 */
 .c-button--gray:hover {
-    background-color: #374151; /* hover:bg-gray-700 */
+    background-color: #4b5563; /* hover:bg-gray-700 */
     transform: translateY(-1px);
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
 }
 
 /* 赤色のボタン */
 .c-button--red {
-    background-color: #ef4444; /* bg-red-500 */
+    background-color: #dc2626; /* bg-red-500 */
+    width: 64px; /* ボタンの幅を固定 */
+    height: 40px;
 }
 
 /* 赤ボタンのホバー時の色 */
 .c-button--red:hover {
-    background-color: #dc2626; /* hover:bg-red-600 */
+    background-color: #b91c1c; /* hover:bg-red-600 */
     transform: translateY(-1px);
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
 }
@@ -148,19 +155,15 @@ body {
 /* ボタンのグループ化 */
 .c-button-group {
     margin-bottom: 1.5rem; /* mb-6 */
+
+    /* text-align: right; レイアウトに合わせて調整 */
     display: flex;
-    /* --- ここを変更しました --- */
-    justify-content: space-between; /* 両端に配置する */
+    justify-content: space-between; 
     gap: 1rem; /* ボタン間のスペース */
-    flex-wrap: nowrap; /* ボタンが折り返さないようにする */
-    width: 100%; /* 親要素の幅いっぱいに広げる */
-    /* 返品内容テキストボックスと位置を揃えるための設定をここに統合 */
-    max-width: 800px;
-    margin-left: auto;
-    margin-right: auto;
-    padding: 0; /* 不要なパディングをリセット */
-    box-sizing: border-box;
-    /* --- 変更ここまで --- */
+    flex-wrap: wrap; /* 必要に応じて折り返し */
+    flex-direction: row;
+    align-items: stretch;
+
 }
 
 /* ボタングループのマージン */
@@ -182,12 +185,20 @@ body {
     overflow-x: auto; /* 横スクロールを有効化 */
     -webkit-overflow-scrolling: touch;
     margin-bottom: 1.5rem; /* テーブルの下にスペース */
+    border: 1px solid #e5e7eb; /* border-gray-200 */
+    border-radius: 0.5rem; /* rounded-lg */
+    overflow: hidden;
 }
 
 .c-table {
     width: 100%;
     border-collapse: collapse;
     background: white;
+
+    border: none;
+    box-shadow: none; /* 追加: data-tableに合わせる */
+    border-radius: 0;
+
 }
 
 .c-table--bordered {
@@ -205,12 +216,15 @@ body {
 }
 
 .c-table__th {
-    padding: 0.75rem 1rem; /* py-3 px-4 */
+    padding: 0.75rem; /* py-3 px-4 */
     text-align: left;
     font-weight: 600; /* font-semibold */
     color: #374151; /* gray-700 */
-    border-bottom: 1px solid #e5e7eb; /* border-b border-gray-200 */
+    border: none; /* border-b border-gray-200 */
+    background-color: #f3f4f6;
     white-space: nowrap; /* テキストの折り返しを防ぐ */
+    border-bottom: 1px solid #d1d5db; /* border-b border-gray-200 */
+    border-top: 1px solid #d1d5db; /* border-t border-gray-200 */
 }
 
 .c-table__th--padded {
@@ -218,9 +232,12 @@ body {
 }
 
 .c-table__td {
-    padding: 0.75rem 1rem; /* py-3 px-4 */
-    border-bottom: 1px solid #e5e7eb; /* border-b border-gray-200 */
-    color: #4b5563; /* gray-700 */
+    padding: 0.75rem; /* py-3 px-4 */
+    border-bottom: 1px solid #d1d5db; /* border-b border-gray-200 */
+    color: #111827;
+    vertical-align: middle; /* gray-700 */
+    border-left: none;
+    border-right: none;
 }
 
 .c-table__td--padded {
@@ -284,20 +301,24 @@ body {
 }
 
 .c-form-input {
-    padding: 0.5rem 0.75rem;
-    border: 1px solid #d1d5db;
-    border-radius: 0.25rem;
-    width: 100%;
+
+    padding: 0.25rem 0.5rem; /* px-3 py-2 */
+    border: 1px solid #d1d5db; /* border-gray-300 */
+    border-radius: 0.25rem; /* rounded-md */
+    width: 100%; /* full width */
     box-sizing: border-box;
-    font-size: 0.875rem;
-    color: #1f2937;
-    background-color: #ffffff;
+    font-size: 1rem; /* text-sm */
+    color: #111827; /* text-gray-900 */
+    background-color: #ffffff; /* bg-white */
+    transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out; /* フォーカス時のアニメーション */
 }
 
 .c-form-input:focus {
-    outline: none;
-    border-color: #2563eb;
-    box-shadow: 0 0 0 1px #2563eb;
+    outline: 2px solid transparent; /* focus:outline-none */
+    outline-offset: 2px; /* focus:outline-offset-2 */
+    border-color: #3b82f6; /* ring-blue-500 */
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1); /* ring-1 */
+
 }
 
 .c-form-input--small {
@@ -352,6 +373,7 @@ body {
     margin: 0;
 }
 
+
 .p-filter-form {
     margin-bottom: 1.5rem;
     display: flex;
@@ -367,20 +389,40 @@ body {
     align-self: flex-end;
 }
 
-/* レスポンシブ対応は基本的に行わないため、メディアクエリを削除または簡素化 */
-/* 残りのメディアクエリは、ボタンの順序などごく一部の調整のためのみに存在 */
+
+/* レスポンシブ対応 */
+@media screen and (max-width: 768px) {
+    .l-container-wide, .l-container, .l-container-narrow { /* すべてのコンテナのパディングを調整 */
+        padding: 1rem;
+    }
+
+    .c-heading-primary{
+        font-size: 1.25rem; /* 小画面での見出しサイズ調整 */
+        margin-bottom: 1rem; /* 左寄せ */
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .c-text-id {
+        font-size: 0.875rem;
+        margin-left: 0; /* 小画面では左マージンをリセット */
+        margin-top: 0.25rem; /* 少しだけ上部にマージン */
+    }
 
 /* @media screen and (max-width: 768px) のメディアクエリは削除しました。 */
 
-/* 大画面向け (769px以上) の設定 */
-@media (min-width: 769px) {
-    /* 確定ボタンと戻るボタンの位置入れ替えは維持 */
-    .c-button--red {
-        order: 2; /* 確定ボタンを2番目に表示 (右側) */
+
+    .c-button {
+        width: 100%; /* ボタンを横幅いっぱいに */
+        box-sizing: border-box;
+        height: 40px;
     }
 
-    .c-button--gray {
-        order: 1; /* 戻るボタンを1番目に表示 (左側) */
+    .c-button-group {
+        flex-direction: column-reverse; /* ボタングループを縦に並べる */
+        gap: 0.5rem;
+        align-items: stretch; /* 横幅いっぱいに広げる */
+        text-align: center; /* 中央寄せ */
     }
 
     /* ボタングループのマージン調整 (必要であれば) */
@@ -388,16 +430,19 @@ body {
         margin-top: 1.5rem;
     }
 
-    /*
-    以前ここに存在した .c-button と .c-button-group の多くのスタイルは、
-    全画面で共通の振る舞いをさせるため、メディアクエリ外の基本スタイルに移動されました。
-    */
-}
 
-/* 納品情報グリッドレイアウト（2カラム）などは、必要に応じてレスポンシブを残す */
-@media (min-width: 768px) {
-    .p-delivery-info-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
+    .c-table__th,
+    .c-table__td {
+        padding: 0.5rem; /* 小画面でのテーブルセルパディング */
+        font-size: 0.875rem; /* 文字サイズを少し小さく */
+    }
+
+    /* フォーム入力フィールドの調整 */
+    .c-form-select, .c-form-input { /* 全てのフォーム入力要素を調整 */
+        width: 100%;
+        box-sizing: border-box;
+        font-size: 0.875rem;
+        padding: 0.375rem;
     }
     .p-delivery-info-remarks {
         grid-column: span 2 / span 2;
@@ -407,6 +452,35 @@ body {
         align-items: flex-end;
     }
     .p-filter-button-wrap {
-        align-self: auto;
+
+        align-self: stretch; /* 親要素の幅に合わせてstretch */
+    }
+    /* .c-button--gray,
+    .c-button--red {
+        width: 64px; 
+        height: 40px;
+    } */
+
+    /* 中画面以上でのフィルターフォームのレイアウト */
+    @media (min-width: 768px) { /* md: */
+        .p-filter-form {
+            flex-direction: row; /* md:flex-row */
+            align-items: flex-end; /* フォーム要素が揃うように調整 */
+        }
+        .p-filter-button-wrap {
+            align-self: auto; /* md:self-auto */
+        }
+    }
+
+    /* 納品情報グリッドレイアウト（2カラム） (納品詳細ページからコピー) */
+    @media (min-width: 768px) { /* md: */
+        .p-delivery-info-grid {
+            grid-template-columns: repeat(2, minmax(0, 1fr)); /* md:grid-cols-2 */
+        }
+        /* 中画面以上での備考欄の横幅いっぱいに広げる (納品詳細ページからコピー) */
+        .p-delivery-info-remarks {
+            grid-column: span 2 / span 2; /* md:col-span-2 */
+        }
+
     }
 }

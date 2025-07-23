@@ -8,7 +8,7 @@
 }
 
 .l-container {
-    max-width: 72rem; /* max-w-6xl (1152px) */
+    /* max-width: 72rem; max-w-6xl (1152px) */
     margin-left: auto;
     margin-right: auto;
     padding: 2rem 1.5rem; /* py-8 px-6 */
@@ -25,7 +25,6 @@
     border-bottom: 1px solid #e5e7eb; /* border-b (border-gray-200) */
     padding-bottom: 0.5rem; /* pb-2 */
     color: #2d3748; /* text-gray-800 */
-    text-align: center; /* 中央揃えを維持 */
 }
 
 /* 戻るボタンのラッパー */
@@ -50,10 +49,12 @@
         align-items: flex-start; /* 上揃えを維持 */
         flex-wrap: wrap; /* 折り返しを維持 */
     }
-    .p-filter-form > div {
-        /* md以降で3列レイアウトを維持しつつ調整 */
-        flex: 1 1 calc(33.33% - 1.33rem); /* (gap / 3) = 16px / 3 = 5.33px, so 20px / 3 approx */
-        min-width: 250px; /* 最小幅を維持 */
+    .p-filter-form > .p-filter-group { /* 新しく定義するラッパーに対するスタイル */
+        display: flex; /* 内部をフレックスボックスに */
+        align-items: flex-end; /* 項目とボタンの底辺を揃える */
+        gap: 0.5rem; /* 項目とボタンの間の隙間 */
+        flex: 1 1 calc(33.33% - 1.33rem); /* 元の3列レイアウトを維持 */
+        min-width: 280px; /* ある程度の最小幅を確保（入力フィールド+ボタンの合計幅を考慮） */
     }
 }
 
@@ -76,18 +77,9 @@
     height: 40px; /* 高さを固定して揃える */
     box-sizing: border-box;
     font-size: 1rem; /* font-sizeを統一 */
+    flex-grow: 1;
+    min-width: 150px;
 }
-
-/* ソートコントロールの個別調整（HTML構造変更に伴いシンプル化） */
-/* p-sort-controls は div のクラスではなくなりましたが、
-   もしソート全体を特定のスタイルで囲む必要がある場合は、
-   select 要素に p-sort-controls-select など新しいクラスを付与し、
-   それに対してスタイルを適用します。
-   ここでは、c-form-select のスタイルが適用されるので、特別な調整は不要です。
-*/
-/* HTML修正により、このブロックはほぼ不要になります。
-   もし追加で微調整が必要な場合は、.p-sort-controls-select に対して行います。 */
-
 
 /* ボタンアクションコンテナ */
 .p-form-actions {
@@ -126,6 +118,9 @@
     box-sizing: border-box;
     min-width: 150px; /* ボタンの最小幅 */
     cursor: pointer; /* カーソルをポインターに */
+    flex-shrink: 0;
+    min-width: 80px;
+    width: auto;
 }
 
 .c-button--gray {
@@ -139,11 +134,11 @@
 }
 
 .c-button--green {
-    background-color: #48bb78; /* bg-green-500 */
-    border: 1px solid #48bb78; /* ボーダーを追加 */
+    background-color: #3b82f6; /* bg-green-500 */
+    border: 1px solid #3b82f6; /* ボーダーを追加 */
 }
 .c-button--green:hover {
-    background-color: #38a169; /* hover:bg-green-600 */
+    background-color: #2563eb; /* hover:bg-green-600 */
     transform: translateY(-1px); /* ホバーで少し浮く */
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); /* 影 */
 }
@@ -229,6 +224,17 @@
     .p-filter-form > div {
         flex-basis: 100%; /* 1列レイアウト */
         min-width: unset; /* 最小幅をリセット */
+    }
+    .p-filter-form > .p-filter-group { /* 小画面では縦並びに変更 */
+        flex-direction: column;
+        align-items: flex-start;
+        width: 100%; /* 親要素の幅いっぱいに */
+    }
+    .p-filter-form > .p-filter-group .c-form-select,
+    .p-filter-form > .p-filter-group .c-form-input,
+    .p-filter-form > .p-filter-group .c-button {
+        width: 100%; /* 小画面ではすべて100%幅に */
+        min-width: unset;
     }
     .p-form-actions {
         flex-direction: column; /* ボタンを縦に並べる */

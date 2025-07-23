@@ -54,14 +54,15 @@
                 <textarea id="overall_return_notes" name="overall_return_notes" rows="5" class="c-form-input c-form-input--full" placeholder="返品に関する全体的な詳細をここに入力してください。"></textarea>
             </div>
 
-           <div class="c-button-group c-button-group--mt4">
-                <a href="{{ route('deliveries.details', ['delivery_id' => $delivery_id]) }}"
-                   class="c-button c-button--gray">
-                    納品明細に戻る
-                </a>
-                <button type="submit" class="c-button c-button--red" id="submitButton">
-                    確定
-                </button>
+            <div class="c-button-group c-button-group--mt4">
+            <a href="{{ route('deliveries.details', ['delivery_id' => $delivery_id]) }}"
+               class="c-button c-button--gray">
+                 納品明細に戻る
+            </a>
+            <button type="submit" class="c-button c-button--red c-button--mt4">
+                確定
+            </button>
+
             </div>
         </form>
     </div>

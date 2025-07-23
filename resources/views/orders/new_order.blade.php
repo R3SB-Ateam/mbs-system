@@ -38,9 +38,19 @@
                 select: function(event, ui) {
                     $('#customer_search').val(ui.item.value);      // 「名前」だけ入力欄にセット
                     $('#customer_id').val(ui.item.customer_id);    // hiddenにIDをセット
+                    $('#customer_address').val(ui.item.address);
                     return false;
                 }
-            });
+            }).autocomplete("instance")._renderItem = function (ul, item) {
+                    return $("<li>")
+                        .append(`
+                            <div>
+                                <strong>${item.value}（顧客ID: ${item.customer_id}）</strong><br>
+                                <small>住所：${item.address}</small>
+                            </div>
+                        `)
+                        .appendTo(ul);
+            };
             // 二重送信防止機能
             $('#orderForm').on('submit',function(){
                 const $submitButton = $('#submitOrderButton');

@@ -1,61 +1,130 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# 緑橋書店業務用アプリケーション  
+## 概要
+本プロジェクトは、システム開発演習の授業の一環として、仮想顧客である「緑橋書店」のために開発された業務用アプリケーションです。緑橋書店の業務効率化を目的として、要件定義から設計、開発、テストまでの一連の工程をチームで担当しました。
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+## プロジェクトの目的と背景  
+緑橋書店様（MBS様）は大阪市東成区において書籍小売業を営んでおり、その業務のうち受注および納品の業務は紙媒体で運用されていました。利用客からの注文（電話・FAX・メール）を注文書として、また利用客への納品実績を納品書として、それぞれ手書きで作成・管理しており、以下の課題を抱えていました。
 
-## About Laravel
+注文から納品までの経過時間（リードタイム）や売上額を顧客ごとに計測・集計するのに多大な手間が生じ、顧客満足度向上に繋がる施策の検討に活用できていない。
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+これらの背景を踏まえ、受注納品業務の情報システム化を行うことで、特に統計情報（リードタイムおよび売上類）の自動算出により、顧客満足度向上策の検討に資することを第一の目的としました。また、注文書・納品書の作成支援機能を搭載することで、現行業務のさらなる効率化を目指しました。
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## 開発体制
+本開発は、以下の体制により遂行しました。
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+開発期間: 2024年11月6日 〜 2025年7月28日  
 
-## Learning Laravel
+開発人数: 7名
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+担当フェーズ: 要件定義、基本設計、詳細設計、コーディング、単体テスト設計・実施、結合テスト設計・実施、システムテスト設計・実施、納品
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+顧客（発注者）: 緑橋書店 経営企画部 宮崎部長
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+### 開発責任者:  
+堀内 基広（前期：プロジェクトマネージャー　後期：スーパーバイザー）  
 
-## Laravel Sponsors
+宮崎 航汰 (前期：スーパーバイザー　後期：プロジェクトマネージャー)
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+### 開発担当者:  
+瀧下 敦斗（スーパーバイザー）
 
-### Premium Partners
+大坪 春嗣（担当,スーパーバイザー代理）
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development/)**
-- **[Active Logic](https://activelogic.com)**
+奥野 結花（担当者）
 
-## Contributing
+高橋 直樹（担当者）
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+山本 隼斗（担当者）
 
-## Code of Conduct
+## 使用技術
+フレームワーク: Laravel 12
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+言語: PHP 8.2.12, HTML, CSS, JavaScript
 
-## Security Vulnerabilities
+データベース: MySQL
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+サーバーOS: CentOS Linux OS
 
-## License
+サーバーハードウェア: HPE ProLiant MicroServer Gen10
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+CPU: AMD Opteron(tm) X3216 APU 3.0GHz
+
+メモリ: DDR4 2400MHz 8GiB
+
+NW: BCM5720 Gigavbit Ethernet PCIe
+
+開発環境OS: Windows 11 Pro
+
+開発環境ハードウェア: HP EliteBook 650 15.6 inch G9 Notebook PC
+
+CPU: 12th Gen Intel(R) Core(TM) i7-1265U
+
+メモリ: RAM 32GB
+
+## アプリケーションの機能  
+本システムは、「受注管理」「納品管理」「統計情報分析」を主な対象として情報システム化を行います。
+
+### 主要機能:  
+
+注文管理機能: 注文データの登録、閲覧、編集、キャンセル。金額計算、ステータス管理を含む。
+
+納品管理機能: 注文情報に基づく納品処理と納品データの管理。返品、ステータス更新を含む。
+
+顧客管理機能: 顧客情報の管理と各顧客の注文履歴の確認。
+
+分析機能: 顧客単位での売上集計や、注文から納品までのリードタイムの集計・分析。
+### UI/UX:  
+
+直感的な操作が可能なGUIデザイン。
+
+デスクトップPC用とモバイル用の2種類の画面を用意。
+
+ダッシュボード画面から各機能（注文一覧、納品一覧、顧客一覧、顧客更新）へのクイックアクセスボタンを配置。
+
+主要な操作（注文登録、納品登録、キャンセル、返品登録、顧客更新）には確認アラートを実装。
+
+## ローカル環境でのセットアップ方法
+1.  **リポジトリのクローン**
+    ```bash
+    git clone [リポジトリのURL]
+    ```
+2.  **必要なソフトウェアのインストール**
+    * PHP 8.2.12
+    * Composer
+    * MySQL
+3.  **Composer依存関係のインストール**
+    ```bash
+    cd mbs-system
+    composer install
+    ```
+4.  **環境設定ファイルの作成**
+    ```bash
+    cp .env.example .env
+    ```
+5.  **.envファイルの編集**  
+    データベース接続情報などを設定してください。
+6.  **アプリケーションキーの生成**
+    ```bash
+    php artisan key:generate
+    ```
+7.  **データベースマイグレーションの実行**
+    ```bash
+    php artisan migrate
+    ```
+8.  **（必要であれば）シーディングの実行**
+    ```bash
+    php artisan db:seed
+    ```
+9.  **開発サーバーの起動**
+    ```bash
+    php artisan serve
+    ```
+    ブラウザで `http://localhost:8000` にアクセスしてください。
+
+## 今後の展望
+
+UI/UXのさらなる改善
+
+パフォーマンスの最適化
+
+セキュリティ強化
